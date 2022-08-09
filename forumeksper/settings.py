@@ -13,8 +13,9 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+from django.contrib import messages
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -26,7 +27,6 @@ SECRET_KEY = 'django-insecure-q$p8u%u(zv1y1@s1b!tpoqbi(_xcjs*60je4q$4(1#1ommd%1r
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -48,7 +48,31 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user_account.middleware.ActiveUserMiddleware',
 ]
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
+
+if os.name == 'nt':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': 'c:/foo/bar',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:8000',
+        }
+    }
 
 ROOT_URLCONF = 'forumeksper.urls'
 
@@ -70,6 +94,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'forumeksper.wsgi.application'
 
+USER_ONLINE_TIMEOUT = 30
+
+USER_LASTSEEN_TIMEOUT = 60 * 60 * 24 * 7
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -80,10 +107,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-AUTH_USER_MODEL = 'user_account.UserAccount'
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -102,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

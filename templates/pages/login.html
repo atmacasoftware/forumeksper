@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block login %}
+    <div class="container-fluid body__auth">
+        <div class="container align-center">
+            <div class="userForm">
+                <div class="userAuth">
+                    <div class="userNav">
+                        <div class="userNav_list active">
+                            <a href="/giris-yap">Giriş Yap</a>
+                        </div>
+                        <div class="userNav_list">
+                            <a href="/kayit-ol">Kayıt Ol</a>
+                        </div>
+                    </div>
+                    <div class="userBody">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-floating first mb-3">
+                                <input type="text" class="form-control" name="username"
+                                       placeholder="Kullanıcı Adı"
+                                       id="username"
+                                       required
+                                />
+                                <label for="username">Kullanıcı Adı</label>
+                            </div>
+                            <div class="form-floating last mb-4">
+                                <input type="password" class="form-control" id="password"
+                                       placeholder='Şifre'
+                                       name='password'
+                                       minLength='6'
+                                       required
+                                />
+                                <label for="password">Şifre</label>
+                            </div>
+
+                            <div class="d-flex mb-5 align-items-center">
+                                    <span class="ml-auto"><a href="/reset-password"
+                                                             class="forgot-pass">Şifremi Unuttum</a></span>
+                            </div>
+
+                            <button type="submit" value="Giriş Yap"
+                                    class="btn btn-block btn-primary">Giriş Yap
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'message.html' %}
+    </div>
+{% endblock %}

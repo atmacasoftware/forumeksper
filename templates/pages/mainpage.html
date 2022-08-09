@@ -65,5 +65,14 @@
             </div>
         </section>
         <!--Box End -->
+
+        <div>
+            {% for p in profile %}
+                {{ p.user.username }}
+                {{ p.online }}
+                {{ p.last_seen }}
+            {% endfor %}
+        </div>
+
     </main>
 {% endblock %}

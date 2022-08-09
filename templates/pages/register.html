@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+<h4>Register</h4>
+
+{% block register %}
+    <div class="container-fluid body__auth">
+        <div class="container align-center">
+            <div class="userForm">
+                <div class="userAuth">
+                    <div class="userNav">
+                        <div class="userNav_list {% if request.path == '/giris-yap' %} active {% endif %}">
+                            <a href="{% url 'login' %}">Giriş Yap</a>
+                        </div>
+                        <div class="userNav_list {% if request.path == '/kayit-ol' %} active {% endif %}">
+                            <a href="{% url 'register' %}">Kayıt Ol</a>
+                        </div>
+                    </div>
+                    <div class="userBody">
+                        <form method="POST" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       name="username"
+                                       class="form-control"
+                                       id="username"
+                                       placeholder="admin"
+                                       required
+
+                                />
+                                <label for="username">Kullanıcı Adınız</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       name="first_name"
+                                       class="form-control"
+                                       id="first_name"
+                                       placeholder="Adınız"
+                                       required
+                                />
+                                <label for="first_name">Adınız</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       name="last_name"
+                                       class="form-control"
+                                       id="last_name"
+                                       placeholder="Soyadınız"
+                                       required
+                                />
+                                <label for="last_name">Soyadınız</label>
+
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email"
+                                       name="email"
+                                       class="form-control"
+                                       id="email"
+                                       placeholder="Email Adresini"
+                                       aria-describedby="emailHelp" required
+                                />
+                                <label for="email">Email Adresiniz</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password"
+                                       class="form-control"
+                                       name="password"
+                                       id="password"
+                                       placeholder="Şifre"
+                                       required
+                                />
+                                <label for="password">Şifre</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" name="re_password" id="re_password"
+                                       placeholder="Şifre Tekrar"
+                                       required
+                                />
+                                <label for="re_password">Şifre Tekrar</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if message %}
+                <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            {{ message }}
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+{% endblock %}

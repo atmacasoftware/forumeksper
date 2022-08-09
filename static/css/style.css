@@ -77,15 +77,42 @@ li {
     background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* 1.1) Navbar */
-
-.logout-btn{
-    background: transparent;
-    border: none!important;
+.alert {
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    z-index: 9;
+    width: 25%;
 }
 
-.logout-btn:hover{
-    border: none!important;
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0 !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+    border: none;
+}
+
+/* 1.1) Navbar */
+
+.logout-btn {
+    background: transparent;
+    border: none !important;
+}
+
+.logout-btn:hover {
+    border: none !important;
 }
 
 /* Navbar End */
@@ -352,7 +379,15 @@ li {
 /* Main Page End */
 
 /* 3) Login Page */
-.userForm{
+
+.body__auth {
+    background: black;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+.userForm {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -360,40 +395,45 @@ li {
 
 }
 
-.userForm .userAuth{
+.userForm .userAuth {
     max-width: 600px;
     width: 600px;
+    margin-top: 50px;
+    border: 2px solid #f4f4f4;
+    border-radius: 25px;
 }
 
 @media screen and (max-width: 369px) {
-    .userForm .userAuth{
-        width: 300px!important;
+    .userForm .userAuth {
+        width: 300px !important;
     }
 }
 
 @media screen and (min-width: 370px) and (max-width: 475px) {
-    .userForm .userAuth{
-        width: 350px!important;
+    .userForm .userAuth {
+        width: 350px !important;
     }
 }
 
 @media screen and (min-width: 476px) and (max-width: 620px) {
-    .userForm .userAuth{
-        width: 475px!important;
+    .userForm .userAuth {
+        width: 475px !important;
     }
 }
 
-.userForm .userNav{
+.userForm .userNav {
     display: flex;
     justify-content: space-between;
     width: 100%;
     height: 60px;
     align-items: center;
     background-color: #212529;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 
 }
 
-.userForm .userNav .userNav_list{
+.userForm .userNav .userNav_list {
     width: 100%;
     text-align: center;
     height: 100%;
@@ -402,41 +442,72 @@ li {
     align-items: center;
 }
 
-.userForm .userNav .userNav_list a{
+.userForm .userNav .userNav_list a {
     color: white;
     font-size: 20px;
     font-weight: bold;
     transition: 0.3s;
 }
 
-.userForm .userNav .userNav_list a:hover{
+.userForm .userNav .userNav_list a:hover {
     color: #ADCAE8;
 }
 
-.userForm .userNav .userNav_list.active{
+.userForm .userNav .userNav_list.active {
     background-color: #52D382;
 }
 
-.userForm .userNav .userNav_list.active a:hover{
+.userForm .userNav .userNav_list:nth-child(2).active {
+    border-top-right-radius: 25px;
+}
+
+.userForm .userNav .userNav_list:nth-child(1).active {
+    border-top-left-radius: 25px;
+}
+
+.userForm .userNav .userNav_list.active a:hover {
     color: #212529;
 }
 
-.userBody{
+.userBody {
     background-color: #373A3E;
     padding: 30px 30px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
-.userBody .form-group{
+.userBody .form-group {
     margin-bottom: 20px;
 }
 
-.userBody .form-group input{
+.userBody label {
+    color: #52D382;
+    margin-bottom: 10px;
+}
+
+.userBody .helptext {
+    color: #f4f4f4;
+}
+
+.userBody ul li {
+    list-style-type: circle;
+    color: #f4f4f4;
+}
+
+.userBody input {
     height: 50px;
     background-color: black;
     color: white;
 }
 
-.activation-message{
+.userBody .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select{
+    background: black;
+    color: white;
+    border: 1px solid #f4f4f4;
+}
+
+
+.activation-message {
     position: absolute;
     right: 40px;
     bottom: 20px;
