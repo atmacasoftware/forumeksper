@@ -1,0 +1,446 @@
+/*
+
+-----Content-----
+
+1) General
+    1.1) Navbar
+2) Main Page
+    2.1) Search Box
+    2.2) Box
+    2.3) Shapes
+3) Login Page
+
+
+*/
+
+/* 1) General */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+.shadow-blur {
+    box-shadow: inset 0 0px 1px 1px rgba(254, 254, 254, 0.9), 0 20px 27px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.border-radius-xl {
+    border-radius: 1rem;
+}
+
+.z-index-0 {
+    z-index: 0 !important;
+}
+
+.z-index-1 {
+    z-index: 1 !important;
+}
+
+.z-index-2 {
+    z-index: 2 !important;
+}
+
+.z-index-3 {
+    z-index: 3 !important;
+}
+
+.mx-auto {
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+.py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.vertical.dark {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+}
+
+
+.mt-n10 {
+    margin-top: -8rem !important;
+}
+
+.blur {
+    box-shadow: inset 0px 0px 2px #fefefed1;
+    -webkit-backdrop-filter: saturate(200%) blur(30px);
+    backdrop-filter: saturate(200%) blur(30px);
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 1.1) Navbar */
+
+.logout-btn{
+    background: transparent;
+    border: none!important;
+}
+
+.logout-btn:hover{
+    border: none!important;
+}
+
+/* Navbar End */
+
+/* General End */
+
+/* 2) Main Page */
+/* 2.1) Search */
+
+
+.search-box {
+    width: 100%;
+    height: 500px;
+    background: rgba(33, 37, 41, 0.90);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-box form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-box h1 {
+    z-index: 2;
+    text-align: center;
+}
+
+.search {
+    margin-bottom: auto;
+    height: 70px;
+    background-color: #ADCAE8;
+    padding: 10px;
+    width: 60%;
+    z-index: 2;
+}
+
+.search-input {
+    color: white;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0;
+    margin-top: 5px;
+    caret-color: transparent;
+    line-height: 40px;
+    transition: width 0.4s linear;
+}
+
+.search .search-input {
+    padding: 0 10px;
+    width: 550px;
+    caret-color: #536bf6;
+    font-size: 21px;
+    font-weight: 300;
+    color: white;
+    transition: width 0.4s linear;
+}
+
+.search:hover > .search-icon {
+    background: black;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.search-icon {
+    height: 50px;
+    width: 50px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: #52D382;
+
+}
+
+/* 2.2) Box */
+
+.box {
+    padding: 15px;
+    height: 300px;
+}
+
+.box:first-child {
+    border-right: 2px solid #f4f4f4;
+}
+
+.box:last-child {
+    border-left: 2px solid #f4f4f4;
+}
+
+.box ul {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+}
+
+.box ul li {
+    border-bottom: 2px solid #f0f0f0;
+    width: 100%;
+    text-align: start;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    transition: 0.3s;
+}
+
+.box ul li a {
+    color: black;
+}
+
+.box ul li:hover {
+    background-color: #52D382;
+}
+
+.box-title {
+    text-align: center;
+}
+
+/* 2.3) Shapes */
+
+.shapes span {
+    color: #f0f0f0;
+    font-size: 1.3rem;
+}
+
+.shapes {
+    width: 100%;
+    top: 0;
+    height: 400px;
+    position: absolute;
+    left: 0;
+}
+
+.shapes span:first-child {
+    position: absolute;
+    top: 50%;
+    left: -5%;
+    animation: leftRight 15s linear infinite;
+}
+
+.shapes span:nth-child(2) {
+    position: absolute;
+    bottom: -10%;
+    left: 10%;
+    animation: bottomTop 7s linear infinite;
+}
+
+.shapes span:nth-child(3) {
+    position: absolute;
+    top: 20%;
+    right: 0;
+    animation: rightLeft 15s linear infinite;
+}
+
+.shapes span:nth-child(4) {
+    position: absolute;
+    top: -5%;
+    left: 20%;
+    animation: topBottom 7s linear infinite;
+
+}
+
+.shapes span:nth-child(5) {
+    position: absolute;
+    top: 80%;
+    right: 0;
+    animation: rightLeft 15s linear infinite;
+}
+
+.shapes span:nth-child(6) {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    animation: bottomTop 7s linear infinite;
+}
+
+.shapes span:nth-child(7) {
+    position: absolute;
+    top: -15%;
+    left: 60%;
+    animation: topBottom 7s linear infinite;
+}
+
+.shapes span:nth-child(8) {
+    position: absolute;
+    bottom: -25%;
+    left: 80%;
+    animation: bottomTop 7s linear infinite;
+}
+
+@keyframes bottomTop {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50vh);
+        opacity: 0;
+    }
+}
+
+@keyframes topBottom {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(50vh);
+        opacity: 0;
+    }
+}
+
+@keyframes leftRight {
+    0% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+}
+
+@keyframes rightLeft {
+    0% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-100vw);
+        opacity: 0;
+    }
+}
+
+/* Main Page End */
+
+/* 3) Login Page */
+.userForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.userForm .userAuth{
+    max-width: 600px;
+    width: 600px;
+}
+
+@media screen and (max-width: 369px) {
+    .userForm .userAuth{
+        width: 300px!important;
+    }
+}
+
+@media screen and (min-width: 370px) and (max-width: 475px) {
+    .userForm .userAuth{
+        width: 350px!important;
+    }
+}
+
+@media screen and (min-width: 476px) and (max-width: 620px) {
+    .userForm .userAuth{
+        width: 475px!important;
+    }
+}
+
+.userForm .userNav{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    align-items: center;
+    background-color: #212529;
+
+}
+
+.userForm .userNav .userNav_list{
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userForm .userNav .userNav_list a{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.userForm .userNav .userNav_list a:hover{
+    color: #ADCAE8;
+}
+
+.userForm .userNav .userNav_list.active{
+    background-color: #52D382;
+}
+
+.userForm .userNav .userNav_list.active a:hover{
+    color: #212529;
+}
+
+.userBody{
+    background-color: #373A3E;
+    padding: 30px 30px;
+}
+
+.userBody .form-group{
+    margin-bottom: 20px;
+}
+
+.userBody .form-group input{
+    height: 50px;
+    background-color: black;
+    color: white;
+}
+
+.activation-message{
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+}
+
+
+/* Login Page End */
