@@ -4,7 +4,6 @@
 {% block mainpage %}
     <main>
         <!--Search Box -->
-
         <div class="search-box">
             <div class="container">
                 <div class="row">
@@ -34,7 +33,6 @@
                 </div>
             </div>
         </div>
-
         <!--Search Box End -->
 
         <!--Box Start -->
@@ -75,4 +73,12 @@
         </div>
 
     </main>
+
+
+    <script>
+        const ws = new WebSocket('wss://127.0.0.1:8000/ws/server/')
+        ws.onopen = () => {
+            console.log('opened')
+        }
+    </script>
 {% endblock %}

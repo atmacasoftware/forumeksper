@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user_account',
+    'server',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +95,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'forumeksper.wsgi.application'
+ASGI_APPLICATION = 'forumeksper.asgi.application'
 
 USER_ONLINE_TIMEOUT = 30
 
@@ -171,3 +174,12 @@ EMAIL_HOST_PASSWORD = '206031aAb%'
 EMAIL_PORT = 80
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 8000)],
+        },
+    },
+}

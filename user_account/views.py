@@ -7,7 +7,6 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, FormView
 import json
-from validate_email import validate_email
 from forumeksper.settings import EMAIL_HOST_USER
 from user_account.forms import SignUpForm
 from django.contrib.auth import login, authenticate
@@ -20,16 +19,6 @@ from django.core.mail import send_mail
 from django.utils.encoding import force_str, DjangoUnicodeDecodeError, force_bytes
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-
-class EmailValidationView(View):
-    def post(self, request):
-        data = json.loads(request.body)
-        email = data['email']
-        if not validate_email(email):
-            return JsonResponse({'email_error': 'Email is invalid'}, status=400)
-        if User.objects.filter(email=email).exists():
-            return JsonResponse({'email_error': 'sorry email in use,choose another one '}, status=409)
-        return JsonResponse({'email_valid': True})
 
 
 class UsernameValidationView(View):
