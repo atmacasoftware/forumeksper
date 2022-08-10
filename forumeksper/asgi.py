@@ -19,11 +19,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'forumeksper.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(
-                server.routing.websocket_urlpatterns
-            )
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            server.routing.websocket_urlpatterns
         )
     ),
 })

@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block select_room %}
+    <div class="server-body">
+        <div class="container-fluid">
+            <div class="channels_top">
+                <a href="" class="channels_top_circle" >
+                    <i class="bi bi-plus"></i>
+                    <span class="tooltiptext tooltip-bottom">Server Oluştur</span>
+                </a>
+                <a href="" class="channels_top_circle">
+                    <i class="bi bi-broadcast"></i>
+                    <span class="tooltiptext tooltip-bottom">Server Keşfet</span>
+                </a>
+            </div>
+            <div class="row ">
+                {% for r in rooms %}
+                    <div class="col-lg-3">
+                        <div class="channel">
+                            <div class="channel_image">
+                                <div class="channel_image_banner">
+                                    {% if room.banner %}
+                                        {{ room.banner }}
+                                    {% else %}
+                                        <img src="{% static 'img/server/empty_banner.png' %}" alt="banner">
+                                    {% endif %}
+                                </div>
+                                <div class="channel_image_cover">
+                                    {% if room.image %}
+                                        {{ room.image }}
+                                    {% else %}
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="channel_name">
+                                <h5>{{ r.name }}</h5>
+                            </div>
+                            <div class="channel_button">
+                                <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                <a href="">Ayrıl</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

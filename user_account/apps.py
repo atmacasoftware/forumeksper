@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class UserAccountConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'user_account'
-    verbose_name = "Kullanıcı Profilleri"
+    verbose_name = "1. Kullanıcı Profilleri"
