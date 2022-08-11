@@ -5,45 +5,249 @@
     <div class="server-body">
         <div class="container-fluid">
             <div class="channels_top">
-                <a href="" class="channels_top_circle" >
+                <a href="#" class="channels_top_circle" data-bs-toggle="modal" data-bs-target="#createChannel">
                     <i class="bi bi-plus"></i>
                     <span class="tooltiptext tooltip-bottom">Server Oluştur</span>
                 </a>
-                <a href="" class="channels_top_circle">
+                <a href="{% url 'room_find' %}" class="channels_top_circle">
                     <i class="bi bi-broadcast"></i>
                     <span class="tooltiptext tooltip-bottom">Server Keşfet</span>
                 </a>
             </div>
-            <div class="row ">
-                {% for r in rooms %}
-                    <div class="col-lg-3">
-                        <div class="channel">
-                            <div class="channel_image">
-                                <div class="channel_image_banner">
-                                    {% if room.banner %}
-                                        {{ room.banner }}
-                                    {% else %}
-                                        <img src="{% static 'img/server/empty_banner.png' %}" alt="banner">
-                                    {% endif %}
+            <div class="container">
+                <div class="row ">
+                    {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                <div class="channel_image_cover">
-                                    {% if room.image %}
-                                        {{ room.image }}
-                                    {% else %}
-                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
-                                    {% endif %}
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
                                 </div>
-                            </div>
-                            <div class="channel_name">
-                                <h5>{{ r.name }}</h5>
-                            </div>
-                            <div class="channel_button">
-                                <a href="{% url 'room' r.slug %}">Kanala Git</a>
-                                <a href="">Ayrıl</a>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}{% for r in rooms %}
+                        <div class="col-lg-4">
+                            <div class="channel">
+                                <div class="channel_image">
+                                    <div class="channel_image_cover empty-banner">
+                                        {% if room.image %}
+                                            {{ room.image }}
+                                        {% else %}
+                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="channel_name">
+                                    <h5>{{ r.name }}</h5>
+                                </div>
+                                <div class="channel_button">
+                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                    <a href="">Ayrıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="createChannel" tabindex="-1" aria-labelledby="createChannelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bir Kanal Oluştur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" enctype="multipart/form-data" id="createChannelForm">
+                        {% csrf_token %}
+                        <div class="upload_profile_picture">
+                            <img src="{% static 'img/server/upload_picture.png' %}"                                                                                          alt="Upload Picture">
+                            <input type="file" class="file" id="image" name="image">
+                            <label for="image" id="uploadPictureBtn"><i class="bi bi-camera-fill"></i></label>
+                        </div>
+                        <div class="upload_banner">
+                            <img src="{% static 'img/server/upload_banner.png' %}" id="banner" alt="Upload Banner">
+                            <input type="file" class="file" id="banner" name="banner">
+                            <label for="banner" id="uploadBannerBtn"><i class="bi bi-camera-fill"></i></label>
+                        </div>
+                        <div class="crete_channel_name">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal Et</a>
+                    <a type="button" class="btn btn-primary">Oluştur</a>
+                </div>
             </div>
         </div>
     </div>

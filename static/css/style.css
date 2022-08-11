@@ -526,10 +526,6 @@ label:focus,
     background: black;
 }
 
-.server-body .container-fluid .row {
-    width: 100%;
-}
-
 .channels_top {
     display: flex;
     justify-content: center;
@@ -601,7 +597,6 @@ label:focus,
     font-size: 72px;
 }
 
-
 .server-body .container-fluid .channel {
     width: 100%;
     background: #373A3E;
@@ -630,18 +625,21 @@ label:focus,
     object-fit: contain;
 }
 
+.server-body .container-fluid .channel .channel_image .channel_image_cover {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
 .server-body .container-fluid .channel .channel_image .channel_image_cover img {
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    transform: translateX(-50%);
     width: 120px;
     height: 120px;
 }
 
 .channel_name {
     text-align: center;
-    margin-top: 75px;
+    margin-top: 10px;
     color: #f4f4f4;
 }
 
@@ -670,5 +668,55 @@ label:focus,
     background: crimson;
 
 }
+
+.empty-banner {
+    background-image: url("../img/server/empty_banner.png");
+}
+
+#createChannelForm {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    width: 100%;
+}
+
+.upload_profile_picture {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.upload_banner {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.file {
+    display: none;
+}
+
+#uploadPictureBtn {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    padding: 6px 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: rgba(173, 172, 172, 0.801);
+    box-shadow: 2px 4px 4px rgb(0 0 0 / 64%);
+    top: 70%;
+    transform: translateX(-90%);
+    left: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 /* Server Page End */

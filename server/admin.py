@@ -12,6 +12,12 @@ class MemberAdmin(admin.ModelAdmin):
     search_fields = ('group_user','room')
     list_per_page = 300
 
+
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('room', 'user', 'date_added')
+    search_fields = ('room','user')
+    list_per_page = 300
+
 admin.site.register(Room,RoomAdmin)
-admin.site.register(Message)
+admin.site.register(Message,MessageAdmin)
 admin.site.register(MemberShip,MemberAdmin)
