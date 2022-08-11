@@ -688,6 +688,14 @@ label:focus,
     position: relative;
 }
 
+.upload_profile_picture img {
+    transition: 0.3s;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .upload_banner {
     justify-content: center;
     align-items: center;
@@ -716,7 +724,238 @@ label:focus,
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.3s;
 }
 
+#uploadPictureBtn:hover {
+    background: #212529;
+}
+
+#uploadBannerBtn {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    padding: 6px 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: rgba(173, 172, 172, 0.801);
+    box-shadow: 2px 4px 4px rgb(0 0 0 / 64%);
+    top: 85%;
+    transform: translateX(-70%);
+    left: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+#uploadBannerBtn:hover {
+    background: #212529;
+}
+
+.upload_banner img {
+    transition: 0.3s;
+    height: 100px;
+    object-fit: fill;
+}
+
+.crete_channel_name p {
+    text-align: center;
+}
+
+.crete_channel_name {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#channelsName {
+    text-align: center;
+    border-style: dashed;
+    width: 75%;
+}
+
+#heading {
+    text-transform: uppercase;
+    color: #673AB7;
+    font-weight: normal
+}
+
+#createChannelForm {
+    text-align: center;
+    position: relative;
+    margin-top: 20px
+}
+
+#createChannelForm fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+    position: relative
+}
+
+.form-card {
+    text-align: left
+}
+
+#createChannelForm fieldset:not(:first-of-type) {
+    display: none
+}
+
+
+#createChannelForm .action-button {
+    width: 100px;
+    background: black;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right
+}
+
+#createChannelForm .action-button:hover,
+#createChannelForm .action-button:focus {
+    background-color: #52D382
+}
+
+#createChannelForm .action-button-previous {
+    width: 100px;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right
+}
+
+#createChannelForm .action-button-previous:hover,
+#createChannelForm .action-button-previous:focus {
+    background-color: #52D382
+}
+
+.card {
+    z-index: 0;
+    border: none;
+    position: relative
+}
+
+.fs-title {
+    font-size: 25px;
+    color: #673AB7;
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left
+}
+
+.purple-text {
+    color: #673AB7;
+    font-weight: normal
+}
+
+.steps {
+    font-size: 25px;
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-align: right
+}
+
+.fieldlabels {
+    color: gray;
+    text-align: left
+}
+
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey
+}
+
+#progressbar .active {
+    color: #673AB7
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 15px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400
+}
+
+#progressbar #account:before {
+    font-family: FontAwesome;
+    content: "\f13e"
+}
+
+#progressbar #personal:before {
+    font-family: FontAwesome;
+    content: "\f007"
+}
+
+#progressbar #payment:before {
+    font-family: FontAwesome;
+    content: "\f030"
+}
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f00c"
+}
+
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px
+}
+
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+    background: #673AB7
+}
+
+.progress {
+    height: 20px
+}
+
+.progress-bar {
+    background-color: black;
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover
+}
 
 /* Server Page End */
