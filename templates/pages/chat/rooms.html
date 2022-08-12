@@ -71,7 +71,7 @@
                                             <div class="col-lg-12">
                                                 <div class="category">
                                                     <input type="radio" name="category" id="{{ c.slug }}"
-                                                           value="{{ c.id }}" required>
+                                                           value="{{ c.id }}">
                                                     <label for="{{ c.slug }}">
                                                         <div class="category-image">
                                                             <img src="{{ c.get_category_photos }}" alt="Category Photo">
@@ -87,7 +87,7 @@
                                     <h3 id="disp" style="color:green"></h3>
                                     <h4 id="error" style="color:red"></h4>
                                 </div>
-                                <input type="button" name="next" id="next1" disabled="disabled" class="next action-button" onclick="checkButton()"
+                                <input type="button" name="next" id="next1"  class="next action-button" onclick="checkButton()"
                                        value="İlerle"/>
                             </fieldset>
                             <fieldset>
