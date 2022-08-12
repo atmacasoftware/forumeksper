@@ -6,10 +6,48 @@ from django.utils import timezone
 
 # Create your models here.
 
+class RoomCategory(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Kategori Adı", null=True)
+    image = models.ImageField(upload_to='kanal/kategori', null=True, blank=True)
+    slug = models.SlugField(unique=True, editable=False)
+
+    class Meta:
+        verbose_name_plural = "4. Kategoriler"
+
+    def get_slug(self):
+        slug = slugify(self.name.replace("ı", "i"))
+        unique = slug
+        number = 1
+
+        while Room.objects.filter(slug=unique).exists():
+            unique = '{}-{}'.format(slug, number)
+            number += 1
+
+        return unique
+
+    def __str__(self):
+        return self.name
+
+    def get_category_photos(self):
+        if self.image:
+            return self.image.url
+        else:
+            return None
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        self.slug = self.get_slug()
+        return super(RoomCategory, self).save(*args, **kwargs)
+
+
+
 class Room(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="Kanal Adı")
     slug = models.SlugField(unique=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name="Kanal Sahibi")
+    category = models.ForeignKey(RoomCategory, on_delete=models.CASCADE, null=True,verbose_name="Kategori Adı")
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, verbose_name="Oluşturulduğu Tarih")
     modified_at = models.DateTimeField(null=True, verbose_name="Güncellendiği Tarih", blank=True)
     image = models.ImageField(upload_to='kanal/kapak', null=True, blank=True)
@@ -39,6 +77,19 @@ class Room(models.Model):
         self.modified = timezone.now()
         self.slug = self.get_slug()
         return super(Room, self).save(*args, **kwargs)
+
+    def get_channel_photos(self):
+        if self.banner:
+            return self.banner.url
+        else:
+            return None
+
+    def get_banner_photos(self):
+        if self.image:
+            return self.image.url
+        else:
+            return None
+
 
 
 class MemberShip(models.Model):

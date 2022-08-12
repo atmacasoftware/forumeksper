@@ -56,52 +56,110 @@
                 </div>
                 <div class="modal-body">
                     <div class="card px-0 pb-0 mb-3">
-                    <form id="createChannelForm">
-                        {% csrf_token %}
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <br> <!-- fieldsets -->
-                        <fieldset>
-                            <div class="form-card">
-                                <label class="fieldlabels">Email: *</label> <input type="email" name="email"
-                                                                                   placeholder="Email Id"/> <label
-                                    class="fieldlabels">Username: *</label> <input type="text" name="uname"
-                                                                                   placeholder="UserName"/> <label
-                                    class="fieldlabels">Password: *</label> <input type="password" name="pwd"
-                                                                                   placeholder="Password"/> <label
-                                    class="fieldlabels">Confirm Password: *</label> <input type="password" name="cpwd"
-                                                                                           placeholder="Confirm Password"/>
+                        <form id="createChannelForm" method="POST" enctype="multipart/form-data" action=".">
+                            {% csrf_token %}
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <input type="button" name="next" class="next action-button" value="İlerle"/>
-                        </fieldset>
-                        <fieldset>
-                            <div class="form-card mb-4">
-                                <div class="upload_profile_picture">
-                                    <p>Kanalınız için fotoğraf seçiniz.</p>
-                                    <img src="{% static 'img/server/upload_picture.png' %}" id="picture"
-                                         alt="Upload Picture">
-                                    <input type="file" class="file" id="image" name="image">
-                                    <label for="image" id="uploadPictureBtn"><i class="bi bi-camera-fill"></i></label>
+                            <br> <!-- fieldsets -->
+                            <fieldset>
+                                <div class="form-card">
+                                    <p>Kanalınızın kategorisini belirleyiniz.</p>
+                                    <div class="row">
+                                        {% for c in category %}
+                                            <div class="col-lg-12">
+                                                <div class="category">
+                                                    <input type="radio" name="category" id="{{ c.slug }}"
+                                                           value="{{ c.id }}" required>
+                                                    <label for="{{ c.slug }}">
+                                                        <div class="category-image">
+                                                            <img src="{{ c.get_category_photos }}" alt="Category Photo">
+                                                        </div>
+                                                        <div class="category_name">
+                                                            <p>{{ c.name }}</p>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <h3 id="disp" style="color:green"></h3>
+                                    <h4 id="error" style="color:red"></h4>
                                 </div>
-                                <div class="upload_banner mt-5">
-                                    <p>Kanalınız için kapak fotoğrafı seçiniz.</p>
-                                    <img src="{% static 'img/server/upload_banner.png' %}" id="banner_picture"
-                                         alt="Upload Banner">
-                                    <input type="file" class="file" id="banner" name="banner">
-                                    <label for="banner" id="uploadBannerBtn"><i class="bi bi-camera-fill"></i></label>
+                                <input type="button" name="next" id="next1" disabled="disabled" class="next action-button" onclick="checkButton()"
+                                       value="İlerle"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card mb-4">
+                                    <div class="upload_profile_picture">
+                                        <p>Kanalınız için fotoğraf seçiniz.</p>
+                                        <img src="{% static 'img/server/upload_picture.png' %}" id="picture"
+                                             alt="Upload Picture">
+                                        <input type="file" class="file" id="image" name="image" accept="image/*">
+                                        <label for="image" id="uploadPictureBtn"><i
+                                                class="bi bi-camera-fill"></i></label>
+                                    </div>
+                                    <div class="upload_banner mt-5">
+                                        <p>Kanalınız için kapak fotoğrafı seçiniz.</p>
+                                        <img src="{% static 'img/server/upload_banner.png' %}" id="banner_picture"
+                                             alt="Upload Banner">
+                                        <input type="file" class="file" id="banner" name="banner" accept="image/*">
+                                        <label for="banner" id="uploadBannerBtn"><i
+                                                class="bi bi-camera-fill"></i></label>
+                                    </div>
+                                    <div class="crete_channel_name mt-5">
+                                        <p>Kanal adınızı belirleyiniz.</p>
+                                        <input type="text" name="name" id="channelsName">
+                                    </div>
                                 </div>
-                                <div class="crete_channel_name mt-5">
-                                    <p>Kanal adınızı belirleyiniz.</p>
-                                    <input type="text" name="name" id="channelsName">
+                                <input type="button" name="next" class="next action-button" value="İlerle"/> <input
+                                    type="button" name="previous" class="previous action-button-previous" value="Geri"/>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-card">
+                                    <p>Kanalınızın gizlilik durumunu belirleyiniz.</p>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="is_public">
+                                                <input type="radio" name="is_private" id="is_public" value="1">
+                                                <label for="is_public">
+                                                    <div class="is_private_image">
+                                                        <img src="{% static 'img/server/public.png' %}"
+                                                             alt="Private İmage">
+                                                    </div>
+                                                    <div class="is_private_name">
+                                                        <h4>Herkese Açık</h4>
+                                                        <span>Herkese açık olması durumunda kanalına herkes katılabilir.</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="is_public">
+                                                <input type="radio" name="is_private" id="is_private" value="2">
+                                                <label for="is_private">
+                                                    <div class="is_private_image">
+                                                        <img src="{% static 'img/server/private.png' %}"
+                                                             alt="Private İmage">
+                                                    </div>
+                                                    <div class="is_private_name">
+                                                        <h4>Gizli</h4>
+                                                        <span>Gizli olması durumunda kanalınıza katılmak isteyenler size davet gönderecekler.</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <input type="button" name="next" class="next action-button" value="Oluştur"/> <input
-                                type="button" name="previous" class="previous action-button-previous" value="Geri"/>
-                        </fieldset>
-                    </form>
-                </div>
+                                <input type="submit" name="createChannels" class="action-button" value="Oluştur"/>
+                                <input
+                                        type="button" name="previous" class="previous action-button-previous"
+                                        value="Geri"/>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

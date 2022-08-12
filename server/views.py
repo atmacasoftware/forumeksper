@@ -4,12 +4,35 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 import threading
 
-from server.models import Room, Message, MemberShip
+from server.models import Room, Message, MemberShip, RoomCategory
+
 
 @login_required
 def rooms(request):
     rooms = Room.objects.filter(membership__group_user=request.user) or Room.objects.filter(user=request.user)
-    return render(request, 'pages/chat/rooms.html',{'rooms':rooms})
+    category = RoomCategory.objects.all()
+    if 'createChannels' in request.POST:
+        try:
+            postData = request.POST
+            category = postData.get('category','')
+            image = request.FILES.get("image")
+            banner = request.FILES.get("banner")
+            name = postData.get('name')
+            private = postData.get('is_private','')
+
+            get_cateogry = RoomCategory.objects.get(id=category)
+            print(get_cateogry)
+
+            if private == "1":
+                private = False
+            else:
+                private = True
+            data = Room.objects.create(name=name, user=request.user, category=get_cateogry, image=image, banner=banner, is_private=private)
+            data.save()
+            return redirect('room', data.slug)
+        except:
+            return render(request, 'pages/chat/rooms.html',{'rooms':rooms,'category':category})
+    return render(request, 'pages/chat/rooms.html',{'rooms':rooms,'category':category})
 
 
 @login_required

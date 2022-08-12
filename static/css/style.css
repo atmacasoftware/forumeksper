@@ -958,4 +958,80 @@ label:focus,
     object-fit: cover
 }
 
+input[type="radio"] {
+    display: none;
+}
+
+.category {
+    display: flex;
+    justify-content: center;
+}
+
+.category label, .is_public label {
+    width: 70%;
+    height: 120px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    transition: 0.3s;
+}
+
+.category-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.category_name {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    align-items: center;
+}
+
+.category_name p {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.category label:hover {
+    background: #52D382;
+    color: white;
+}
+
+input[type="radio"]:checked + label {
+    background: #52D382;
+    color: white;
+}
+
+.is_public label{
+    width: 100% !important;
+}
+
+.is_private_image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.is_private_image img{
+    width: 75px;
+    height: 75px;
+}
+
+.is_private_name{
+    width: 65%;
+}
+
+fieldset p{
+    text-align: center;
+}
+
 /* Server Page End */
