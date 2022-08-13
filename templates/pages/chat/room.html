@@ -1,25 +1,107 @@
 {% extends 'layout.html' %}
 {% load static %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/server.css' %}">
+{% endblock %}
+
 {% block room %}
-    <div class="container">
-        <h1>{{ room.name }}</h1>
-        <div style="height: 500px;width: 500px;overflow-y: auto" id="chat-message">
-            {% for message in messages %}
-                <div style="background: #52D382;">'
-                    <p>{{ message.user.username }}</p>
-                    <p>{{ message.content }}</p>
+    <div class="server-body single-room">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="participants">
+                        <div class="channel_title">
+                            {% if room.image %}
+                                <img src="{{ room.get_channel_photos }}" alt="Channel Photo">
+                            {% else %}
+                                <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                            {% endif %}
+                            <h3>{{ room.name }}</h3>
+                        </div>
+                        <div class="participants_title">
+                            <h4>Katılımcılar ({{ room_participants_count }})</h4>
+                        </div>
+                        <div class="participants_body">
+                            <ul>
+                                {% for p in profile %}
+                                    {% for u in p %}
+                                        <li>
+                                            <a href="">
+                                                <div class="participants_user_image">
+                                                    {% if u.get_profile_photos %}
+                                                        <img src="{{ u.get_profile_photos }}" alt="User Image">
+                                                    {% else %}
+                                                        <div class="participants_user_noimage">
+                                                            <img src="{% static 'img/server/empty_channels.png' %}"
+                                                                 alt="No Image">
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="participants_user_name">
+                                                    <span>{{ u.user }}</span>
+                                                </div>
+                                                <div class="participants_is_online">
+                                                    {{ u.online }}
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
-        <div>
-            <form action="." method="POST">
-                {% csrf_token %}
-                <input type="text" name="content" placeholder="Mesajınızı yazınız" id="chat-message-input">
-                <button class="btn btn-primary" id="chat-submit">Gönder</button>
-            </form>
+                <div class="col-lg-6">
+                    <div class="chat">
+                        <div id="chat-message">
+                            {% for message in messages %}
+                                <div class="message-cover">
+                                    <div class="message-user">
+                                        <p>{{ message.user.username }}</p>
+                                    </div>
+                                    <div class="message-content">
+                                        <p>{{ message.content }}</p>
+                                    </div>
+                                    <div class="message-time-line">
+                                        <span>{{ message.date_added }}</span>
+                                    </div>
+                                    <div class="message-reply">
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                <li><a class="dropdown-item" href="#">Favori mesaj ekle</a></li>
+                                                <li><a class="dropdown-item" href="#">Kötüye mesaj bildir</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="writing-section">
+                            <form action="." method="POST">
+                                {% csrf_token %}
+                                <label for="chat-message-input"></label><textarea name="content"
+                                                                                  placeholder="Mesajınızı yazınız"
+                                                                                  id="chat-message-input"></textarea>
+                                <button class="btn btn-primary" id="chat-submit">Gönder</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="survey">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -42,9 +124,32 @@
             const data = JSON.parse(e.data)
 
             if (data.message) {
-                let html = '<div style="background: #52D382;">';
-                html += '<p>' + data.username + '</p>';
-                html += '<p>' + data.message + '</p> </div>';
+                let html = `
+                        <div class="message-cover">
+                                    <div class="message-user">
+                                        <p>${data.username}</p>
+                                    </div>
+                                    <div class="message-content">
+                                        <p>${data.message}</p>
+                                    </div>
+                                    <div class="message-time-line">
+                                        <span>${data.date_added}</span>
+                                    </div>
+                                    <div class="message-reply">
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                <li><a class="dropdown-item" href="#">Favori mesaj ekle</a></li>
+                                                <li><a class="dropdown-item" href="#">Kötüye mesaj bildir</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                `
 
                 document.querySelector('#chat-message').innerHTML += html;
 
@@ -57,10 +162,19 @@
             console.log('onclose')
         }
 
+        document.querySelector('#chat-message-input').onkeyup=function (e){
+            if(e.keyCode === 13){
+                document.querySelector('#chat-submit').click()
+            }
+        }
+
         document.querySelector('#chat-submit').onclick = function (e) {
             e.preventDefault();
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
+
+            const dateInputDom = document.querySelector('#chat-message-input');
+            const date_added = dateInputDom.value;
 
             chatSocket.send(JSON.stringify({
                 'message': message,
@@ -71,5 +185,6 @@
             messageInputDom.value = '';
             return false;
         }
+
     </script>
 {% endblock %}

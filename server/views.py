@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 import threading
 
 from server.models import Room, Message, MemberShip, RoomCategory
+from user_account.models import UserProfile
 
 
 @login_required
@@ -58,4 +59,23 @@ def room_find(request):
 def room(request, slug):
     room = Room.objects.get(slug=slug)
     messages = Message.objects.filter(room=room)[0:25]
-    return render(request, 'pages/chat/room.html',{'room':room,'messages':messages})
+    room_participants = MemberShip.objects.filter(room=room)
+    room_participants_count = MemberShip.objects.filter(room=room).count()
+    participants = []
+    message_users = []
+    profile = []
+    message_users_profile = []
+
+    for p in room_participants:
+        participants.append(p.group_user)
+
+    for pu in participants:
+        profile.append(UserProfile.objects.filter(user=pu))
+
+    for m in messages:
+        message_users.append(m.user)
+
+    for mu in message_users:
+        message_users_profile.append(UserProfile.objects.filter(user=mu))
+
+    return render(request, 'pages/chat/room.html',{'room':room,'messages':messages,'room_participants_count':room_participants_count,'room_participants':room_participants,'profile':profile})

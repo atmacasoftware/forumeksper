@@ -42,7 +42,6 @@ class RoomCategory(models.Model):
         return super(RoomCategory, self).save(*args, **kwargs)
 
 
-
 class Room(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="Kanal Adı")
     slug = models.SlugField(unique=True, editable=False)

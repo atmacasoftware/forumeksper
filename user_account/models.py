@@ -19,6 +19,12 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username + " " + self.email
 
+    def get_profile_photos(self):
+        if self.profile_photo:
+            return self.profile_photo.url
+        else:
+            return None
+
     @staticmethod
     def get_customer_by_username(username):
         try:

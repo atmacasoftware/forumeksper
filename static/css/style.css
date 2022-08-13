@@ -10,6 +10,7 @@
     2.3) Shapes
 3) Login Page
 4) Server Page
+    4.1) Single Room
 
 
 */
@@ -526,7 +527,12 @@ label:focus,
     background: black;
 }
 
-.room-header{
+.server-body .container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
+.room-header {
     color: #ffffff;
     font-weight: bold;
 }
@@ -607,7 +613,7 @@ label:focus,
     background: #373A3E;
     border-radius: 20px;
     margin-top: 20px;
-    height: 250px;
+    height: 275px;
 }
 
 .server-body .container-fluid .channel .channel_image {
@@ -1021,28 +1027,225 @@ input[type="radio"]:checked + label {
     color: white;
 }
 
-.is_public label{
+.is_public label {
     width: 100% !important;
 }
 
-.is_private_image{
+.is_private_image {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 30px;
 }
 
-.is_private_image img{
+.is_private_image img {
     width: 75px;
     height: 75px;
 }
 
-.is_private_name{
+.is_private_name {
     width: 65%;
 }
 
-fieldset p{
+fieldset p {
     text-align: center;
 }
+
+/* 4.1) Single Room Start */
+.server-body .participants {
+    height: 100vh;
+    background: #212529;
+    border-top: 2px solid black;
+}
+
+.single-room {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.channel_title {
+    padding: 10px 30px;
+    margin-top: 70px;
+    display: flex;
+    justify-content: start;
+    flex-direction: row;
+    align-items: center;
+}
+
+.channel_title img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.channel_title h3 {
+    color: #ffffff;
+}
+
+.participants_title {
+    padding: 10px 30px;
+    margin-top: 10px;
+}
+
+.participants_title h4 {
+    color: #ffffff;
+}
+
+.participants_body ul li a {
+    display: flex;
+    justify-content: start;
+    flex-direction: row;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.participants_user_image {
+    margin-right: 20px;
+}
+
+.participants_user_image img {
+    width: 30px;
+    height: 30px;
+}
+
+.participants_user_name {
+    margin-right: 20px;
+}
+
+.participants_user_name span {
+    color: #ffffff;
+}
+
+.chat {
+    height: 100%;
+    margin-top: 40px;
+}
+
+.banner img {
+    width: 100%;
+    height: 200px;
+}
+
+.chat .writing-section {
+    position: relative;
+    bottom: 10%;
+    width: 100%;
+    height: 30%;
+}
+
+.chat .writing-section form {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+#chat-message {
+    height: 500px;
+    overflow-y: auto;
+}
+
+.chat form{
+    margin-top: 15px;
+}
+
+.chat form input {
+    width: 80%;
+    height: 30%;
+}
+
+.chat form button {
+    width: 19%;
+}
+
+#chat-message-input {
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    background: #212529;
+    padding: 15px;
+    color: #ffffff;
+    width: 80%;
+    height: 75px;
+}
+
+textarea[name=content] {
+    resize: none;
+}
+
+#chat-message-input::placeholder {
+    color: #ffffff;
+}
+
+#chat-submit {
+    background: #212529;
+    padding: 15px;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    height: 75px;
+    border-radius: 20px;
+}
+
+.message-cover {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    position: relative;
+}
+
+.message-cover:hover .message-reply {
+    opacity: 1;
+}
+
+.message-cover .message-user p {
+    color: #52D382;
+}
+
+.message-cover .message-content p {
+    color: #ffffff;
+}
+
+.message-cover .message-time-line {
+    text-align: center;
+    position: relative;
+}
+
+.message-cover .message-time-line span {
+    color: gray;
+}
+
+.message-cover .message-time-line:before {
+    content: "";
+    display: block;
+    width: 35%;
+    height: 1.5px;
+    background: gray;
+    position: absolute;
+    left: 0;
+    top: 50%;
+}
+
+.message-cover .message-time-line:after {
+    content: "";
+    display: block;
+    width: 35%;
+    height: 1.5px;
+    background: gray;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+
+.message-reply {
+    position: absolute;
+    right: 20px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+/* Single Room End */
 
 /* Server Page End */
