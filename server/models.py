@@ -71,24 +71,24 @@ class Room(models.Model):
     def __str__(self):
         return self.name
 
+    def get_channel_photos(self):
+        if self.image:
+            return self.image.url
+        else:
+            return None
+
+    def get_banner_photos(self):
+        if self.banner:
+            return self.banner.url
+        else:
+            return None
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         self.slug = self.get_slug()
         return super(Room, self).save(*args, **kwargs)
-
-    def get_channel_photos(self):
-        if self.banner:
-            return self.banner.url
-        else:
-            return None
-
-    def get_banner_photos(self):
-        if self.image:
-            return self.image.url
-        else:
-            return None
 
 
 

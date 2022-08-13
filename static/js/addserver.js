@@ -130,14 +130,9 @@ $(document).ready(function () {
 
 });
 
-
-//function checkButton() {
-//    var getSelectedValue = document.querySelector(
-//        'input[name="category"]:checked');
-//
-//    if (getSelectedValue != null) {
-//        document.getElementById("next1").removeAttribute('disabled')
-//    } else {
-//        document.getElementById("next1").setAttribute('disabled','disabled')
-//    }
-//}
+let categoryValue = document.querySelectorAll('.categoryInput')
+categoryValue.forEach(i => {
+    i.addEventListener('click', function () {
+        i.setAttribute('is_checked', 'true')
+    })
+})

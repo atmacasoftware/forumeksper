@@ -526,6 +526,11 @@ label:focus,
     background: black;
 }
 
+.room-header{
+    color: #ffffff;
+    font-weight: bold;
+}
+
 .channels_top {
     display: flex;
     justify-content: center;
@@ -630,11 +635,17 @@ label:focus,
     border-top-right-radius: 20px;
     display: flex;
     justify-content: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .server-body .container-fluid .channel .channel_image .channel_image_cover img {
     width: 120px;
     height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .channel_name {

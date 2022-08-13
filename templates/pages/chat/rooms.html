@@ -7,38 +7,75 @@
             <div class="channels_top">
                 <a href="#" class="channels_top_circle" data-bs-toggle="modal" data-bs-target="#createChannel">
                     <i class="bi bi-plus"></i>
-                    <span class="tooltiptext tooltip-bottom">Server Oluştur</span>
+                    <span class="tooltiptext tooltip-bottom">Kanal Oluştur</span>
                 </a>
                 <a href="{% url 'room_find' %}" class="channels_top_circle">
                     <i class="bi bi-broadcast"></i>
-                    <span class="tooltiptext tooltip-bottom">Server Keşfet</span>
+                    <span class="tooltiptext tooltip-bottom">Kanalları Keşfet</span>
                 </a>
             </div>
             <div class="container">
-                <div class="row ">
-                    {% for r in rooms %}
-                        <div class="col-lg-4">
-                            <div class="channel">
-                                <div class="channel_image">
-                                    <div class="channel_image_cover empty-banner">
-                                        {% if room.image %}
-                                            {{ room.image }}
-                                        {% else %}
-                                            <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
-                                        {% endif %}
+                {% if owner_rooms %}
+                    <div class="row mt-3">
+                        <h4 class="room-header">Kendi Kanallarım</h4>
+                        <hr>
+                    </div>
+                    <div class="row">
+                        {% for r in owner_rooms %}
+                            <div class="col-lg-4">
+                                <div class="channel">
+                                    <div class="channel_image">
+                                        <div class="channel_image_cover" {% if r.get_banner_photos %} style="background-image: url({{ r.get_banner_photos }})" {% else %} style="background-image: url('../../../static/img/server/empty_banner.png')" {% endif %}>
+                                            {% if r.get_channel_photos %}
+                                                <img src="{{ r.get_channel_photos }}" alt="Channel">
+                                            {% else %}
+                                                <img src="{% static 'img/server/empty_channels.png' %}" alt="Empty Channel">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="channel_name">
+                                        <h5>{{ r.name }}</h5>
+                                    </div>
+                                    <div class="channel_button">
+                                        <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                        <a href="">Ayrıl</a>
                                     </div>
                                 </div>
-                                <div class="channel_name">
-                                    <h5>{{ r.name }}</h5>
-                                </div>
-                                <div class="channel_button">
-                                    <a href="{% url 'room' r.slug %}">Kanala Git</a>
-                                    <a href="">Ayrıl</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if rooms %}
+                    <div class="row mt-3">
+                        <h4 class="room-header">Katıldığım kanallar</h4>
+                        <hr>
+                    </div>
+                    <div class="row ">
+                        {% for r in rooms %}
+                            <div class="col-lg-4">
+                                <div class="channel">
+                                    <div class="channel_image">
+                                        <div class="channel_image_cover empty-banner">
+                                            {% if room.image %}
+                                                {{ room.image }}
+                                            {% else %}
+                                                <img src="{% static 'img/server/empty_channels.png' %}" alt="cover">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="channel_name">
+                                        <h5>{{ r.name }}</h5>
+                                    </div>
+                                    <div class="channel_button">
+                                        <a href="{% url 'room' r.slug %}">Kanala Git</a>
+                                        <a href="">Ayrıl</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -70,9 +107,10 @@
                                         {% for c in category %}
                                             <div class="col-lg-12">
                                                 <div class="category">
-                                                    <input type="radio" name="category" id="{{ c.slug }}"
-                                                           value="{{ c.id }}">
-                                                    <label for="{{ c.slug }}">
+                                                    <input type="radio" class="categoryInput" name="category"
+                                                           id="category-{{ c.slug }}"
+                                                           value="{{ c.id }}" required>
+                                                    <label for="category-{{ c.slug }}">
                                                         <div class="category-image">
                                                             <img src="{{ c.get_category_photos }}" alt="Category Photo">
                                                         </div>
@@ -87,7 +125,7 @@
                                     <h3 id="disp" style="color:green"></h3>
                                     <h4 id="error" style="color:red"></h4>
                                 </div>
-                                <input type="button" name="next" id="next1"  class="next action-button" onclick="checkButton()"
+                                <input type="button" name="next" id="next1" class="next action-button"
                                        value="İlerle"/>
                             </fieldset>
                             <fieldset>
@@ -96,7 +134,8 @@
                                         <p>Kanalınız için fotoğraf seçiniz.</p>
                                         <img src="{% static 'img/server/upload_picture.png' %}" id="picture"
                                              alt="Upload Picture">
-                                        <input type="file" class="file" id="image" name="image" accept="image/*">
+                                        <input type="file" class="file" id="image" name="image" accept="image/*"
+                                               required>
                                         <label for="image" id="uploadPictureBtn"><i
                                                 class="bi bi-camera-fill"></i></label>
                                     </div>
@@ -104,7 +143,8 @@
                                         <p>Kanalınız için kapak fotoğrafı seçiniz.</p>
                                         <img src="{% static 'img/server/upload_banner.png' %}" id="banner_picture"
                                              alt="Upload Banner">
-                                        <input type="file" class="file" id="banner" name="banner" accept="image/*">
+                                        <input type="file" class="file" id="banner" name="banner" accept="image/*"
+                                               required>
                                         <label for="banner" id="uploadBannerBtn"><i
                                                 class="bi bi-camera-fill"></i></label>
                                     </div>
@@ -122,7 +162,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="is_public">
-                                                <input type="radio" name="is_private" id="is_public" value="1">
+                                                <input type="radio" name="is_private" id="is_public" value="1" required>
                                                 <label for="is_public">
                                                     <div class="is_private_image">
                                                         <img src="{% static 'img/server/public.png' %}"
@@ -137,7 +177,8 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="is_public">
-                                                <input type="radio" name="is_private" id="is_private" value="2">
+                                                <input type="radio" name="is_private" id="is_private" value="2"
+                                                       required>
                                                 <label for="is_private">
                                                     <div class="is_private_image">
                                                         <img src="{% static 'img/server/private.png' %}"
