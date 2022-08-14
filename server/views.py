@@ -58,7 +58,7 @@ def room_find(request):
 @login_required
 def room(request, slug):
     room = Room.objects.get(slug=slug)
-    messages = Message.objects.filter(room=room)[0:25]
+    messages = Message.objects.filter(room=room)
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
     participants = []

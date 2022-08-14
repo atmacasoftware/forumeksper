@@ -108,6 +108,7 @@ class Message(models.Model):
     user = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE, verbose_name="Kullanıcı")
     content = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulma Tarihi")
+    file_type = models.CharField(max_length=50, null=True)
 
     class Meta:
         ordering = ('date_added',)
