@@ -97,7 +97,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'forumeksper.wsgi.application'
 ASGI_APPLICATION = 'forumeksper.asgi.application'
 
-USER_ONLINE_TIMEOUT = 30
+USER_ONLINE_TIMEOUT = 300
 
 USER_LASTSEEN_TIMEOUT = 60 * 60 * 24 * 7
 

@@ -9,7 +9,7 @@
     <div class="server-body single-room">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="participants">
                         <div class="channel_title">
                             {% if room.image %}
@@ -52,48 +52,54 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <div class="chat">
-                        <div id="chat-message">
-                            {% for message in messages %}
-                                <div class="message-cover">
-                                    <div class="message-user">
-                                        <p>{{ message.user.username }}</p>
-                                    </div>
-                                    <div class="message-content">
-                                        <p>{{ message.content }}</p>
-                                    </div>
-                                    <div class="message-time-line">
-                                        <span>{{ message.date_added }}</span>
-                                    </div>
-                                    <div class="message-reply">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-three-dots"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                <li><a class="dropdown-item" href="#">Favori mesaj ekle</a></li>
-                                                <li><a class="dropdown-item" href="#">Kötüye mesaj bildir</a></li>
-                                            </ul>
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="chat-message">
+                                    {% for message in messages %}
+                                        <div class="message-cover">
+                                            <div class="message-user">
+                                                <p>{{ message.user.username }}</p>
+                                            </div>
+                                            <div class="message-content">
+                                                <p>{{ message.content }}</p>
+                                            </div>
+                                            <div class="message-time-line">
+                                                <span>{{ message.date_added }}</span>
+                                            </div>
+                                            <div class="message-reply">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item" href="#">Favori mesaj ekle</a></li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye mesaj bildir</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
-                            {% endfor %}
+                                <div class="writing-section">
+                                    <form action="." method="POST">
+                                        {% csrf_token %}
+                                        <label for="chat-message-input"></label><textarea name="content"
+                                                                                          placeholder="Mesajınızı yazınız"
+                                                                                          id="chat-message-input"></textarea>
+                                        <button class="btn btn-primary" id="chat-submit">Gönder</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="writing-section">
-                            <form action="." method="POST">
-                                {% csrf_token %}
-                                <label for="chat-message-input"></label><textarea name="content"
-                                                                                  placeholder="Mesajınızı yazınız"
-                                                                                  id="chat-message-input"></textarea>
-                                <button class="btn btn-primary" id="chat-submit">Gönder</button>
-                            </form>
-                        </div>
+
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-3">
                     <div class="survey">
 
                     </div>
@@ -107,6 +113,7 @@
 {% block scripts %}
     {{ room.slug|json_script:"json-roomname" }}
     {{ request.user.username|json_script:"json-username" }}
+
     <script>
         const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
         const userName = JSON.parse(document.getElementById('json-username').textContent);
@@ -162,8 +169,8 @@
             console.log('onclose')
         }
 
-        document.querySelector('#chat-message-input').onkeyup=function (e){
-            if(e.keyCode === 13){
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {
                 document.querySelector('#chat-submit').click()
             }
         }

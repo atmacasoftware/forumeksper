@@ -78,4 +78,4 @@ def room(request, slug):
     for mu in message_users:
         message_users_profile.append(UserProfile.objects.filter(user=mu))
 
-    return render(request, 'pages/chat/room.html',{'room':room,'messages':messages,'room_participants_count':room_participants_count,'room_participants':room_participants,'profile':profile})
+    return render(request, 'pages/chat/single_room.html',{'room':room,'messages':messages,'room_participants_count':room_participants_count,'room_participants':room_participants,'profile':profile})

@@ -1065,7 +1065,7 @@ fieldset p {
 
 .channel_title {
     padding: 10px 30px;
-    margin-top: 70px;
+    margin-top: 20px;
     display: flex;
     justify-content: start;
     flex-direction: row;
@@ -1081,16 +1081,9 @@ fieldset p {
 
 .channel_title h3 {
     color: #ffffff;
+    font-size: 1.3rem;
 }
 
-.participants_title {
-    padding: 10px 30px;
-    margin-top: 10px;
-}
-
-.participants_title h4 {
-    color: #ffffff;
-}
 
 .participants_body ul li a {
     display: flex;
@@ -1117,10 +1110,7 @@ fieldset p {
     color: #ffffff;
 }
 
-.chat {
-    height: 100%;
-    margin-top: 40px;
-}
+
 
 .banner img {
     width: 100%;
@@ -1245,6 +1235,19 @@ textarea[name=content] {
     opacity: 0;
     transition: 0.3s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Single Room End */
 
