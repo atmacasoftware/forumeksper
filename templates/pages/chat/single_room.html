@@ -59,9 +59,6 @@
                     <div class="overlay"></div>
                 </div>
                 <div class="chat-area">
-                    <div class="alert-wrapper">
-
-                    </div>
                     <div class="chat-area-header">
                         <div class="chat-area-title">
                             {% if room.get_channel_photos %}
@@ -80,6 +77,11 @@
                                 <li><a class="dropdown-item" href="#">Kötüye Kullanım Bildir</a></li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="alert-wrapper">
+                    </div>
+                    <div class="load-more-wrapper">
+                        <button id="loadMore">Önceki Mesajları Yükle</button>
                     </div>
                     <div class="chat-area-main" id="chat-message">
 
@@ -172,7 +174,7 @@
 
 
                         <div class="message-wrapper">
-                            <input type="text" placeholder="{{ room.name }} için mesaj gönder" id="chat-message-input"/>
+                            <input type="text" placeholder="'{{ room.name }}' için mesaj gönder..." id="chat-message-input"/>
                             <button type="submit" id="chat-submit"><i class="bi bi-send-fill"></i></button>
                             <button type="button" id="chat-microfon"><i class="bi bi-mic-fill"></i></button>
                         </div>

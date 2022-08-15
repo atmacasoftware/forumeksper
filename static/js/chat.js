@@ -106,6 +106,7 @@ function handleVideoSelect(event) {
 
 }
 
+
 function getBaseVideo64(video) {
     var reader = new FileReader()
     reader.readAsDataURL(video)
@@ -283,7 +284,7 @@ chatSocket.onmessage = function (e) {
         } else {
             console.log("Boş mesaj")
         }
-    }else if (message_type === 'record') {
+    } else if (message_type === 'record') {
         if (data.message) {
             let html = `
                             <div class="chat-msg">
@@ -353,8 +354,12 @@ document.querySelectorAll('.msg-img').forEach(image => {
     }
 })
 
-document.querySelector('.popup-image span').onclick = () => {
-    document.querySelector('.popup-image').style.display = 'none';
+const popUpImage = document.querySelector('.popup-image');
+
+if (popUpImage) {
+    document.querySelector('.popup-image span').onclick = () => {
+        document.querySelector('.popup-image').style.display = 'none';
+    }
 }
 
 
