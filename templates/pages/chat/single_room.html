@@ -99,6 +99,14 @@
                                                 <img src="{{ message.content }}" alt="Image">
                                             </div>
                                             <img src="{{ message.content }}" class="msg-img" alt="Image">
+                                        {% elif message.file_type == 'video' %}
+                                            <video controls width="250" height="250">
+                                                <source src="{{ message.content }}">
+                                            </video>
+                                        {% elif message.file_type == 'audio' %}
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
                                         {% else %}
                                             <p>{{ message.content }}</p>
                                         {% endif %}
@@ -124,11 +132,35 @@
                             <i class="bi bi-image"></i>
                         </label>
                         <input type="file" name="image" hidden accept=".jpg, .jpeg, .png" id="hiddenImageInput">
-                        <label for="hiddenFileInput">
-                            <i class="bi bi-paperclip" id="file" aria-hidden="true"
-                            ></i>
-                        </label>
-                        <input type="file" id="hiddenFileInput" accept=".pdf, .doc, .json">
+                        <div class="dropdown attach-shared-wrapper">
+                            <button class="attach-shared-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-paperclip" id="file" aria-hidden="true"
+                                ></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <label for="hiddenFileInput">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                    </label>
+                                    <input type="file" id="hiddenFileInput" accept=".pdf, .doc, .json">
+                                    <span class="tooltiptext tooltip-bottom">Dosya Ekle</span>
+                                </li>
+                                <li>
+                                    <label for="hiddenVideoInput">
+                                        <i class="bi bi-camera-video"></i>
+                                    </label>
+                                    <input type="file" id="hiddenVideoInput" accept="video/mp4,video/x-m4v,video/*">
+                                    <span class="tooltiptext tooltip-bottom">Video Ekle</span>
+                                </li>
+                                <li>
+                                    <label for="hiddenAudioInput">
+                                        <i class="bi bi-headphones"></i>
+                                    </label>
+                                    <input type="file" id="hiddenAudioInput" accept="audio/*">
+                                    <span class="tooltiptext tooltip-bottom">Ses Ekle</span>
+                                </li>
+                            </ul>
+                        </div>
 
 
                         <div class="message-wrapper">

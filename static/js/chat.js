@@ -72,6 +72,48 @@ function getBaseImage64(file) {
     }
 }
 
+document.getElementById('hiddenVideoInput').addEventListener('change', handleVideoSelect, false)
+
+function handleVideoSelect(event) {
+    var video = document.getElementById('hiddenVideoInput').files[0];
+    getBaseVideo64(video)
+}
+
+function getBaseVideo64(video) {
+    var reader = new FileReader()
+    reader.readAsDataURL(video)
+
+    reader.onload = function () {
+        chatSocket.send(JSON.stringify({
+            "file_type": "video",
+            "message": reader.result,
+            'username': userName,
+            'room': roomName
+        }))
+    }
+}
+
+
+document.getElementById('hiddenAudioInput').addEventListener('change', handleAudioSelect, false)
+
+function handleAudioSelect(event) {
+    var audio = document.getElementById('hiddenAudioInput').files[0];
+    getBaseAudio64(audio)
+}
+
+function getBaseAudio64(audio) {
+    var reader = new FileReader()
+    reader.readAsDataURL(audio)
+
+    reader.onload = function () {
+        chatSocket.send(JSON.stringify({
+            "file_type": "audio",
+            "message": reader.result,
+            'username': userName,
+            'room': roomName
+        }))
+    }
+}
 
 chatSocket.onmessage = function (e) {
 
@@ -148,6 +190,60 @@ chatSocket.onmessage = function (e) {
                                     <div class="chat-msg-text">
                                         <p>${data.username}</p>
                                         <img src="${data.message}" alt="Image">
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+            document.querySelector('#chat-message').innerHTML += html;
+            box.scrollTop = box.scrollHeight;
+
+        } else {
+            console.log("Boş mesaj")
+        }
+    }else if (message_type === 'video') {
+        if (data.message) {
+            let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${data.username}</p>
+                                     
+                                        <video controls width="250" height="250">
+                                        <source src="${data.message}">
+                                        </video>
+</a>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+            document.querySelector('#chat-message').innerHTML += html;
+            box.scrollTop = box.scrollHeight;
+
+        } else {
+            console.log("Boş mesaj")
+        }
+    }else if (message_type === 'audio') {
+        if (data.message) {
+            let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${data.username}</p>
+                                     
+                                        <audio controls style="width: 250px;">
+                                        <source src="${data.message}">
+                                        </audio>
+</a>
                                     </div>
                                 </div>
                             </div>
