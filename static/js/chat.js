@@ -8,6 +8,8 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
+const alertWrapper = document.querySelector('.alert-wrapper');
+
 $(document).ready(function () {
     $('#chat-submit').attr('disabled', true);
     $('#chat-submit').css('cursor', 'no-drop');
@@ -33,7 +35,14 @@ document.getElementById('hiddenFileInput').addEventListener('change', handleFile
 
 function handleFileSelect(event) {
     var file = document.getElementById('hiddenFileInput').files[0];
-    getBase64(file)
+    if (file.size > 31457281){
+        alertWrapper.innerHTML = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Maksimum dosya boyutu 30 MB'dır.
+                    </div>`
+    }else{
+        getBase64(file)
+    }
 }
 
 function getBase64(file) {
@@ -55,12 +64,19 @@ document.getElementById('hiddenImageInput').addEventListener('change', handleIma
 
 function handleImageSelect(event) {
     var image = document.getElementById('hiddenImageInput').files[0];
-    getBaseImage64(image)
+    if (image.size > 20971521){
+        alertWrapper.innerHTML = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Maksimum resim boyutu 20 MB'dır.
+                    </div>`
+    }else{
+        getBaseImage64(image)
+    }
 }
 
-function getBaseImage64(file) {
+function getBaseImage64(image) {
     var reader = new FileReader()
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(image)
 
     reader.onload = function () {
         chatSocket.send(JSON.stringify({
@@ -76,7 +92,15 @@ document.getElementById('hiddenVideoInput').addEventListener('change', handleVid
 
 function handleVideoSelect(event) {
     var video = document.getElementById('hiddenVideoInput').files[0];
-    getBaseVideo64(video)
+    if (video.size > 52428801){
+        alertWrapper.innerHTML = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Maksimum video boyutu 50 MB'dır.
+                    </div>`
+    }else{
+        getBaseVideo64(video)
+    }
+
 }
 
 function getBaseVideo64(video) {
