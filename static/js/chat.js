@@ -9,6 +9,7 @@ const chatSocket = new WebSocket(
 );
 
 const alertWrapper = document.querySelector('.alert-wrapper');
+var isRecord = false
 
 $(document).ready(function () {
     $('#chat-submit').attr('disabled', true);
@@ -35,12 +36,12 @@ document.getElementById('hiddenFileInput').addEventListener('change', handleFile
 
 function handleFileSelect(event) {
     var file = document.getElementById('hiddenFileInput').files[0];
-    if (file.size > 31457281){
+    if (file.size > 31457281) {
         alertWrapper.innerHTML = `
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Maksimum dosya boyutu 30 MB'dır.
                     </div>`
-    }else{
+    } else {
         getBase64(file)
     }
 }
@@ -64,12 +65,12 @@ document.getElementById('hiddenImageInput').addEventListener('change', handleIma
 
 function handleImageSelect(event) {
     var image = document.getElementById('hiddenImageInput').files[0];
-    if (image.size > 20971521){
+    if (image.size > 20971521) {
         alertWrapper.innerHTML = `
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Maksimum resim boyutu 20 MB'dır.
                     </div>`
-    }else{
+    } else {
         getBaseImage64(image)
     }
 }
@@ -92,12 +93,14 @@ document.getElementById('hiddenVideoInput').addEventListener('change', handleVid
 
 function handleVideoSelect(event) {
     var video = document.getElementById('hiddenVideoInput').files[0];
-    if (video.size > 52428801){
+    if (video.size > 52428801) {
         alertWrapper.innerHTML = `
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Maksimum video boyutu 50 MB'dır.
                     </div>`
-    }else{
+    } else {
+
+
         getBaseVideo64(video)
     }
 
@@ -226,7 +229,7 @@ chatSocket.onmessage = function (e) {
         } else {
             console.log("Boş mesaj")
         }
-    }else if (message_type === 'video') {
+    } else if (message_type === 'video') {
         if (data.message) {
             let html = `
                             <div class="chat-msg">
@@ -253,7 +256,34 @@ chatSocket.onmessage = function (e) {
         } else {
             console.log("Boş mesaj")
         }
-    }else if (message_type === 'audio') {
+    } else if (message_type === 'audio') {
+        if (data.message) {
+            let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${data.username}</p>
+                                     
+                                        <audio controls style="width: 250px;">
+                                        <source src="${data.message}">
+                                        </audio>
+</a>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+            document.querySelector('#chat-message').innerHTML += html;
+            box.scrollTop = box.scrollHeight;
+
+        } else {
+            console.log("Boş mesaj")
+        }
+    }else if (message_type === 'record') {
         if (data.message) {
             let html = `
                             <div class="chat-msg">
@@ -327,3 +357,50 @@ document.querySelector('.popup-image span').onclick = () => {
     document.querySelector('.popup-image').style.display = 'none';
 }
 
+
+navigator.mediaDevices.getUserMedia({audio: true})
+    .then(function (mediaStreamObject) {
+        const startStop = document.getElementById("chat-microfon");
+        const startStopIcon = document.querySelector('.bi-mic-fill');
+        const mediaRecorder = new MediaRecorder(mediaStreamObject)
+        startStop.addEventListener('click', function (e) {
+            if (isRecord) {
+                startStopIcon.style = ""
+                isRecord = false
+                mediaRecorder.stop()
+            } else {
+                startStopIcon.style = "color:red"
+                isRecord = true
+                mediaRecorder.start()
+            }
+        })
+
+
+        mediaRecorder.ondataavailable = function (e) {
+            dataArray.push(e.data)
+        }
+
+        var dataArray = []
+
+        mediaRecorder.onstop = function (e) {
+            let auidodata = new Blob(dataArray, {'type': 'audio/mp3'})
+            dataArray = []
+            getBaseRecord64(auidodata)
+        }
+
+
+    });
+
+function getBaseRecord64(auidodata) {
+    var reader = new FileReader()
+    reader.readAsDataURL(auidodata)
+
+    reader.onload = function () {
+        chatSocket.send(JSON.stringify({
+            "file_type": "record",
+            "message": reader.result,
+            'username': userName,
+            'room': roomName
+        }))
+    }
+}

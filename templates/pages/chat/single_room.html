@@ -110,6 +110,10 @@
                                             <audio controls style="width: 250px;">
                                                 <source src="{{ message.content }}">
                                             </audio>
+                                        {% elif message.file_type == 'record' %}
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
                                         {% else %}
                                             <p>{{ message.content }}</p>
                                         {% endif %}
@@ -129,6 +133,7 @@
 
                         {% endfor %}
                     </div>
+
                     <div class="chat-area-footer">
                         <label for="hiddenImageInput">
 
