@@ -1,5 +1,5 @@
 {% load static %}
-{% load humanize %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -89,101 +89,137 @@
                         </div>
                     </div>
                     <div class="chat-area-main" id="chat-message">
-                        {% for message in messages %}
-                            {% if message.file_type == 'text' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>{{ message.user__username }}</p>
-                                            <p>{{ message.content }}</p>
+                        <div class="chat-old-msg">
+
+                        </div>
+                        <div class="chat-last-msg">
+                            {% for message in messages %}
+                                {% if message.file_type == 'text' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <p>{{ message.content }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% elif message.file_type == 'file' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>${message.username}</p>
-                                            <a href="{{ message.content }}" download="Forum Ekpser">
-                                                <img src="/static/img/server/file.png" alt="File">
-                                            </a>
+                                {% elif message.file_type == 'file' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <a href="{{ message.content }}" download="Forum Ekpser">
+                                                    <img src="/static/img/server/file.png" alt="File">
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% elif message.file_type == 'image' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>${message.username}</p>
-                                            <img src="{{ message.content }}" alt="Image">
+                                {% elif message.file_type == 'image' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <img src="{{ message.content }}" alt="Image">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% elif message.file_type == 'video' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>${message.username}</p>
-                                            <video controls width="250" height="250">
-                                                <source src="{{ message.content }}">
-                                            </video>
+                                {% elif message.file_type == 'video' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <video controls width="250" height="250">
+                                                    <source src="{{ message.content }}">
+                                                </video>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% elif message.file_type == 'audio' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>${message.username}</p>
-                                            <audio controls style="width: 250px;">
-                                                <source src="{{ message.content }}">
-                                            </audio>
+                                {% elif message.file_type == 'audio' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <audio controls style="width: 250px;">
+                                                    <source src="{{ message.content }}">
+                                                </audio>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% elif message.file_type == 'record' %}
-                                <div class="chat-msg">
-                                    <div class="chat-msg-profile">
-                                        <div class="chat-msg-date">{{ message.date_added }}</div>
-                                    </div>
-                                    <div class="chat-msg-content">
-                                        <div class="chat-msg-text">
-                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
-                                                 class="user_profile_photo">
-                                            <p>${message.username}</p>
-                                            <audio controls style="width: 250px;">
-                                                <source src="{{ message.content }}">
-                                            </audio>
+                                {% elif message.file_type == 'record' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <audio controls style="width: 250px;">
+                                                    <source src="{{ message.content }}">
+                                                </audio>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
                     </div>
 
                     <div class="chat-area-footer">
@@ -231,51 +267,32 @@
                         </div>
                     </div>
 
-
-                    <div class="card-content" style="display: none">
-
-
-                        <div class="center-align">
-                            {% if directs.has_next %}
-                                <a id="loadmorebtn" class="waves-effect waves-light btn-small"><i
-                                        class="material-icons left">add</i>Load more</a>
-                                <input id="page_number" type="hidden" value="{{ directs.next_page_number }}">
-                            {% endif %}
-                        </div>
-
-                        <ol id="oldirects" style="list-style-type: none; display: none; flex-direction: column-reverse;"
-                            class="collection">
-                            {% for direct in directs %}
-                                <li style="border-bottom: 0px;" class="collection-item avatar">
-                                    {% if direct.sender.profile.picture %}
-                                        <img src="{{ direct.sender.profile.picture.url }}"
-                                             class="circle responsive-img">
-                                    {% else %}
-                                        <img src="{% static 'img/no_avatar.jpg' %}" class="circle responsive-img">
-                                    {% endif %}
-                                    <span class="title"><b>{{ direct.sender.first_name }} {{ direct.sender.last_name }}</b></span>
-                                    <p>{{ direct.body }}</p>
-                                    <p class="right-align">{{ direct.date | naturaltime }}</p>
-                                </li>
-                            {% endfor %}
-                        </ol>
+                    <div class="center-align d-none">
+                        {% if directs.has_next %}
+                            <a id="loadmorebtn" class="waves-effect waves-light btn-small"><i
+                                    class="material-icons left">add</i>Load more</a>
+                            <input id="page_number" type="hidden" value="{{ directs.next_page_number }}">
+                        {% endif %}
                     </div>
                 </div>
+                <div class="detail-area">
+                    <div class="detail-changes">
+                        <input type="text" placeholder="Konuşmalarda ara...">
+                    </div>
 
-
-            </div>
-            <div class="detail-area">
-                <div class="detail-changes">
-                    <input type="text" placeholder="Konuşmalarda ara...">
                 </div>
-
             </div>
         </div>
-    </div>
+
     </div>
 {% endblock %}
 {{ room.slug|json_script:"json-roomname" }}
 {{ request.user.username|json_script:"json-username" }}
+{% for p in user_profile %}
+    {% if request.user == p.user %}
+        {{ p.get_profile_photos|json_script:"json-profile" }}
+    {% endif %}
+{% endfor %}
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
             integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"

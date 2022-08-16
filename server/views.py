@@ -64,8 +64,8 @@ def room_find(request):
 @login_required
 def room(request, slug):
     room = Room.objects.get(slug=slug)
-    messages = Message.objects.filter(room=room).values('content','user__username','user__userprofile__profile_photo','date_added','file_type')
-    directs = Message.objects.filter(room=room).order_by('-date_added')
+    messages = Message.objects.filter(room=room).values('content','user__username','user__userprofile__profile_photo','date_added','file_type').order_by('-date_added')
+    directs = Message.objects.filter(room=room).values('content','user__username','user__userprofile__profile_photo','date_added','file_type').order_by('-date_added')
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
     participants = []
@@ -83,12 +83,9 @@ def room(request, slug):
     for p in room_participants:
         participants.append(p.group_user)
 
-
-
-
     return render(request, 'pages/chat/single_room.html',
                   {'room': room, 'directs': directs_data,'messages': messages_data, 'room_participants_count': room_participants_count,
-                   'room_participants': room_participants, 'profile': profile})
+                   'room_participants': room_participants})
 
 
 def json_room_message(request, slug):
@@ -112,8 +109,6 @@ def json_room_message(request, slug):
         # Creating the list of data
         directs_list = list(directs_data)
 
-        for x in range(len(directs_list)):
-            directs_list[x]['date_added'] = naturaltime(directs_list[x]['date_added'])
 
         return JsonResponse(directs_list, safe=False)
     else:

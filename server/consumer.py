@@ -30,8 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         file_type = data['file_type']
         username = data['username']
-
-
+        profile = data['profile']
         room = data['room']
 
         await self.save_message(username, room, message, file_type)
@@ -43,7 +42,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'username': username,
                 'room': room,
-                'file_type':file_type
+                'file_type':file_type,
+                'profile':profile
             }
         )
 
@@ -53,6 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = event['username']
         room = event['room']
         file_type = event['file_type']
+        profile = event['profile']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
@@ -60,7 +61,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'room': room,
             'date_added': timezone.now().isoformat(),
-            'file_type':file_type
+            'file_type':file_type,
+            'profile':profile
         }))
 
     @sync_to_async

@@ -950,7 +950,7 @@ html {
 }
 
 .tooltiptext {
-    visibility: visible;
+    visibility: hidden;
     position: absolute;
     width: auto;
     min-width: 120px;
@@ -960,7 +960,7 @@ html {
     padding: 5px 10px;
     border-radius: 6px;
     z-index: 1;
-    opacity: 1;
+    opacity: 0;
     transition: opacity 0.3s;
 }
 
@@ -1035,11 +1035,40 @@ html {
     color: #ffffff;
 }
 
-#spinner-box{
+#spinner-box {
     text-align: center;
     margin-top: 10px;
 }
 
-.not-visible{
+.not-visible {
     display: none;
+}
+
+.chat-msg-user {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.chat-msg-user .user_profile_photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.chat-msg-user p {
+    margin-left: 10px;
+    color: #52D382;
+}
+
+.chat-old-msg{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.chat-last-msg {
+    display: flex;
+    flex-direction: column-reverse;
 }

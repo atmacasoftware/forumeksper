@@ -1,5 +1,6 @@
 const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
 const userName = JSON.parse(document.getElementById('json-username').textContent);
+const profile = JSON.parse(document.getElementById('json-profile').textContent);
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
@@ -55,7 +56,7 @@ function getBase64(file) {
             "file_type": "file",
             "message": reader.result,
             'username': userName,
-            'room': roomName
+            'room': roomName,'profile': profile
         }))
     }
 }
@@ -84,7 +85,8 @@ function getBaseImage64(image) {
             "file_type": "image",
             "message": reader.result,
             'username': userName,
-            'room': roomName
+            'room': roomName,
+            'profile': profile
         }))
     }
 }
@@ -106,7 +108,6 @@ function handleVideoSelect(event) {
 
 }
 
-
 function getBaseVideo64(video) {
     var reader = new FileReader()
     reader.readAsDataURL(video)
@@ -116,11 +117,11 @@ function getBaseVideo64(video) {
             "file_type": "video",
             "message": reader.result,
             'username': userName,
-            'room': roomName
+            'room': roomName,
+            'profile': profile
         }))
     }
 }
-
 
 document.getElementById('hiddenAudioInput').addEventListener('change', handleAudioSelect, false)
 
@@ -138,7 +139,8 @@ function getBaseAudio64(audio) {
             "file_type": "audio",
             "message": reader.result,
             'username': userName,
-            'room': roomName
+            'room': roomName,
+            'profile': profile
         }))
     }
 }
@@ -157,8 +159,18 @@ chatSocket.onmessage = function (e) {
         hour12: false,
     };
     var datetime = new Date(data.date_added).toLocaleString('tr', dateOptions);
-
     const message_type = data.file_type
+
+    let profile_photo;
+
+    if (data.profile === null) {
+        profile_photo = '/static/img/profile/empty_profile.png'
+    } else {
+        profile_photo = data.profile;
+    }
+
+    console.log(profile_photo)
+
     if (message_type === 'text') {
         if (data.message) {
             let html = `
@@ -168,7 +180,12 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                    <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
+                                    
                                         <p>${data.message}</p>
                                     </div>
                                 </div>
@@ -191,7 +208,11 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
                                         <a href="${data.message}" download="Forum Ekpser">
                                         <img src="/static/img/server/file.png" alt="File">
 </a>
@@ -216,7 +237,11 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
                                         <img src="${data.message}" alt="Image">
                                     </div>
                                 </div>
@@ -239,7 +264,11 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
                                      
                                         <video controls width="250" height="250">
                                         <source src="${data.message}">
@@ -266,7 +295,11 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
                                      
                                         <audio controls style="width: 250px;">
                                         <source src="${data.message}">
@@ -293,7 +326,11 @@ chatSocket.onmessage = function (e) {
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                            <p>${data.username}</p>
+                                    </div>
                                      
                                         <audio controls style="width: 250px;">
                                         <source src="${data.message}">
@@ -340,7 +377,8 @@ document.querySelector('#chat-submit').onclick = function (e) {
         "file_type": "text",
         'message': message,
         'username': userName,
-        'room': roomName
+        'room': roomName,
+        'profile': profile
     }));
 
     messageInputDom.value = '';
@@ -405,7 +443,8 @@ function getBaseRecord64(auidodata) {
             "file_type": "record",
             "message": reader.result,
             'username': userName,
-            'room': roomName
+            'room': roomName,
+            'profile': profile
         }))
     }
 }
@@ -431,13 +470,14 @@ const csrf = document.getElementById("csrfToken");
             },
             cache: false,
             type: 'post',
-            success: function (response) {
-                if (response.empty == true) {
+            success: function (data) {
+                if (data.empty == true) {
                     $(loadBtn).hide();
                 } else {
-                    const data = response.data
+                    box.scrollTop = box.scrollHeight;
+                    const messages = data
                     setTimeout(() => {
-                        data.map(message => {
+                        messages.map(message => {
                             spinnerBox.classList.add('not-visible')
 
                             var dateOptions = {
@@ -453,6 +493,14 @@ const csrf = document.getElementById("csrfToken");
 
                             const message_type = message.file_type
 
+                            let profile_photo;
+
+                            if (message.user__userprofile__profile_photo === null) {
+                                profile_photo = '/static/img/profile/empty_profile.png'
+                            } else {
+                                profile_photo = message.user__userprofile__profile_photo;
+                            }
+
                             if (message_type === 'text') {
 
                                 let html = `
@@ -462,14 +510,19 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${message.user__username}</p>
+                                    <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
+                                  
                                         <p>${message.content}</p>
                                     </div>
                                 </div>
                             </div>
                        
                 `
-                                chatMessage.innerHTML += html;
+                                document.querySelector('.chat-old-msg').innerHTML += html;
                                 box.scrollTop = box.scrollHeight;
 
                             } else if (message_type === 'file') {
@@ -481,7 +534,11 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${message.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
                                         <a href="${message.message}" download="Forum Ekpser">
                                         <img src="/static/img/server/file.png" alt="File">
 </a>
@@ -490,7 +547,6 @@ const csrf = document.getElementById("csrfToken");
                             </div>
                        
                 `
-
                                     chatMessage.innerHTML += html;
                                     box.scrollTop = box.scrollHeight;
 
@@ -506,14 +562,17 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${data.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
                                         <img src="${data.message}" alt="Image">
                                     </div>
                                 </div>
                             </div>
                        
                 `
-
                                     chatMessage.innerHTML += html;
                                     box.scrollTop = box.scrollHeight;
 
@@ -529,7 +588,11 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${message.username}</p>
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
                                      
                                         <video controls width="250" height="250">
                                         <source src="${message.message}">
@@ -539,7 +602,6 @@ const csrf = document.getElementById("csrfToken");
                             </div>
                        
                 `
-
                                     chatMessage.innerHTML += html;
                                     box.scrollTop = box.scrollHeight;
 
@@ -555,8 +617,11 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${message.username}</p>
-                                     
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
                                         <audio controls style="width: 250px;">
                                         <source src="${message.message}">
                                         </audio>
@@ -581,8 +646,11 @@ const csrf = document.getElementById("csrfToken");
                                 </div>
                                 <div class="chat-msg-content">
                                     <div class="chat-msg-text">
-                                        <p>${message.username}</p>
-                                     
+                                        <div class="chat-msg-user">
+                                        <img src="${profile_photo}" alt="User"
+                                                     class="user_profile_photo">
+                                           <p>${message.user__username}</p>
+                                    </div>
                                         <audio controls style="width: 250px;">
                                         <source src="${message.message}">
                                         </audio>
@@ -591,10 +659,8 @@ const csrf = document.getElementById("csrfToken");
                             </div>
                        
                 `
-
                                     chatMessage.innerHTML += html;
                                     box.scrollTop = box.scrollHeight;
-
                                 } else {
                                     console.log("Boş mesaj")
                                 }
@@ -605,7 +671,6 @@ const csrf = document.getElementById("csrfToken");
                 }
                 page_number = page_number + 1;
                 $("#page_number").attr('value', page_number);
-
             }
         });
         return false;
