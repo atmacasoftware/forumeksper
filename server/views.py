@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.humanize.templatetags.humanize import naturaltime
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import threading
 
@@ -17,11 +20,11 @@ def rooms(request):
     if 'createChannels' in request.POST:
         try:
             postData = request.POST
-            category = postData.get('category','')
+            category = postData.get('category', '')
             image = request.FILES.get("image")
             banner = request.FILES.get("banner")
             name = postData.get('name')
-            private = postData.get('is_private','')
+            private = postData.get('is_private', '')
 
             get_cateogry = RoomCategory.objects.get(id=category)
 
@@ -29,14 +32,16 @@ def rooms(request):
                 private = False
             else:
                 private = True
-            data = Room.objects.create(name=name, user=request.user, category=get_cateogry, image=image, banner=banner, is_private=private)
+            data = Room.objects.create(name=name, user=request.user, category=get_cateogry, image=image, banner=banner,
+                                       is_private=private)
             data.save()
             return redirect('room', data.slug)
         except:
             messages.info(request,
                           'Kategori seçimi, kanal kapak resmi, kanal banner resmi, kanal adı ve kanal gizlilik durumunu seçmeniz gerekmektedir.')
-            return render(request, 'pages/chat/rooms.html',{'rooms':rooms,'category':category,'messages':messages,'owner_rooms':owner_rooms})
-    return render(request, 'pages/chat/rooms.html',{'rooms':rooms,'category':category,'owner_rooms':owner_rooms})
+            return render(request, 'pages/chat/rooms.html',
+                          {'rooms': rooms, 'category': category, 'messages': messages, 'owner_rooms': owner_rooms})
+    return render(request, 'pages/chat/rooms.html', {'rooms': rooms, 'category': category, 'owner_rooms': owner_rooms})
 
 
 @login_required
@@ -53,29 +58,63 @@ def room_find(request):
             return redirect('rooms')
         except:
             pass
-    return render(request, 'pages/chat/keşfet.html',{'rooms':rooms,'messages':messages})
+    return render(request, 'pages/chat/keşfet.html', {'rooms': rooms, 'messages': messages})
+
 
 @login_required
 def room(request, slug):
     room = Room.objects.get(slug=slug)
-    messages = Message.objects.filter(room=room)
+    messages = Message.objects.filter(room=room).values('content','user__username','user__userprofile__profile_photo','date_added','file_type')
+    directs = Message.objects.filter(room=room).order_by('-date_added')
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
     participants = []
     message_users = []
     profile = []
-    message_users_profile = []
+
+    paginator_directs = Paginator(directs, 5)
+    page_number_directs = request.GET.get('directspage')
+    directs_data = paginator_directs.get_page(page_number_directs)
+
+    paginator_messages = Paginator(messages, 5)
+    page_number_messages = request.GET.get('messagespage')
+    messages_data = paginator_messages.get_page(page_number_messages)
 
     for p in room_participants:
         participants.append(p.group_user)
 
-    for pu in participants:
-        profile.append(UserProfile.objects.filter(user=pu))
 
-    for m in messages:
-        message_users.append(m.user)
 
-    for mu in message_users:
-        message_users_profile.append(UserProfile.objects.filter(user=mu))
 
-    return render(request, 'pages/chat/single_room.html',{'room':room,'messages':messages,'room_participants_count':room_participants_count,'room_participants':room_participants,'profile':profile})
+    return render(request, 'pages/chat/single_room.html',
+                  {'room': room, 'directs': directs_data,'messages': messages_data, 'room_participants_count': room_participants_count,
+                   'room_participants': room_participants, 'profile': profile})
+
+
+def json_room_message(request, slug):
+    room = Room.objects.get(slug=slug)
+    page_number_directs = request.POST.get('directspage')
+
+    message = Message.objects.filter(room=room).order_by('-date_added').values(
+        'content',
+        'user__username',
+        'date_added',
+        'file_type',
+        'user__userprofile__profile_photo',
+    )
+
+    # Pagination for directs
+    paginator_directs = Paginator(message, 5)
+
+    if paginator_directs.num_pages >= int(page_number_directs):
+        directs_data = paginator_directs.get_page(page_number_directs)
+
+        # Creating the list of data
+        directs_list = list(directs_data)
+
+        for x in range(len(directs_list)):
+            directs_list[x]['date_added'] = naturaltime(directs_list[x]['date_added'])
+
+        return JsonResponse(directs_list, safe=False)
+    else:
+        return JsonResponse({'empty': True}, safe=False)

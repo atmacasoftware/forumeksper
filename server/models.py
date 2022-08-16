@@ -114,5 +114,8 @@ class Message(models.Model):
         ordering = ('date_added',)
         verbose_name_plural = "3. Kanal Mesajları"
 
+    def get_username(self):
+        return self.user.username
+
     def __str__(self):
         return self.user.username + " - " + self.room.name

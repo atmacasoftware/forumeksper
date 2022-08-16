@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -82,57 +83,106 @@
                     </div>
                     <div class="load-more-wrapper">
                         <button id="loadMore">Önceki Mesajları Yükle</button>
+                        <div id="spinner-box" class="not-visible">
+                            <div class="spinner-grow text-success" role="status">
+                            </div>
+                        </div>
                     </div>
                     <div class="chat-area-main" id="chat-message">
-
                         {% for message in messages %}
-                            <div class="chat-msg">
-                                <div class="chat-msg-profile">
-                                    <div class="chat-msg-date">{{ message.date_added }}</div>
-                                </div>
-                                <div class="chat-msg-content">
-                                    <div class="chat-msg-text">
-                                        <p>{{ message.user.username }}</p>
-                                        {% if message.file_type == 'text' %}
+                            {% if message.file_type == 'text' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>{{ message.user__username }}</p>
                                             <p>{{ message.content }}</p>
-                                        {% elif message.file_type == 'file' %}
-                                            <a href="{{ message.content }}" download="proposed_file_name"><img
-                                                    src="{% static 'img/server/file.png' %}" alt="File"></a>
-                                        {% elif message.file_type == 'image' %}
-                                            <div class="popup-image">
-                                                <span>&times;</span>
-                                                <img src="{{ message.content }}" alt="Image">
-                                            </div>
-                                            <img src="{{ message.content }}" class="msg-img" alt="Image">
-                                        {% elif message.file_type == 'video' %}
-                                            <video controls width="250" height="250">
-                                                <source src="{{ message.content }}">
-                                            </video>
-                                        {% elif message.file_type == 'audio' %}
-                                            <audio controls style="width: 250px;">
-                                                <source src="{{ message.content }}">
-                                            </audio>
-                                        {% elif message.file_type == 'record' %}
-                                            <audio controls style="width: 250px;">
-                                                <source src="{{ message.content }}">
-                                            </audio>
-                                        {% else %}
-                                            <p>{{ message.content }}</p>
-                                        {% endif %}
-                                        <div class="dropdown">
-                                            <button class="message-reply" data-bs-toggle="dropdown"
-                                                    aria-expanded="false"><i class="bi bi-three-dots-vertical"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                <li><a class="dropdown-item" href="#">Kötüye Kullanım Bildir</a></li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-
+                            {% elif message.file_type == 'file' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>${message.username}</p>
+                                            <a href="{{ message.content }}" download="Forum Ekpser">
+                                                <img src="/static/img/server/file.png" alt="File">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif message.file_type == 'image' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>${message.username}</p>
+                                            <img src="{{ message.content }}" alt="Image">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif message.file_type == 'video' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>${message.username}</p>
+                                            <video controls width="250" height="250">
+                                                <source src="{{ message.content }}">
+                                            </video>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif message.file_type == 'audio' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>${message.username}</p>
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif message.file_type == 'record' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <img src="/media/{{ message.user__userprofile__profile_photo }}" alt="User"
+                                                 class="user_profile_photo">
+                                            <p>${message.username}</p>
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
 
@@ -174,21 +224,54 @@
 
 
                         <div class="message-wrapper">
-                            <input type="text" placeholder="'{{ room.name }}' için mesaj gönder..." id="chat-message-input"/>
+                            <input type="text" placeholder="'{{ room.name }}' için mesaj gönder..."
+                                   id="chat-message-input"/>
                             <button type="submit" id="chat-submit"><i class="bi bi-send-fill"></i></button>
                             <button type="button" id="chat-microfon"><i class="bi bi-mic-fill"></i></button>
                         </div>
-
-                    </div>
-                </div>
-                <div class="detail-area">
-                    <div class="detail-changes">
-                        <input type="text" placeholder="Konuşmalarda ara...">
                     </div>
 
+
+                    <div class="card-content" style="display: none">
+
+
+                        <div class="center-align">
+                            {% if directs.has_next %}
+                                <a id="loadmorebtn" class="waves-effect waves-light btn-small"><i
+                                        class="material-icons left">add</i>Load more</a>
+                                <input id="page_number" type="hidden" value="{{ directs.next_page_number }}">
+                            {% endif %}
+                        </div>
+
+                        <ol id="oldirects" style="list-style-type: none; display: none; flex-direction: column-reverse;"
+                            class="collection">
+                            {% for direct in directs %}
+                                <li style="border-bottom: 0px;" class="collection-item avatar">
+                                    {% if direct.sender.profile.picture %}
+                                        <img src="{{ direct.sender.profile.picture.url }}"
+                                             class="circle responsive-img">
+                                    {% else %}
+                                        <img src="{% static 'img/no_avatar.jpg' %}" class="circle responsive-img">
+                                    {% endif %}
+                                    <span class="title"><b>{{ direct.sender.first_name }} {{ direct.sender.last_name }}</b></span>
+                                    <p>{{ direct.body }}</p>
+                                    <p class="right-align">{{ direct.date | naturaltime }}</p>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
                 </div>
+
+
+            </div>
+            <div class="detail-area">
+                <div class="detail-changes">
+                    <input type="text" placeholder="Konuşmalarda ara...">
+                </div>
+
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}
 {{ room.slug|json_script:"json-roomname" }}
@@ -203,7 +286,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        // This is for the AJAX request in loadmore.js script. So we can send post request.
+        // Because csrf_token is neccesary for ajax requests.
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
     <script src="{% static 'js/chat.js' %}"></script>
+
 
 {% endblock %}
 

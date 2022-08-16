@@ -1034,3 +1034,12 @@ html {
     width: 250px;
     color: #ffffff;
 }
+
+#spinner-box{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.not-visible{
+    display: none;
+}

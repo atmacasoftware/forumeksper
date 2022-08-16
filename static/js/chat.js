@@ -409,3 +409,206 @@ function getBaseRecord64(auidodata) {
         }))
     }
 }
+
+
+const spinnerBox = document.getElementById('spinner-box');
+const loadBtn = document.getElementById('loadMore');
+const loadBox = document.querySelector('.load-more-wrapper');
+const chatMessage = document.querySelector('#chat-message');
+const csrf = document.getElementById("csrfToken");
+
+(function ($) {
+
+    $("#loadMore").click(function () {
+        var directspage = document.getElementById('page_number');
+        var page_number = parseInt(directspage.value);
+
+        $.ajax({
+            url: `/server/json/${roomName}/`,
+            data: {
+                'directspage': page_number,
+                'csrfmiddlewaretoken': window.CSRF_TOKEN
+            },
+            cache: false,
+            type: 'post',
+            success: function (response) {
+                if (response.empty == true) {
+                    $(loadBtn).hide();
+                } else {
+                    const data = response.data
+                    setTimeout(() => {
+                        data.map(message => {
+                            spinnerBox.classList.add('not-visible')
+
+                            var dateOptions = {
+
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: false,
+                            };
+                            var datetime = new Date(message.date_added).toLocaleString('tr', dateOptions);
+
+                            const message_type = message.file_type
+
+                            if (message_type === 'text') {
+
+                                let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${message.user__username}</p>
+                                        <p>${message.content}</p>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+                                chatMessage.innerHTML += html;
+                                box.scrollTop = box.scrollHeight;
+
+                            } else if (message_type === 'file') {
+                                if (message.message) {
+                                    let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${message.username}</p>
+                                        <a href="${message.message}" download="Forum Ekpser">
+                                        <img src="/static/img/server/file.png" alt="File">
+</a>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+                                    chatMessage.innerHTML += html;
+                                    box.scrollTop = box.scrollHeight;
+
+                                } else {
+                                    console.log("Boş mesaj")
+                                }
+                            } else if (message_type === 'image') {
+                                if (message.message) {
+                                    let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${data.username}</p>
+                                        <img src="${data.message}" alt="Image">
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+                                    chatMessage.innerHTML += html;
+                                    box.scrollTop = box.scrollHeight;
+
+                                } else {
+                                    console.log("Boş mesaj")
+                                }
+                            } else if (message_type === 'video') {
+                                if (message.message) {
+                                    let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${message.username}</p>
+                                     
+                                        <video controls width="250" height="250">
+                                        <source src="${message.message}">
+                                        </video>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+                                    chatMessage.innerHTML += html;
+                                    box.scrollTop = box.scrollHeight;
+
+                                } else {
+                                    console.log("Boş mesaj")
+                                }
+                            } else if (message_type === 'audio') {
+                                if (message.message) {
+                                    let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${message.username}</p>
+                                     
+                                        <audio controls style="width: 250px;">
+                                        <source src="${message.message}">
+                                        </audio>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+                                    chatMessage.innerHTML += html;
+                                    box.scrollTop = box.scrollHeight;
+
+                                } else {
+                                    console.log("Boş mesaj")
+                                }
+                            } else if (message_type === 'record') {
+                                if (data.message) {
+                                    let html = `
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">${datetime}</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">
+                                        <p>${message.username}</p>
+                                     
+                                        <audio controls style="width: 250px;">
+                                        <source src="${message.message}">
+                                        </audio>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                `
+
+                                    chatMessage.innerHTML += html;
+                                    box.scrollTop = box.scrollHeight;
+
+                                } else {
+                                    console.log("Boş mesaj")
+                                }
+                            }
+
+                        })
+                    }, 500)
+                }
+                page_number = page_number + 1;
+                $("#page_number").attr('value', page_number);
+
+            }
+        });
+        return false;
+    });
+    // end of document ready
+}(jQuery)); // end of jQuery name space

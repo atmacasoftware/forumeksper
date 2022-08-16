@@ -159,3 +159,4 @@ class Login(View):
             messages.warning(request, 'Email veya şifre hatalı.')
             return render(request, 'pages/login.html', {'error1': 'Kullanıcı adı veya şifre yanlış olabilir.',
                                                         'error2': 'Hesabınız aktif edilmemiş olabilir. Lütfen email adresini kontrol ediniz. Aktivasyon maili spamlarına düşmüş olabilir.'})
+
