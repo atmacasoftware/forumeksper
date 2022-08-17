@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user_account',
     'server',
     'channels',
+    'notifications',
 ]
 
 MIDDLEWARE = [

@@ -116,6 +116,21 @@ label:focus,
     border: none !important;
 }
 
+.navbar-nav{
+    align-items: center!important;
+}
+
+.notification-btn{
+    background: none;
+    border: none;
+    outline: none;
+    color: #ffffff;
+}
+
+.dropdown-notification .dropdown-menu{
+    width: 300px;
+}
+
 /* Navbar End */
 
 /* General End */

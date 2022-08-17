@@ -13,6 +13,8 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
+
+import notifications.routing
 import server.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'forumeksper.settings')
@@ -21,7 +23,8 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            server.routing.websocket_urlpatterns
+            server.routing.websocket_urlpatterns +
+            notifications.routing.websocket_urlpatterns
         )
     ),
 })

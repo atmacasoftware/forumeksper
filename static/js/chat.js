@@ -56,7 +56,7 @@ function getBase64(file) {
             "file_type": "file",
             "message": reader.result,
             'username': userName,
-            'room': roomName,'profile': profile
+            'room': roomName, 'profile': profile
         }))
     }
 }
@@ -449,12 +449,11 @@ function getBaseRecord64(auidodata) {
     }
 }
 
-
 const spinnerBox = document.getElementById('spinner-box');
 const loadBtn = document.getElementById('loadMore');
 const loadBox = document.querySelector('.load-more-wrapper');
 const chatMessage = document.querySelector('#chat-message');
-const csrf = document.getElementById("csrfToken");
+
 
 (function ($) {
 
@@ -471,7 +470,7 @@ const csrf = document.getElementById("csrfToken");
             cache: false,
             type: 'post',
             success: function (data) {
-                if (data.empty == true) {
+                if (data.empty === true) {
                     $(loadBtn).hide();
                 } else {
                     box.scrollTop = box.scrollHeight;
@@ -498,8 +497,10 @@ const csrf = document.getElementById("csrfToken");
                             if (message.user__userprofile__profile_photo === null) {
                                 profile_photo = '/static/img/profile/empty_profile.png'
                             } else {
-                                profile_photo = message.user__userprofile__profile_photo;
+                                profile_photo = `/media/${message.user__userprofile__profile_photo}`;
                             }
+
+                            console.log(message.user__userprofile__profile_photo)
 
                             if (message_type === 'text') {
 
@@ -600,7 +601,6 @@ const csrf = document.getElementById("csrfToken");
                                     </div>
                                 </div>
                             </div>
-                       
                 `
                                     chatMessage.innerHTML += html;
                                     box.scrollTop = box.scrollHeight;
@@ -669,7 +669,7 @@ const csrf = document.getElementById("csrfToken");
                         })
                     }, 500)
                 }
-                page_number = page_number + 1;
+                page_number = page_number + 15;
                 $("#page_number").attr('value', page_number);
             }
         });
