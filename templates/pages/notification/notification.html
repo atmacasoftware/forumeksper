@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="notification">
+    <div class="icon_wrap">
+        <i class="bi bi-bell"></i>
+    </div>
+    <div class="notification_dd">
+        <ul class="notification_ul">
+            <li>
+                <div class="notify_data">
+                    <div class="title">
+                        Lorem ipsum dolor sit amet.
+                    </div>
+                    <div class="sub_title">
+                        17 Ağustos 2022 20:36
+                    </div>
+                </div>
+            </li>
+            <li class="show_all">
+                <p class="link">Tüm Bildirimleri Gör</p>
+            </li>
+        </ul>
+    </div>
 
-</body>
-</html>
+</div>
+
+{% for notify in notification %}
+    <li><a class="dropdown-item" href="#">{{ notify.content }}</a></li>
+{% endfor %}

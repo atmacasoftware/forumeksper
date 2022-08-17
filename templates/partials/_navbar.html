@@ -29,25 +29,20 @@
                 </li>
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <div class="dropdown dropdown-notification">
-                            <button type="button" class="notification-btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                             </span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-
+                        {% include 'pages/notification/notification.html' %}
                     </li>
                 {% endif %}
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url 'logout' %}" class="nav-link">Çıkış Yap</a>
+                        <div class="profile">
+                            <div class="profile_picture">
+                                <img src="{{ user_profile.get_profile_photos }}" alt="Profile">
+                            </div>
+                            <div class="profile_user">
+                                <p>{{ user_profile.user }}</p>
+                            </div>
+                        </div>
+
                     </li>
                 {% else %}
                     <li class="nav-item">
