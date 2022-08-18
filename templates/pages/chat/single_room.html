@@ -15,6 +15,12 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/server.css' %}">
+        <link rel="stylesheet" href="{% static 'css/notification.css' %}">
+        <style>
+            .notification_dd{
+                width: 250px!important;
+            }
+        </style>
     {% endblock %}
 </head>
 <body>
@@ -308,13 +314,13 @@
                             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                                 <ul class="navbar-nav">
                                     {% if request.user.is_authenticated %}
-                                        <li class="nav-item notification-item">
-                                            {% include 'pages/navbar_partials/notification.html' %}
+                                        <li class="nav-item user-item">
+                                            {% include 'pages/navbar_partials/users.html' %}
                                         </li>
                                     {% endif %}
                                     {% if request.user.is_authenticated %}
                                         <li class="nav-item user-item">
-                                            {% include 'pages/navbar_partials/users.html' %}
+                                            {% include 'pages/navbar_partials/notification.html' %}
                                         </li>
                                     {% endif %}
                                 </ul>
@@ -324,7 +330,6 @@
                     <div class="detail-changes">
                         <input type="text" placeholder="Konuşmalarda ara...">
                     </div>
-
                 </div>
             </div>
         </div>

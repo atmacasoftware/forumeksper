@@ -10,8 +10,9 @@ def mainpage(request):
     person_profile = None
     notification = None
     notification_count = None
+    notification_unread = None
     if request.user.is_authenticated:
         person_profile = UserProfile.objects.get(user=request.user)
-        notification = Notification.objects.filter(recipient_user=request.user)
+        notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
         notification_count = Notification.objects.filter(recipient_user=request.user).count()
-    return render(request,'pages/mainpage.html',{'profile':profile,'person_profile':person_profile,'notification':notification,'notification_count':notification_count})
+    return render(request,'pages/mainpage.html',{'profile':profile,'person_profile':person_profile,'notification':notification,'notification_count':notification_count,'notification_unread':notification_unread})

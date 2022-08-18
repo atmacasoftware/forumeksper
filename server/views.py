@@ -102,7 +102,7 @@ def room(request, slug):
 
     if request.user.is_authenticated:
         person_profile = UserProfile.objects.get(user=request.user)
-        notification = Notification.objects.filter(recipient_user=request.user)
+        notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
         notification_count = Notification.objects.filter(recipient_user=request.user).count()
 
     return render(request, 'pages/chat/single_room.html',

@@ -1,11 +1,14 @@
 <div class="notification">
     <div class="icon_wrap">
         <i class="bi bi-bell"></i>
+        {% if notification_unread %}
+            <span class="not-read"><i class="bi bi-dot"></i></span>
+        {% endif %}
     </div>
     <div class="notification_dd">
         <ul class="notification_ul">
             {% for n in notification %}
-                <li>
+                <li {% if n.is_seen == False %} class="read" {% else %} class="" {% endif %}>
                     <div class="notify_data">
                         <div class="title">
                             {{ n.content }}
