@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import threading
 
+from notifications.models import Notification
 from server.models import Room, Message, MemberShip, RoomCategory
 from user_account.models import UserProfile
 
@@ -69,9 +70,14 @@ def room(request, slug):
                                                        'date_added', 'file_type').order_by('-date_added')
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
+    all_profile = UserProfile.objects.all()
     participants = []
     message_users = []
     profile = []
+    owner_profile = []
+    person_profile = None
+    notification = None
+    notification_count = None
 
     paginator_directs = Paginator(directs, 15)
     page_number_directs = request.GET.get('directspage')
@@ -81,13 +87,28 @@ def room(request, slug):
     page_number_messages = request.GET.get('messagespage')
     messages_data = paginator_messages.get_page(page_number_messages)
 
+    for a in all_profile:
+        if room.user == a.user:
+            owner_profile.append(a)
+
+
     for p in room_participants:
         participants.append(p.group_user)
+
+    for u in all_profile:
+        for p in participants:
+            if p.username == u.user.username:
+                profile.append(u)
+
+    if request.user.is_authenticated:
+        person_profile = UserProfile.objects.get(user=request.user)
+        notification = Notification.objects.filter(recipient_user=request.user)
+        notification_count = Notification.objects.filter(recipient_user=request.user).count()
 
     return render(request, 'pages/chat/single_room.html',
                   {'room': room, 'directs': directs_data, 'messages': messages_data,
                    'room_participants_count': room_participants_count,
-                   'room_participants': room_participants})
+                   'room_participants': room_participants,'all_profile':all_profile,'participants':participants,'profile':profile,'owner_profile':owner_profile,'person_profile':person_profile,'notification':notification,'notification_count':notification_count})
 
 
 def json_room_message(request, slug):

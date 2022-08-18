@@ -30,30 +30,57 @@
                             <img class="logo" src="{% static 'img/logo.png' %}" alt="">
                         </a>
                     </div>
+
+                    <div class="owner_title">
+                        <h4>Kanal Sahibi</h4>
+                    </div>
+
+                    {% for admin in owner_profile %}
+                        <div class="msg {% if admin.online %} online {% endif %}">
+                            {% if admin.get_profile_photos %}
+                                <img class="msg-profile" src="{{ admin.get_profile_photos }}" alt="User Image">
+                            {% else %}
+                                <img class="msg-profile" src="{% static 'img/server/empty_channels.png' %}"
+                                     alt="No Image">
+                            {% endif %}
+
+                            <div class="msg-detail">
+                                <div class="msg-username">{{ admin.user }}</div>
+                                {% if admin.online %}
+                                {% else %}
+                                    <div class="msg-content">
+                                        <span class="msg-date">{{ admin.last_seen }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
                     <div class="participants_title">
                         <h4>Katılımcılar ({{ room_participants_count }})</h4>
                     </div>
-                    {% for p in profile %}
-                        {% for u in p %}
-                            <div class="msg {% if u.online %} online {% endif %}">
-                                {% if u.get_profile_photos %}
-                                    <img class="msg-profile" src="{{ u.get_profile_photos }}" alt="User Image">
-                                {% else %}
-                                    <img class="msg-profile" src="{% static 'img/server/empty_channels.png' %}"
-                                         alt="No Image">
-                                {% endif %}
 
-                                <div class="msg-detail">
-                                    <div class="msg-username">{{ u.user }}</div>
-                                    {% if u.online %}
-                                    {% else %}
-                                        <div class="msg-content">
-                                            <span class="msg-date">{{ u.last_seen }}</span>
-                                        </div>
-                                    {% endif %}
-                                </div>
+                    {% for p in profile %}
+
+                        <div class="msg {% if p.online %} online {% endif %}">
+                            {% if p.get_profile_photos %}
+                                <img class="msg-profile" src="{{ p.get_profile_photos }}" alt="User Image">
+                            {% else %}
+                                <img class="msg-profile" src="{% static 'img/server/empty_channels.png' %}"
+                                     alt="No Image">
+                            {% endif %}
+
+                            <div class="msg-detail">
+                                <div class="msg-username">{{ p.user }}</div>
+                                {% if p.online %}
+                                {% else %}
+                                    <div class="msg-content">
+                                        <span class="msg-date">{{ p.last_seen }}</span>
+                                    </div>
+                                {% endif %}
                             </div>
-                        {% endfor %}
+                        </div>
+
                     {% endfor %}
 
                     <button class="add"></button>
@@ -276,6 +303,24 @@
                     </div>
                 </div>
                 <div class="detail-area">
+                    <nav class="navbar navbar-dark navbar-expand-lg sticky-top bg-dark text-white">
+                        <div class="container">
+                            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                <ul class="navbar-nav">
+                                    {% if request.user.is_authenticated %}
+                                        <li class="nav-item notification-item">
+                                            {% include 'pages/navbar_partials/notification.html' %}
+                                        </li>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated %}
+                                        <li class="nav-item user-item">
+                                            {% include 'pages/navbar_partials/users.html' %}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
                     <div class="detail-changes">
                         <input type="text" placeholder="Konuşmalarda ara...">
                     </div>
@@ -309,6 +354,7 @@
         window.CSRF_TOKEN = "{{ csrf_token }}";
     </script>
     <script src="{% static 'js/chat.js' %}"></script>
+    <script src="{% static 'js/notification.js' %}"></script>
 
 
 {% endblock %}

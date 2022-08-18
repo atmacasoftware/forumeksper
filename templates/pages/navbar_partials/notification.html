@@ -1,0 +1,27 @@
+<div class="notification">
+    <div class="icon_wrap">
+        <i class="bi bi-bell"></i>
+    </div>
+    <div class="notification_dd">
+        <ul class="notification_ul">
+            {% for n in notification %}
+                <li>
+                    <div class="notify_data">
+                        <div class="title">
+                            {{ n.content }}
+                        </div>
+                        <div class="sub_title">
+                            {{ n.created_at }}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            {% if notification_count > 5 %}
+                <li class="show_all">
+                    <p class="link">Tüm Bildirimleri Gör</p>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+</div>

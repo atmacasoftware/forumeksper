@@ -1,0 +1,30 @@
+<div class="profile">
+    <div class="profile_wrap">
+        <div class="profile_picture">
+            <img src="{{ person_profile.get_profile_photos }}" alt="Profile">
+        </div>
+        <div class="profile_user">
+            <p>{{ person_profile.user }}</p>
+        </div>
+    </div>
+    <div class="profile_dd">
+        <ul class="profile_ul">
+            <li class="profile__link">
+                <div class="profile_icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="title profile-img">
+                    <p>Hesabım</p>
+                </div>
+            </li>
+            <li class="profile__logout">
+                <div class="profile_icon">
+                    <i class="bi bi-box-arrow-left"></i>
+                </div>
+                <div class="title">
+                    <a href="{% url 'logout' %}">Çıkış Yap</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
