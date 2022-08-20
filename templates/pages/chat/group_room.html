@@ -1,0 +1,497 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ room.name }}</title>
+    {% block css %}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/server.css' %}">
+        <link rel="stylesheet" href="{% static 'css/notification.css' %}">
+        <style>
+            .notification_dd {
+                width: 250px !important;
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+
+
+{% block single_room %}
+    <div class="container-fluid room_page">
+        <div class="app">
+            <div class="wrapper">
+                <div class="conversation-area">
+                    <div class="logo-wrapper">
+                        <a href="{% url 'mainpage' %}">
+                            <img class="logo" src="{% static 'img/logo.png' %}" alt="">
+                        </a>
+                    </div>
+
+                    <div class="owner_title">
+                        <h4>Kanal Sahibi</h4>
+                    </div>
+                    {% for admin in owner_profile %}
+                        <div class="msg {% if admin.online %} online {% endif %}">
+                            {% if admin.get_profile_photos %}
+                                <img class="msg-profile" src="{{ admin.get_profile_photos }}" alt="User Image">
+                            {% else %}
+                                <img class="msg-profile" src="{% static 'img/server/empty_channels.png' %}"
+                                     alt="No Image">
+                            {% endif %}
+
+                            <div class="msg-detail">
+                                <div class="msg-username">{{ admin.user }}</div>
+                                {% if admin.online %}
+                                {% else %}
+                                    <div class="msg-content">
+                                        <span class="msg-date">{{ admin.last_seen }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="participants_title">
+                        <h4>Katılımcılar ({{ room_participants_count }})</h4>
+                    </div>
+
+                    {% for p in profile %}
+                        <div class="msg {% if p.online %} online {% else %} offline {% endif %}">
+                            {% if p.get_profile_photos %}
+                                <img class="msg-profile" src="{{ p.get_profile_photos }}" alt="User Image">
+                            {% else %}
+                                <img class="msg-profile" src="{% static 'img/server/empty_channels.png' %}"
+                                     alt="No Image">
+                            {% endif %}
+
+                            <div class="msg-detail">
+                                <div class="msg-username">{{ p.user }}</div>
+                                {% if p.online %}
+                                {% else %}
+                                    <div class="msg-content">
+                                        <span class="msg-date">{{ p.last_seen }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                    <button class="add"></button>
+                    <div class="overlay"></div>
+                </div>
+                <div class="chat-area">
+                    <div class="chat-area-header">
+                        <div class="chat-area-title">
+                            {% if room.get_channel_photos %}
+                                <img src="{{ room.get_channel_photos }}" alt="Channel">
+                            {% else %}
+                                <img src="{% static 'img/server/empty_channels.png' %}"
+                                     alt="Empty Channel">
+                            {% endif %}
+                            {{ room.name }}
+                        </div>
+                        <div class="chat-information dropdown">
+                            <button data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Gruptan Ayrıl</a></li>
+                                <li><a class="dropdown-item" href="#">Kötüye Kullanım Bildir</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="alert-wrapper">
+                    </div>
+                    <div class="load-more-wrapper">
+                        <button id="loadMore">Önceki Mesajları Yükle</button>
+                        <div id="spinner-box" class="not-visible">
+                            <div class="spinner-grow text-success" role="status">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-area-main" id="chat-message">
+                        <div class="chat-old-msg">
+
+                        </div>
+                        <div class="chat-last-msg">
+                            {% for message in messages %}
+                                {% if message.file_type == 'text' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <p>{{ message.content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif message.file_type == 'file' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <a href="{{ message.content }}" download="Forum Ekpser">
+                                                    <img src="/static/img/server/file.png" alt="File">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif message.file_type == 'image' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <img src="{{ message.content }}" alt="Image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif message.file_type == 'video' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <video controls width="250" height="250">
+                                                    <source src="{{ message.content }}">
+                                                </video>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif message.file_type == 'audio' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <audio controls style="width: 250px;">
+                                                    <source src="{{ message.content }}">
+                                                </audio>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif message.file_type == 'record' %}
+                                    <div class="chat-msg">
+                                        <div class="chat-msg-profile">
+                                            <div class="chat-msg-date">{{ message.date_added }}</div>
+                                        </div>
+                                        <div class="chat-msg-content">
+                                            <div class="chat-msg-text">
+                                                <div class="chat-msg-user">
+                                                    <img {% if message.user__userprofile__profile_photo %}
+                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                        src="/static/img/profile/empty_profile.png" {% endif %}
+                                                        alt="User"
+                                                        class="user_profile_photo">
+                                                    <p>{{ message.user__username }}</p>
+                                                </div>
+                                                <audio controls style="width: 250px;">
+                                                    <source src="{{ message.content }}">
+                                                </audio>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="chat-area-footer">
+                        <label for="hiddenImageInput">
+
+                            <i class="bi bi-image"></i>
+                        </label>
+                        <input type="file" name="image" hidden accept=".jpg, .jpeg, .png" id="hiddenImageInput">
+                        <div class="dropdown attach-shared-wrapper">
+                            <button class="attach-shared-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-paperclip" id="file" aria-hidden="true"
+                                ></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <label for="hiddenFileInput">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                    </label>
+                                    <input type="file" id="hiddenFileInput" accept=".pdf, .doc, .json">
+                                    <span class="tooltiptext tooltip-bottom">Dosya Ekle</span>
+                                </li>
+                                <li>
+                                    <label for="hiddenVideoInput">
+                                        <i class="bi bi-camera-video"></i>
+                                    </label>
+                                    <input type="file" id="hiddenVideoInput" accept="video/mp4,video/x-m4v,video/*">
+                                    <span class="tooltiptext tooltip-bottom">Video Ekle</span>
+                                </li>
+                                <li>
+                                    <label for="hiddenAudioInput">
+                                        <i class="bi bi-headphones"></i>
+                                    </label>
+                                    <input type="file" id="hiddenAudioInput" accept="audio/*">
+                                    <span class="tooltiptext tooltip-bottom">Ses Ekle</span>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="message-wrapper">
+                            <input type="text" placeholder="'{{ room.name }}' için mesaj gönder..."
+                                   id="chat-message-input"/>
+                            <button type="submit" id="chat-submit"><i class="bi bi-send-fill"></i></button>
+                            <button type="button" id="chat-microfon"><i class="bi bi-mic-fill"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="center-align d-none">
+                        {% if directs.has_next %}
+                            <a id="loadmorebtn" class="waves-effect waves-light btn-small"><i
+                                    class="material-icons left">add</i>Load more</a>
+                            <input id="page_number" type="hidden" value="{{ directs.next_page_number }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="detail-area">
+                    <nav class="navbar navbar-dark navbar-expand-lg sticky-top bg-dark text-white">
+                        <div class="container">
+                            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                <ul class="navbar-nav">
+                                    {% if request.user.is_authenticated %}
+                                        <li class="nav-item user-item">
+                                            {% include 'pages/navbar_partials/users.html' %}
+                                        </li>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated %}
+                                        <li class="nav-item user-item">
+                                            {% include 'pages/navbar_partials/notification.html' %}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="detail-changes">
+                        <input type="text" placeholder="Konuşmalarda ara...">
+                    </div>
+
+                    <!-- Survey Start-->
+
+                    <div class="detail-survey">
+                        <div class="survey_header">
+                            <div class="survey_header_title">
+                                <h3>Anketler</h3>
+                            </div>
+                            <div class="survey_header_create">
+                                <button type="button" data-bs-toggle="modal"
+                                        data-bs-target="#createSurveyModal">
+                                    <i class="bi bi-plus-circle-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="survey_body">
+                            {% for s in surveys %}
+                                <ul class="survey-list">
+                                    <li>
+                                        <a href="#" data-bs-toggle="modal"
+                                           data-bs-target="#survey-{{ s.id }}">
+                                            <span>{{ s.title|truncatechars:"15" }}</span>
+                                            <span>0 katılan</span>
+                                        </a>
+                                        <div class="modal fade" id="survey-{{ s.id }}" tabindex="-1"
+                                             aria-labelledby="survey-{{ s.id }}-label" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="survey-{{ s.id }}-label">{{ s.title }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {% for o in options %}
+                                                            {% if s.id == o.survey_id %}
+                                                                <ul>
+                                                                    <li>
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>{{ o.options }}</td>
+                                                                                <td>
+                                                                                    <form action="" method="post">
+                                                                                        {% csrf_token %}
+                                                                                        <input type="hidden" value="{{ s.id }}" class="surveyID">
+                                                                                        <input type="hidden" value="{{ o.id }}" class="optionID">
+                                                                                        <a href="{% url 'json_survey' s.id o.id %}"
+                                                                                           class="btn btn-success btn-sm survey-option"
+                                                                                           id="option-{{ o.id }}">
+                                                                                            {% if o.vote__answered_user__username == request.user.username %}
+                                                                                                Oy Verildi
+                                                                                            {% else %}
+                                                                                                Oy Ver
+                                                                                            {% endif %}
+                                                                                        </a>
+                                                                                    </form>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </li>
+                                                                </ul>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Survey Start-->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals Start -->
+        <div class="modal fade" id="createSurveyModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Anket Oluştur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" id="createSurveyForm">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <table class="table form-table table-bordered table-sm table-create-survey">
+                                <thead class="text-center">
+                                <tr>
+                                    <th colspan="2">Seçenekler</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for form_data in formset %}
+                                    <tr class="item">
+                                        <td>
+                                            {{ form_data.options }}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-form-row"
+                                                    id="{{ formset.prefix }}">
+                                                Sil
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="9"
+                                        style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
+                                        <button type="button" class="btn btn-sm btn-success add-form-row"
+                                                id="{{ formset.prefix }}">
+                                            Yeni Seçenek Ekle
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            {{ formset.management_form }}
+                            <input type="submit" name="create_survey" class="btn btn-primary" value="Oluştur">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modals End-->
+
+    </div>
+{% endblock %}
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username" }}
+{% for p in user_profile %}
+    {% if request.user == p.user %}
+        {{ p.get_profile_photos|json_script:"json-profile" }}
+    {% endif %}
+{% endfor %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+            integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+            integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        // This is for the AJAX request in loadmore.js script. So we can send post request.
+        // Because csrf_token is neccesary for ajax requests.
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+    <script src="{% static 'js/chat.js' %}"></script>
+    <script src="{% static 'js/notification.js' %}"></script>
+    <script src="{% static 'js/formset.js' %}"></script>
+    <script src="{% static 'js/survey.js' %}"></script>
+
+{% endblock %}
+
+</body>
+</html>
+
+

@@ -3,12 +3,16 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.db import transaction, IntegrityError
+from django.forms import modelformset_factory
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import threading
 
 from notifications.models import Notification
 from server.models import Room, Message, MemberShip, RoomCategory
+from survey.forms import OptionsForm, SurveyForm
+from survey.models import Options, Survey, Vote
 from user_account.models import UserProfile
 
 
@@ -78,6 +82,9 @@ def room(request, slug):
     person_profile = None
     notification = None
     notification_count = None
+    surveys = None
+    options = None
+    vote_option = None
 
     paginator_directs = Paginator(directs, 15)
     page_number_directs = request.GET.get('directspage')
@@ -90,7 +97,6 @@ def room(request, slug):
     for a in all_profile:
         if room.user == a.user:
             owner_profile.append(a)
-
 
     for p in room_participants:
         participants.append(p.group_user)
@@ -105,10 +111,42 @@ def room(request, slug):
         notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
         notification_count = Notification.objects.filter(recipient_user=request.user).count()
 
-    return render(request, 'pages/chat/single_room.html',
+    OptionsFormset = modelformset_factory(Options, form=OptionsForm)
+    form = SurveyForm(request.POST or None)
+    formset = OptionsFormset(request.POST or None, queryset=Options.objects.none(), prefix='option')
+
+    if "create_survey" in request.POST:
+        if form.is_valid() and formset.is_valid():
+            try:
+                with transaction.atomic():
+                    survey = form.save(commit=False)
+                    survey.created_user = request.user
+                    survey.room = room
+                    survey.save()
+
+                    for option in formset:
+                        data = option.save(commit=False)
+                        data.survey = survey
+                        data.options_user = request.user
+                        data.save()
+            except IntegrityError:
+                print("Error Encountered")
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    try:
+        surveys = Survey.objects.filter(room=room).order_by("-id")
+        options = Options.objects.all().values('vote__answered_user__username','vote__is_answered','survey','options','options_user','survey_id','id').distinct()
+    except:
+        pass
+
+    return render(request, 'pages/chat/group_room.html',
                   {'room': room, 'directs': directs_data, 'messages': messages_data,
                    'room_participants_count': room_participants_count,
-                   'room_participants': room_participants,'all_profile':all_profile,'participants':participants,'profile':profile,'owner_profile':owner_profile,'person_profile':person_profile,'notification':notification,'notification_count':notification_count})
+                   'room_participants': room_participants, 'all_profile': all_profile,
+                   'participants': participants, 'profile': profile, 'owner_profile': owner_profile,
+                   'person_profile': person_profile, 'notification': notification,
+                   'notification_count': notification_count, 'form': form, 'formset': formset, 'surveys': surveys,
+                   'options': options,'vote_option':vote_option})
 
 
 def json_room_message(request, slug):
@@ -140,3 +178,27 @@ def json_room_message(request, slug):
             return JsonResponse({'empty': True}, safe=False)
     except:
         return JsonResponse({'empty': True}, safe=False)
+
+
+def json_survey(request, survey_id, option_id):
+    try:
+        survey = Survey.objects.get(id=survey_id)
+        option = Options.objects.get(id=option_id)
+        vote = Vote.objects.create(answered_user=request.user, survey=survey, options=option, is_answered=True)
+        vote.save()
+
+        vote_count = Vote.objects.filter(survey=survey).count()
+
+        data = {
+            'ok':'ok',
+        }
+
+        if vote_count >= 1:
+            data = {
+                'ok': 'ok',
+                'vote_count':vote_count
+            }
+
+        return JsonResponse({'data': data}, safe=False)
+    except:
+        pass

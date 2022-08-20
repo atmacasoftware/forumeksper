@@ -179,7 +179,7 @@ html {
 .detail-area {
     border-left: 1px solid var(--border-color);
     margin-left: auto;
-    padding: 10px 30px 0 30px;
+    padding: 10px 20px 0 20px;
     display: flex;
     flex-direction: column;
     overflow: auto;
@@ -327,7 +327,19 @@ html {
     border-radius: 50%;
     border: 2px solid white;
     left: 50px;
-    bottom: 19px;
+    bottom: 20px;
+}
+
+.msg.offline:before {
+    content: "";
+    position: absolute;
+    background-color: red;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid white;
+    left: 50px;
+    bottom: 20px;
 }
 
 .msg-username {
@@ -1252,7 +1264,133 @@ html {
     align-items: center;
 }
 
+/* Survey Start */
 
 
+.detail-survey {
+    margin-top: 20px;
+}
 
+.detail-survey .survey_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    background: #212529;
+    padding: 5px 10px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-bottom: 1px solid #eef2f4;
+}
+
+.detail-survey .survey_header .survey_header_title h3 {
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.survey_header_create button {
+    background: none;
+    outline: none;
+    border: none;
+    margin-bottom: 5px;
+}
+
+.survey_header_create button i {
+    color: #ffffff;
+    font-size: 24px;
+
+}
+
+.detail-survey .survey_body {
+    height: 200px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    background: #212529;
+    padding: 5px 0;
+}
+
+#createSurveyForm p {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#createSurveyForm p label {
+    width: 25%;
+    font-weight: bold;
+}
+
+#createSurveyForm p input {
+    width: 75%;
+    border-radius: 12px;
+    padding: 2px 10px;
+}
+
+.table-create-survey input {
+    width: 100%;
+    border: 12px;
+    padding: 2px 10px;
+}
+
+.table-create-survey button {
+    width: 100%;
+}
+
+.survey-list {
+    padding-left: 0 !important;
+}
+
+.survey-list li {
+    list-style-type: none;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.survey-list li a {
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    transition: 0.3s;
+    padding: 0 10px;
+}
+
+.survey-list li:hover {
+    background: var(--msg-hover-bg);
+}
+
+
+.modal ul{
+    padding-left: 0!important;
+}
+
+.modal ul table{
+    width: 100%;
+}
+
+.modal ul table tr td:first-child{
+    width: 75%;
+}
+
+.modal ul table tr td:last-child{
+    width: 25%;
+}
+
+.modal ul table tr td a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Survey End */
 

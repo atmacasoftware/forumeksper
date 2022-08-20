@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'server',
     'channels',
     'notifications',
+    'survey',
 ]
 
 MIDDLEWARE = [
