@@ -363,35 +363,42 @@
                                                                 aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {% for o in options %}
-                                                            {% if s.id == o.survey_id %}
-                                                                <ul>
-                                                                    <li>
-                                                                        <table>
-                                                                            <tr>
-                                                                                <td>{{ o.options }}</td>
-                                                                                <td>
-                                                                                    <form action="" method="post">
-                                                                                        {% csrf_token %}
-                                                                                        <input type="hidden" value="{{ s.id }}" class="surveyID">
-                                                                                        <input type="hidden" value="{{ o.id }}" class="optionID">
-                                                                                        <a href="{% url 'json_survey' s.id o.id %}"
-                                                                                           class="btn btn-success btn-sm survey-option"
-                                                                                           id="option-{{ o.id }}">
-                                                                                            {% if o.vote__answered_user__username == request.user.username %}
-                                                                                                Oy Verildi
-                                                                                            {% else %}
-                                                                                                Oy Ver
-                                                                                            {% endif %}
-                                                                                        </a>
-                                                                                    </form>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </li>
-                                                                </ul>
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                        <div class="survey-wrapper">
+                                                            {% for o in options %}
+                                                                {% if s.id == o.survey.id %}
+                                                                    <ul>
+                                                                        <li>
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td>{{ o.options }}</td>
+                                                                                    <td>
+                                                                                        <form action="" method="post">
+                                                                                            {% csrf_token %}
+                                                                                            <input type="hidden"
+                                                                                                   value="{{ s.id }}"
+                                                                                                   class="surveyID">
+                                                                                            <input type="hidden"
+                                                                                                   value="{{ o.id }}"
+                                                                                                   class="optionID">
+                                                                                            <a href="{% url 'json_survey' s.id o.id %}"
+                                                                                               data-target="{% url 'json_survey_results' s.id o.id %}"
+                                                                                               class="btn btn-success btn-sm survey-option"
+                                                                                               id="option-{{ o.id }}">
+                                                                                                {% if o.vote__answered_user__username == request.user.username %}
+                                                                                                    Oy Verildi
+                                                                                                {% else %}
+                                                                                                    Oy Ver
+                                                                                                {% endif %}
+                                                                                            </a>
+                                                                                        </form>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </li>
+                                                                    </ul>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

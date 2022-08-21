@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -135,7 +137,7 @@ def room(request, slug):
 
     try:
         surveys = Survey.objects.filter(room=room).order_by("-id")
-        options = Options.objects.all().values('vote__answered_user__username','vote__is_answered','survey','options','options_user','survey_id','id').distinct()
+        options = Options.objects.all()
     except:
         pass
 
@@ -146,7 +148,7 @@ def room(request, slug):
                    'participants': participants, 'profile': profile, 'owner_profile': owner_profile,
                    'person_profile': person_profile, 'notification': notification,
                    'notification_count': notification_count, 'form': form, 'formset': formset, 'surveys': surveys,
-                   'options': options,'vote_option':vote_option})
+                   'options': options, 'vote_option': vote_option})
 
 
 def json_room_message(request, slug):
@@ -190,15 +192,45 @@ def json_survey(request, survey_id, option_id):
         vote_count = Vote.objects.filter(survey=survey).count()
 
         data = {
-            'ok':'ok',
+            'ok': 'ok',
         }
 
         if vote_count >= 1:
             data = {
                 'ok': 'ok',
-                'vote_count':vote_count
+                'vote_count': vote_count
             }
 
         return JsonResponse({'data': data}, safe=False)
     except:
         pass
+
+
+def json_survey_results(request, survey_id, option_id):
+    res = None
+    res_option = None
+    survey = Survey.objects.filter(id=survey_id)
+    options = Options.objects.filter(survey_id=survey_id)
+    vote = Vote.objects.filter(survey_id=survey_id, options_id=option_id)
+    vote_count = len(Vote.objects.filter(survey_id=survey_id))
+
+    if len(survey) > 0 and len(options) > 0:
+        data_survey = []
+        data_option = []
+        for s in survey:
+            item = {
+                'survey_id': s.id,
+                'title': s.title,
+            }
+            data_survey.append(item)
+
+        for o in options:
+            option_item = {
+                'option_id': o.id,
+                'options': o.options
+            }
+            data_option.append(option_item)
+
+        res = data_survey
+        res_option = data_option
+    return JsonResponse({'data': res, 'data_option': res_option,'vote_count':vote_count}, safe=False)
