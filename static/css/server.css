@@ -127,8 +127,8 @@ html {
 }
 
 .room_page {
-    margin: 0;
-    padding: 0;
+    margin: 0!important;
+    padding: 0!important;
 }
 
 .app {
@@ -1389,6 +1389,106 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+#modal-body {
+    text-align: center;
+    position: relative;
+    margin-top: 20px
+}
+
+#modal-body fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+    position: relative
+}
+
+.form-card {
+    text-align: left
+}
+
+#survey-list fieldset:not(:first-of-type) {
+    display: none
+}
+
+
+#survey-list .action-button {
+    width: 100px;
+    background: black;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right
+}
+
+#survey-list .action-button:hover,
+#survey-list .action-button:focus {
+    background-color: #52D382
+}
+
+#survey-list .action-button-previous {
+    width: 100px;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right
+}
+
+#survey-list .action-button-previous:hover,
+#survey-list .action-button-previous:focus {
+    background-color: #52D382
+}
+
+.card {
+    z-index: 0;
+    border: none;
+    position: relative
+}
+
+.fs-title {
+    font-size: 25px;
+    color: #673AB7;
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left
+}
+
+.purple-text {
+    color: #673AB7;
+    font-weight: normal
+}
+
+.steps {
+    font-size: 25px;
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-align: right
+}
+
+.fieldlabels {
+    color: gray;
+    text-align: left
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover
 }
 
 

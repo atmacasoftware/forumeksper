@@ -7,7 +7,7 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.paginator import Paginator
 from django.db import transaction, IntegrityError
 from django.forms import modelformset_factory
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 import threading
 
@@ -87,6 +87,7 @@ def room(request, slug):
     surveys = None
     options = None
     vote_option = None
+    is_vote = False
 
     paginator_directs = Paginator(directs, 15)
     page_number_directs = request.GET.get('directspage')
@@ -138,6 +139,7 @@ def room(request, slug):
     try:
         surveys = Survey.objects.filter(room=room).order_by("-id")
         options = Options.objects.all()
+
     except:
         pass
 
@@ -201,7 +203,7 @@ def json_survey(request, survey_id, option_id):
                 'vote_count': vote_count
             }
 
-        return JsonResponse({'data': data}, safe=False)
+        return JsonResponse({'data': data})
     except:
         pass
 
@@ -214,6 +216,8 @@ def json_survey_results(request, survey_id, option_id):
     vote = Vote.objects.filter(survey_id=survey_id, options_id=option_id)
     vote_count = len(Vote.objects.filter(survey_id=survey_id))
 
+
+
     if len(survey) > 0 and len(options) > 0:
         data_survey = []
         data_option = []
@@ -221,16 +225,27 @@ def json_survey_results(request, survey_id, option_id):
             item = {
                 'survey_id': s.id,
                 'title': s.title,
+                'countVote':s.countVote(),
             }
             data_survey.append(item)
 
         for o in options:
             option_item = {
                 'option_id': o.id,
-                'options': o.options
+                'options': o.options,
+                'countOptionVote':o.countOptionVote(),
+                'rateVate':o.rateVate(),
+                'countSurveyVote':o.countSurveyVote(),
             }
             data_option.append(option_item)
 
         res = data_survey
         res_option = data_option
     return JsonResponse({'data': res, 'data_option': res_option,'vote_count':vote_count}, safe=False)
+
+def json_option(request, survey_id):
+    survey = Survey.objects.get(id=survey_id)
+    options = list(Options.objects.filter(survey=survey).values('id','options','options_user_id','created_at','survey_id'))
+    data = options
+    return JsonResponse({'data':data}, safe=False)
+

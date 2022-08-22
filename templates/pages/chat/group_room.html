@@ -347,59 +347,91 @@
                             {% for s in surveys %}
                                 <ul class="survey-list">
                                     <li>
-                                        <a href="#" data-bs-toggle="modal"
-                                           data-bs-target="#survey-{{ s.id }}">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#survey-{{ s.id }}"
+                                           class="survey-link"
+                                           role="button"
+                                           data-survey-url="{% url 'json_option' s.id %}">
                                             <span>{{ s.title|truncatechars:"15" }}</span>
                                             <span>0 katılan</span>
                                         </a>
-                                        <div class="modal fade" id="survey-{{ s.id }}" tabindex="-1"
-                                             aria-labelledby="survey-{{ s.id }}-label" aria-hidden="true">
-                                            <div class="modal-dialog">
+
+                                        <!-- First modal dialog -->
+                                        <div class="modal fade" id="survey-{{ s.id }}" aria-hidden="true"
+                                             aria-labelledby="survey-{{ s.id }}-label1" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered-">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title"
-                                                            id="survey-{{ s.id }}-label">{{ s.title }}</h5>
+                                                            id="survey-{{ s.id }}-label1">{{ s.title }}</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="survey-wrapper">
-                                                            {% for o in options %}
-                                                                {% if s.id == o.survey.id %}
-                                                                    <ul>
-                                                                        <li>
-                                                                            <table>
-                                                                                <tr>
-                                                                                    <td>{{ o.options }}</td>
-                                                                                    <td>
-                                                                                        <form action="" method="post">
-                                                                                            {% csrf_token %}
-                                                                                            <input type="hidden"
-                                                                                                   value="{{ s.id }}"
-                                                                                                   class="surveyID">
-                                                                                            <input type="hidden"
-                                                                                                   value="{{ o.id }}"
-                                                                                                   class="optionID">
-                                                                                            <a href="{% url 'json_survey' s.id o.id %}"
-                                                                                               data-target="{% url 'json_survey_results' s.id o.id %}"
-                                                                                               class="btn btn-success btn-sm survey-option"
-                                                                                               id="option-{{ o.id }}">
-                                                                                                {% if o.vote__answered_user__username == request.user.username %}
-                                                                                                    Oy Verildi
-                                                                                                {% else %}
-                                                                                                    Oy Ver
-                                                                                                {% endif %}
-                                                                                            </a>
-                                                                                        </form>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </li>
-                                                                    </ul>
-                                                                {% endif %}
-                                                            {% endfor %}
+                                                            {% if request.user.username in s.is_answered %}
+                                                                <h5>Toplam Oy: {{ s.countVote }}</h5>
+                                                                {% for o in options %}
+                                                                    {% if s.id == o.survey.id %}
+                                                                        <div class="survey-result">
+                                                                            <p>{{ o.options }}
+                                                                                -> {{ o.countOptionVote }} Oy</p>
+                                                                            <div class="progress">
+                                                                                <div class="progress-bar"
+                                                                                     role="progressbar"
+                                                                                     aria-label="Example with label"
+                                                                                     style="width: {{ o.rateVate }}%;"
+                                                                                     aria-valuenow="{{ o.rateVate }}%"
+                                                                                     aria-valuemin="0"
+                                                                                     aria-valuemax="100">{{ o.rateVate }}%
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                {% for o in options %}
+
+                                                                    {% if s.id == o.survey.id %}
+                                                                        <ul>
+                                                                            <li>
+                                                                                <table>
+                                                                                    <tr>
+                                                                                        <td>{{ o.options }}</td>
+                                                                                        <td>
+                                                                                            <form action=""
+                                                                                                  method="post">
+                                                                                                {% csrf_token %}
+                                                                                                <input type="hidden"
+                                                                                                       value="{{ s.id }}"
+                                                                                                       class="surveyID">
+                                                                                                <input type="hidden"
+                                                                                                       value="{{ o.id }}"
+                                                                                                       class="optionID">
+                                                                                                <a href="{% url 'json_survey' s.id o.id %}"
+                                                                                                   data-target="{% url 'json_survey_results' s.id o.id %}"
+                                                                                                   class="btn btn-success btn-sm survey-option"
+                                                                                                   id="option-{{ o.id }}">
+                                                                                                    {% if request.user.username in o.is_answered %}
+                                                                                                        Oy Verildi
+                                                                                                    {% else %}
+                                                                                                        Oy Ver
+                                                                                                    {% endif %}
+                                                                                                </a>
+                                                                                            </form>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </li>
+                                                                        </ul>
+                                                                    {% endif %}
+
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -409,7 +441,7 @@
                         </div>
                     </div>
 
-                    <!-- Survey Start-->
+                    <!-- Survey End-->
                 </div>
             </div>
         </div>
@@ -487,8 +519,6 @@
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
-        // This is for the AJAX request in loadmore.js script. So we can send post request.
-        // Because csrf_token is neccesary for ajax requests.
         window.CSRF_TOKEN = "{{ csrf_token }}";
     </script>
     <script src="{% static 'js/chat.js' %}"></script>

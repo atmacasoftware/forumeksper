@@ -169,7 +169,6 @@ chatSocket.onmessage = function (e) {
         profile_photo = data.profile;
     }
 
-    console.log(profile_photo)
 
     if (message_type === 'text') {
         if (data.message) {
