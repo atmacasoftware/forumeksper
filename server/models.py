@@ -12,7 +12,7 @@ class RoomCategory(models.Model):
     slug = models.SlugField(unique=True, editable=False)
 
     class Meta:
-        verbose_name_plural = "4. Kategoriler"
+        verbose_name_plural = "6. Kategoriler"
 
     def get_slug(self):
         slug = slugify(self.name.replace("ı", "i"))
@@ -40,6 +40,7 @@ class RoomCategory(models.Model):
         self.modified = timezone.now()
         self.slug = self.get_slug()
         return super(RoomCategory, self).save(*args, **kwargs)
+
 
 
 class Room(models.Model):
@@ -82,6 +83,12 @@ class Room(models.Model):
         else:
             return None
 
+    def RoomAdmin(self):
+        return self.user.username
+
+    def RoomManeger(self):
+        return self.room_manager.values_list('user__username', flat=True)
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = timezone.now()
@@ -116,6 +123,48 @@ class Message(models.Model):
 
     def get_username(self):
         return self.user.username
+
+    def __str__(self):
+        return self.user.username + " - " + self.room.name
+
+
+class RoomAnnouncement(models.Model):
+    room = models.ForeignKey(Room, related_name="room_announcement", on_delete=models.CASCADE, verbose_name="Kanal Adı")
+    user = models.ForeignKey(User, related_name="room_announcement", on_delete=models.CASCADE, verbose_name="Kullanıcı")
+    title = models.CharField(max_length=255, verbose_name="Duyuru Başlık", null=True)
+    content = models.TextField(verbose_name="Duyuru İçeril")
+    date_added = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulma Tarihi")
+
+    class Meta:
+        ordering = ('date_added',)
+        verbose_name_plural = "4. Kanal Duyuruları"
+
+    def __str__(self):
+        return self.user.username + " - " + self.room.name + " - " + self.title
+
+
+class RoomManager(models.Model):
+    room = models.ForeignKey(Room, related_name="room_manager", on_delete=models.CASCADE, verbose_name="Kanal")
+    user = models.ForeignKey(User, related_name="room_manager", on_delete=models.CASCADE, verbose_name="Kanal Yöneticileri")
+    date_added = models.DateTimeField(auto_now_add=True, verbose_name="Yönetici Olma Tarihi")
+
+    class Meta:
+        ordering = ('date_added',)
+        verbose_name_plural = "5. Kanal Yöneticileri"
+
+    def __str__(self):
+        return self.user.username + " - " + self.room.name
+
+class FavouriteMessage(models.Model):
+    room = models.ForeignKey(Room, related_name="favourite_message", on_delete=models.CASCADE, verbose_name="Kanal")
+    message = models.ForeignKey(Message, related_name="favourite_message", on_delete=models.CASCADE, verbose_name="Favori Mesaj")
+    user = models.ForeignKey(User, related_name="favourite_message", on_delete=models.CASCADE,
+                             verbose_name="Favorilere Ekleyen Kullanıcı")
+    date_added = models.DateTimeField(auto_now_add=True, verbose_name="Eklenme Tarihi")
+
+    class Meta:
+        ordering = ('date_added',)
+        verbose_name_plural = "6. Favori Mesajları"
 
     def __str__(self):
         return self.user.username + " - " + self.room.name

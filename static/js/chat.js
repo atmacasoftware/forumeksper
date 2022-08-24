@@ -1,6 +1,8 @@
 const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
 const userName = JSON.parse(document.getElementById('json-username').textContent);
 const profile = JSON.parse(document.getElementById('json-profile').textContent);
+const roomID = JSON.parse(document.getElementById('json-roomid').textContent);
+
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
@@ -183,6 +185,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                     
                                         <p>${data.message}</p>
@@ -211,6 +229,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                         <a href="${data.message}" download="Forum Ekpser">
                                         <img src="/static/img/server/file.png" alt="File">
@@ -240,6 +274,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                         <img src="${data.message}" alt="Image">
                                     </div>
@@ -267,6 +317,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                      
                                         <video controls width="250" height="250">
@@ -298,6 +364,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                      
                                         <audio controls style="width: 250px;">
@@ -329,6 +411,22 @@ chatSocket.onmessage = function (e) {
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                             <p>${data.username}</p>
+                                            <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-favourite-target="/favorilere-ekle/${roomID}/${data.id}/"
+                                                                   data-message-id="${data.id}" href="#">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                      
                                         <audio controls style="width: 250px;">
@@ -499,8 +597,6 @@ const chatMessage = document.querySelector('#chat-message');
                                 profile_photo = `/media/${message.user__userprofile__profile_photo}`;
                             }
 
-                            console.log(message.user__userprofile__profile_photo)
-
                             if (message_type === 'text') {
 
                                 let html = `
@@ -514,6 +610,21 @@ const chatMessage = document.querySelector('#chat-message');
                                         <img src="${profile_photo}" alt="User"
                                                      class="user_profile_photo">
                                            <p>${message.user__username}</p>
+                                           <div class="dropdown message-detail">
+                                                        <button class="btn" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                            <li><a class="dropdown-item add-fovourite"
+                                                                   data-message-id="${message.id}" href="/server/favorilere-ekle/${roomID}/${message.id}/">Favori
+                                                                Mesajlarına Ekle</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                                Bildir</a></li>
+                                                        </ul>
+                                                    </div>
                                     </div>
                                   
                                         <p>${message.content}</p>
@@ -674,5 +785,9 @@ const chatMessage = document.querySelector('#chat-message');
         });
         return false;
     });
+
+
     // end of document ready
 }(jQuery)); // end of jQuery name space
+
+

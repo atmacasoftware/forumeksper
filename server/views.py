@@ -12,7 +12,8 @@ from django.shortcuts import render, redirect
 import threading
 
 from notifications.models import Notification
-from server.models import Room, Message, MemberShip, RoomCategory
+from server.forms import AnnouncementForm
+from server.models import Room, Message, MemberShip, RoomCategory, RoomAnnouncement, RoomManager, FavouriteMessage
 from survey.forms import OptionsForm, SurveyForm
 from survey.models import Options, Survey, Vote
 from user_account.models import UserProfile
@@ -70,14 +71,20 @@ def room_find(request):
 @login_required
 def room(request, slug):
     room = Room.objects.get(slug=slug)
-    messages = Message.objects.filter(room=room).values('content', 'user__username', 'user__userprofile__profile_photo',
+    messages = Message.objects.filter(room=room).values('id', 'content', 'user__username',
+                                                        'user__userprofile__profile_photo',
                                                         'date_added', 'file_type').order_by('-date_added')
     directs = Message.objects.filter(room=room).values('content', 'user__username', 'user__userprofile__profile_photo',
                                                        'date_added', 'file_type').order_by('-date_added')
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
+    room_manager = RoomManager.objects.filter(room=room)
+    room_manager_count = RoomManager.objects.filter(room=room).count()
+    participation_count = room_participants_count - room_manager_count
     all_profile = UserProfile.objects.all()
     participants = []
+    managers = []
+    managers_profile = []
     message_users = []
     profile = []
     owner_profile = []
@@ -88,6 +95,8 @@ def room(request, slug):
     options = None
     vote_option = None
     is_vote = False
+    announcement = None
+    favourite = None
 
     paginator_directs = Paginator(directs, 15)
     page_number_directs = request.GET.get('directspage')
@@ -104,15 +113,26 @@ def room(request, slug):
     for p in room_participants:
         participants.append(p.group_user)
 
+    for rm in room_manager:
+        managers.append(rm.user)
+
     for u in all_profile:
         for p in participants:
             if p.username == u.user.username:
                 profile.append(u)
+        for m in managers:
+            if m.username == u.user.username:
+                managers_profile.append(u)
 
     if request.user.is_authenticated:
-        person_profile = UserProfile.objects.get(user=request.user)
-        notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
-        notification_count = Notification.objects.filter(recipient_user=request.user).count()
+        try:
+            person_profile = UserProfile.objects.get(user=request.user)
+            notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
+            notification_count = Notification.objects.filter(recipient_user=request.user).count()
+        except:
+            return redirect('login')
+    else:
+        return redirect('login')
 
     OptionsFormset = modelformset_factory(Options, form=OptionsForm)
     form = SurveyForm(request.POST or None)
@@ -139,7 +159,26 @@ def room(request, slug):
     try:
         surveys = Survey.objects.filter(room=room).order_by("-id")
         options = Options.objects.all()
+    except:
+        pass
 
+    try:
+        announcement = RoomAnnouncement.objects.filter(room=room).order_by('-id')
+    except:
+        announcement = "Duyuru bulunmamaktadır"
+
+    announcement_forum = AnnouncementForm(request.POST or None)
+    if "create_announcement" in request.POST:
+        if form.is_valid():
+            f_announcement = announcement_forum.save(commit=False)
+            f_announcement.user = request.user
+            f_announcement.room = room
+            f_announcement.save()
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        pass
+
+    try:
+        favourite = FavouriteMessage.objects.filter(room=room, user=request.user)
     except:
         pass
 
@@ -150,7 +189,10 @@ def room(request, slug):
                    'participants': participants, 'profile': profile, 'owner_profile': owner_profile,
                    'person_profile': person_profile, 'notification': notification,
                    'notification_count': notification_count, 'form': form, 'formset': formset, 'surveys': surveys,
-                   'options': options, 'vote_option': vote_option})
+                   'options': options, 'vote_option': vote_option, 'announcement': announcement,
+                   'announcement_forum': announcement_forum, 'managers_profile': managers_profile,
+                   'room_manager_count': room_manager_count, 'participation_count': participation_count,
+                   'favourite': favourite})
 
 
 def json_room_message(request, slug):
@@ -159,6 +201,7 @@ def json_room_message(request, slug):
         page_number_directs = request.POST.get('directspage')
 
         message = Message.objects.filter(room=room).order_by('-date_added').values(
+            'id',
             'content',
             'user__username',
             'date_added',
@@ -216,8 +259,6 @@ def json_survey_results(request, survey_id, option_id):
     vote = Vote.objects.filter(survey_id=survey_id, options_id=option_id)
     vote_count = len(Vote.objects.filter(survey_id=survey_id))
 
-
-
     if len(survey) > 0 and len(options) > 0:
         data_survey = []
         data_option = []
@@ -225,7 +266,7 @@ def json_survey_results(request, survey_id, option_id):
             item = {
                 'survey_id': s.id,
                 'title': s.title,
-                'countVote':s.countVote(),
+                'countVote': s.countVote(),
             }
             data_survey.append(item)
 
@@ -233,19 +274,40 @@ def json_survey_results(request, survey_id, option_id):
             option_item = {
                 'option_id': o.id,
                 'options': o.options,
-                'countOptionVote':o.countOptionVote(),
-                'rateVate':o.rateVate(),
-                'countSurveyVote':o.countSurveyVote(),
+                'countOptionVote': o.countOptionVote(),
+                'rateVate': o.rateVate(),
+                'countSurveyVote': o.countSurveyVote(),
             }
             data_option.append(option_item)
 
         res = data_survey
         res_option = data_option
-    return JsonResponse({'data': res, 'data_option': res_option,'vote_count':vote_count}, safe=False)
+    return JsonResponse({'data': res, 'data_option': res_option, 'vote_count': vote_count}, safe=False)
+
 
 def json_option(request, survey_id):
     survey = Survey.objects.get(id=survey_id)
-    options = list(Options.objects.filter(survey=survey).values('id','options','options_user_id','created_at','survey_id'))
+    options = list(
+        Options.objects.filter(survey=survey).values('id', 'options', 'options_user_id', 'created_at', 'survey_id'))
     data = options
-    return JsonResponse({'data':data}, safe=False)
+    return JsonResponse({'data': data}, safe=False)
+
+
+def json_add_favourite_message(request, room_id, message_id):
+    room = Room.objects.get(id=room_id)
+    message = Message.objects.get(room_id=room_id, id=message_id)
+    FavouriteMessage.objects.create(room=room, message=message, user=request.user)
+    data = None
+    try:
+        get_message = list(
+            FavouriteMessage.objects.filter(room=room, message=message).values('id', 'room', 'room_id', 'message',
+                                                                               'message_id', 'message__user__username',
+                                                                               'message__content'))
+        if len(get_message) > 0:
+            data = get_message
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except:
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 

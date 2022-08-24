@@ -1,7 +1,12 @@
+{% load static %}
 <div class="profile">
     <div class="profile_wrap">
         <div class="profile_picture">
-            <img src="{{ person_profile.get_profile_photos }}" alt="Profile">
+            {% if person_profile.get_profile_photos %}
+                <img src="{{ person_profile.get_profile_photos }}" alt="Profile">
+            {% else %}
+                <img src="{% static 'img/profile/empty_profile.png' %}" alt="">
+            {% endif %}
         </div>
         <div class="profile_user">
             <p>{{ person_profile.user }}</p>

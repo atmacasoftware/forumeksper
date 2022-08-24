@@ -3,6 +3,7 @@ from django.db import models
 from django.core.cache import cache
 import datetime
 from forumeksper import settings
+from mainpage.models import Citys, WorkType
 
 
 class UserProfile(models.Model):
@@ -11,6 +12,9 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255)
     profile_photo = models.ImageField(upload_to='profile', null=True, blank=True)
+    bio = models.TextField(max_length=500, null=True)
+    work_type = models.ForeignKey(WorkType, on_delete=models.CASCADE, null=True, blank=True)
+    service_city = models.ForeignKey(Citys, on_delete=models.CASCADE, null=True, blank=True)
     is_email_activation = models.BooleanField(default=False)
 
 

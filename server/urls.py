@@ -9,4 +9,5 @@ urlpatterns = [
     path('anket-cevabi/<survey_id>/<option_id>/', json_survey, name='json_survey'),
     path('anket-secenekleri/<survey_id>/', json_option, name='json_option'),
     path('anket-cevabi/anket-sonuclari/<survey_id>/<option_id>/', json_survey_results, name='json_survey_results'),
+    path('favorilere-ekle/<room_id>/<message_id>/', json_add_favourite_message, name='json_add_favourite_message'),
 ]

@@ -18,7 +18,20 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields = ('room','user')
     list_per_page = 300
 
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('room', 'user','title', 'date_added')
+    search_fields = ('room','user','title')
+    list_per_page = 300
+
+class RoomManagerAdmin(admin.ModelAdmin):
+    list_display = ('room', 'user', 'date_added')
+    search_fields = ('room','user')
+    list_per_page = 300
+
 admin.site.register(Room,RoomAdmin)
 admin.site.register(Message,MessageAdmin)
 admin.site.register(MemberShip,MemberAdmin)
+admin.site.register(RoomAnnouncement,AnnouncementAdmin)
+admin.site.register(RoomManager,RoomManagerAdmin)
+admin.site.register(FavouriteMessage)
 admin.site.register(RoomCategory)

@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'user_account',
+    'import_export',
     'server',
     'channels',
     'notifications',
     'survey',
+    'mainpage',
 ]
 
 MIDDLEWARE = [

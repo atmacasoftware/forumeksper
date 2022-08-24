@@ -28,3 +28,8 @@ urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
+
+
+admin.site.site_title = 'Forum Eksper Yönetimi'
+admin.site.site_header = 'Forum Eksper Yönetim Paneli'
+admin.site.index_title = 'Forum Eksper Yönetimi Paneline Hoş Geldiniz'

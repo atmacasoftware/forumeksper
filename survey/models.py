@@ -29,8 +29,6 @@ class Survey(models.Model):
         return count
 
 
-
-
 class Options(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name="option_survey", verbose_name="İlgili Anket", null=True)
     options = models.CharField(max_length=255, null=True, verbose_name="Seçenek")

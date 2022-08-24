@@ -2,3 +2,4 @@ django
 validate_email
 channels
 channels_redis
+django-import-export
