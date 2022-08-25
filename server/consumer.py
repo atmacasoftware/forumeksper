@@ -4,6 +4,9 @@ from asgiref.sync import sync_to_async, async_to_sync
 from django.contrib.auth.models import User
 from django.utils import timezone
 from .models import Message,Room
+import datetime
+from uuid import uuid4
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -43,7 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'username': username,
                 'room': room,
                 'file_type':file_type,
-                'profile':profile
+                'profile':profile,
             }
         )
 
@@ -62,7 +65,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'room': room,
             'date_added': timezone.now().isoformat(),
             'file_type':file_type,
-            'profile':profile
+            'profile':profile,
         }))
 
     @sync_to_async

@@ -2,7 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
-
+import datetime
+from uuid import uuid4
+def create_id():
+    now = datetime.datetime.now()
+    return str(now.year)+str(now.month)+str(now.day)+str(uuid4())[:7]
 
 # Create your models here.
 
@@ -111,6 +115,7 @@ class MemberShip(models.Model):
 
 
 class Message(models.Model):
+    id = models.CharField(primary_key=True, max_length=255, default=create_id, editable=False)
     room = models.ForeignKey(Room, related_name="messages", on_delete=models.CASCADE, verbose_name="Kanal Adı")
     user = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE, verbose_name="Kullanıcı")
     content = models.TextField()

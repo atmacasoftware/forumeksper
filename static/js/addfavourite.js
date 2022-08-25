@@ -47,3 +47,14 @@ $(document).ready(function () {
         })
     })
 });
+
+
+const reply = document.querySelectorAll('.msg-reply');
+
+$(document).ready(function (){
+    reply.forEach(rp => {
+        $(rp).on('click', function (){
+            console.log("selam")
+        })
+    })
+})

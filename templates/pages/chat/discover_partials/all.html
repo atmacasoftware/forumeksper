@@ -1,0 +1,18 @@
+{% extends 'pages/chat/keşfet.html' %}
+{% load static %}
+
+{% block discover_all %}
+    <ul>
+        {% for room in rooms %}
+            <li>
+                <h4>{{ room.name }}</h4>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="room_slug" value="{{ room.slug }}">
+                    <input type="hidden" name="request_user" value="{{ request.user.username }}">
+                    <input type="submit" value="Katıl" name="is_join">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

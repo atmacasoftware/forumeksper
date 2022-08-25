@@ -1,20 +1,206 @@
 {% extends 'layout.html' %}
 {% load static %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/discover.css' %}">
+{% endblock %}
+
 {% block channel_find %}
 
-    <ul>
-        {% for room in rooms %}
-            <li>
-                <h4>{{ room.name }}</h4>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="room_slug" value="{{ room.slug }}">
-                    <input type="hidden" name="request_user" value="{{ request.user.username }}">
-                    <input type="submit" value="Katıl" name="is_join">
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container-fluid discover-wrapper">
+        <div class="app">
+            <div class="row">
+                <div class="col-lg-2 col-sm-12 category-wrapper">
+                    <div class="category-wrapper_header">
+                        <div class="category-wrapper_header__title">
+                            <h4>Kategoriler</h4>
+                        </div>
+                        <div class="category-wrapper__categories">
+                            <div class="sub_categories">
+                                <a href="" class="{% if request.path == '/server/kesfet/hepsi/' %} active {% endif %}">
+                                    <img src="{% static 'img/server/all_channels.png' %}" alt="All">
+                                    Hepsi
+                                </a>
+                            </div>
+                            {% for c in category %}
+                                <div class="sub_categories">
+                                    <a href="">
+                                        <img src="{{ c.get_category_photos }}" alt="">
+                                        {{ c.name }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-12 channel-wrapper">
+                    {% block discover_all %}
+                    {% endblock %}
+                </div>
+                <div class="col-lg-1 col-sm-12 joined-wrapper">
+                <div class="scrool">
+
+
+                    {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                {% for my in user_room %}
+                        <div class="joined-channels" id="room-channel-{{ my.id }}">
+                            <a href="">
+                                <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
+                            </a>
+                            <script>
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
+                                })
+
+                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
+                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
+                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
+                                })
+                            </script>
+                        </div>
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
 
 {% endblock %}

@@ -11,6 +11,8 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 import threading
 
+from django.template.loader import render_to_string
+
 from notifications.models import Notification
 from server.forms import AnnouncementForm
 from server.models import Room, Message, MemberShip, RoomCategory, RoomAnnouncement, RoomManager, FavouriteMessage
@@ -54,6 +56,8 @@ def rooms(request):
 @login_required
 def room_find(request):
     rooms = Room.objects.all()
+    category = RoomCategory.objects.all()
+    user_room = Room.objects.filter(user=request.user)
     if 'is_join' in request.POST:
         try:
             postData = request.POST
@@ -65,17 +69,35 @@ def room_find(request):
             return redirect('rooms')
         except:
             pass
-    return render(request, 'pages/chat/keşfet.html', {'rooms': rooms, 'messages': messages})
+    return render(request, 'pages/chat/keşfet.html', {'rooms': rooms, 'messages': messages,'category':category,'user_room':user_room})
 
+@login_required
+def all_rooms(request):
+    rooms = Room.objects.all()
+    category = RoomCategory.objects.all()
+    user_room = Room.objects.filter(user=request.user)
+    if 'is_join' in request.POST:
+        try:
+            postData = request.POST
+            room_slug = postData.get('room_slug')
+            get_user = postData.get('request_user')
+            room = Room.objects.get(slug=room_slug)
+            user = User.objects.get(username=get_user)
+            MemberShip.objects.create(group_user=user, room=room)
+            return redirect('rooms')
+        except:
+            pass
+    return render(request,'pages/chat/discover_partials/all.html',{'rooms':rooms,'category':category,'user_room':user_room})
 
 @login_required
 def room(request, slug):
     room = Room.objects.get(slug=slug)
     messages = Message.objects.filter(room=room).values('id', 'content', 'user__username',
                                                         'user__userprofile__profile_photo',
-                                                        'date_added', 'file_type').order_by('-date_added')
+                                                        'date_added', 'file_type').order_by('-date_added')[:15]
     directs = Message.objects.filter(room=room).values('content', 'user__username', 'user__userprofile__profile_photo',
                                                        'date_added', 'file_type').order_by('-date_added')
+    total_data = Message.objects.filter(room=room).count()
     room_participants = MemberShip.objects.filter(room=room)
     room_participants_count = MemberShip.objects.filter(room=room).count()
     room_manager = RoomManager.objects.filter(room=room)
@@ -97,14 +119,6 @@ def room(request, slug):
     is_vote = False
     announcement = None
     favourite = None
-
-    paginator_directs = Paginator(directs, 15)
-    page_number_directs = request.GET.get('directspage')
-    directs_data = paginator_directs.get_page(page_number_directs)
-
-    paginator_messages = Paginator(messages, 15)
-    page_number_messages = request.GET.get('messagespage')
-    messages_data = paginator_messages.get_page(page_number_messages)
 
     for a in all_profile:
         if room.user == a.user:
@@ -183,7 +197,7 @@ def room(request, slug):
         pass
 
     return render(request, 'pages/chat/group_room.html',
-                  {'room': room, 'directs': directs_data, 'messages': messages_data,
+                  {'room': room, 'directs': directs, 'messages': messages,
                    'room_participants_count': room_participants_count,
                    'room_participants': room_participants, 'all_profile': all_profile,
                    'participants': participants, 'profile': profile, 'owner_profile': owner_profile,
@@ -192,7 +206,7 @@ def room(request, slug):
                    'options': options, 'vote_option': vote_option, 'announcement': announcement,
                    'announcement_forum': announcement_forum, 'managers_profile': managers_profile,
                    'room_manager_count': room_manager_count, 'participation_count': participation_count,
-                   'favourite': favourite})
+                   'favourite': favourite, 'total_data': total_data})
 
 
 def json_room_message(request, slug):
@@ -305,9 +319,17 @@ def json_add_favourite_message(request, room_id, message_id):
                                                                                'message__content'))
         if len(get_message) > 0:
             data = get_message
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        else:
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+            return JsonResponse({'data': data}, safe=False)
     except:
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META['HTTP_REFERER'], {'data': data})
 
+
+def load_more_msg(request, room_id):
+    room = Room.objects.get(id=room_id)
+    offset = int(request.GET['offset'])
+    limit = int(request.GET['limit'])
+    data = Message.objects.filter(room=room).values('id', 'content', 'user__username',
+                                                        'user__userprofile__profile_photo',
+                                                        'date_added', 'file_type').order_by('-date_added')[offset:offset + limit]
+    t = render_to_string('pages/chat/ajax_message.html', {'data': data,'room':room})
+    return JsonResponse({'data': t})

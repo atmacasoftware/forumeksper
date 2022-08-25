@@ -22,6 +22,9 @@
             }
         </style>
     {% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
@@ -405,239 +408,244 @@
                     </div>
                     <div class="alert-wrapper">
                     </div>
-                    <div class="load-more-wrapper">
-                        <button id="loadMore">Önceki Mesajları Yükle</button>
-                        <div id="spinner-box" class="not-visible">
-                            <div class="spinner-grow text-success" role="status">
+                    {% if total_data > 15 %}
+                        <div class="load-more-wrapper">
+                            <button id="loadMore" data-total="{{ total_data }}" data-limit="15">Önceki Mesajları Yükle
+                            </button>
+                            <div id="spinner-box">
+                                <div class="spinner-grow text-success" role="status">
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="chat-area-main" id="chat-message">
                         <div class="chat-old-msg">
 
                         </div>
                         <div class="chat-last-msg">
                             {% for message in messages %}
-                                {% if message.file_type == 'text' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                "{% if message.file_type == 'text' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item msg-reply" href="#">Yanıtla</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               id="add-favourite-{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <p>{{ message.content }}</p>
                                             </div>
+                                            <p>{{ message.content }}</p>
                                         </div>
+                                    </div>
 
+                                </div>
+                            {% elif message.file_type == 'file' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
                                     </div>
-                                {% elif message.file_type == 'file' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <a href="{{ message.content }}" download="Forum Ekpser">
-                                                    <img src="/static/img/server/file.png" alt="File">
-                                                </a>
                                             </div>
+                                            <a href="{{ message.content }}" download="Forum Ekpser">
+                                                <img src="/static/img/server/file.png" alt="File">
+                                            </a>
                                         </div>
                                     </div>
-                                {% elif message.file_type == 'image' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                </div>
+                            {% elif message.file_type == 'image' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <img src="{{ message.content }}" alt="Image">
                                             </div>
+                                            <img src="{{ message.content }}" alt="Image">
                                         </div>
                                     </div>
-                                {% elif message.file_type == 'video' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                </div>
+                            {% elif message.file_type == 'video' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <video controls width="250" height="250">
-                                                    <source src="{{ message.content }}">
-                                                </video>
                                             </div>
+                                            <video controls width="250" height="250">
+                                                <source src="{{ message.content }}">
+                                            </video>
                                         </div>
                                     </div>
-                                {% elif message.file_type == 'audio' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                </div>
+                            {% elif message.file_type == 'audio' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <audio controls style="width: 250px;">
-                                                    <source src="{{ message.content }}">
-                                                </audio>
                                             </div>
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
                                         </div>
                                     </div>
-                                {% elif message.file_type == 'record' %}
-                                    <div class="chat-msg">
-                                        <div class="chat-msg-profile">
-                                            <div class="chat-msg-date">{{ message.date_added }}</div>
-                                        </div>
-                                        <div class="chat-msg-content">
-                                            <div class="chat-msg-text">
-                                                <div class="chat-msg-user">
-                                                    <img {% if message.user__userprofile__profile_photo %}
-                                                        src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
-                                                        src="/static/img/profile/empty_profile.png" {% endif %}
-                                                        alt="User"
-                                                        class="user_profile_photo">
-                                                    <p>{{ message.user__username }}</p>
-                                                    <div class="dropdown message-detail">
-                                                        <button class="btn" type="button"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#">Yanıtla</a></li>
-                                                            <li><a class="dropdown-item add-fovourite"
-                                                                   data-message-id="{{ message.id }}"
-                                                                   href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
-                                                                Mesajlarına Ekle</a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#">Kötüye Kullanım
-                                                                Bildir</a></li>
-                                                        </ul>
-                                                    </div>
+                                </div>
+                            {% elif message.file_type == 'record' %}
+                                <div class="chat-msg">
+                                    <div class="chat-msg-profile">
+                                        <div class="chat-msg-date">{{ message.date_added }}</div>
+                                    </div>
+                                    <div class="chat-msg-content">
+                                        <div class="chat-msg-text">
+                                            <div class="chat-msg-user">
+                                                <img {% if message.user__userprofile__profile_photo %}
+                                                    src="/media/{{ message.user__userprofile__profile_photo }}" {% else %}
+                                                    src="/static/img/profile/empty_profile.png" {% endif %}
+                                                    alt="User"
+                                                    class="user_profile_photo">
+                                                <p>{{ message.user__username }}</p>
+                                                <div class="dropdown message-detail">
+                                                    <button class="btn" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Yanıtla</a></li>
+                                                        <li><a class="dropdown-item add-fovourite"
+                                                               data-message-id="{{ message.id }}"
+                                                               href="{% url 'json_add_favourite_message' room.id message.id %}">Favori
+                                                            Mesajlarına Ekle</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Kötüye Kullanım
+                                                            Bildir</a></li>
+                                                    </ul>
                                                 </div>
-                                                <audio controls style="width: 250px;">
-                                                    <source src="{{ message.content }}">
-                                                </audio>
                                             </div>
+                                            <audio controls style="width: 250px;">
+                                                <source src="{{ message.content }}">
+                                            </audio>
                                         </div>
                                     </div>
-                                {% endif %}
+                                </div>
+                            {% endif %}
                             {% endfor %}
                         </div>
 
@@ -996,6 +1004,8 @@
         {{ p.get_profile_photos|json_script:"json-profile" }}
     {% endif %}
 {% endfor %}
+
+
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
             integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
@@ -1013,7 +1023,7 @@
     <script src="{% static 'js/notification.js' %}"></script>
     <script src="{% static 'js/formset.js' %}"></script>
     <script src="{% static 'js/survey.js' %}"></script>
-
+    <script src="{% static 'js/addfavourite.js' %}"></script>
 
 
 {% endblock %}
