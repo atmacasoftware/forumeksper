@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-q$p8u%u(zv1y1@s1b!tpoqbi(_xcjs*60je4q$4(1#1ommd%1r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.forumeksper.com","forumeksper.com","https://www.forumeksper.com", "*"]
 
 # Application definition
 
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'notifications',
     'survey',
     'mainpage',
+    'forums',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -145,14 +147,6 @@ TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 
 USE_TZ = True
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': None,
-        'height': 450,
-        'width': 'auto',
-    }
-}
 
 LOGIN_URL = 'login'
 

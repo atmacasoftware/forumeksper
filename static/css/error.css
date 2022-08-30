@@ -1,0 +1,32 @@
+.error-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.error-header .error-title h3{
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+.error-button{
+    margin-top: 10px;
+}
+
+.error-button a{
+    padding: 12px;
+    background: #52D382;
+    border-radius: 15px;
+    color: #ffffff;
+}
+
+.error-button a:hover{
+    opacity: 0.8;
+}

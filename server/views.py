@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.paginator import Paginator
 from django.db import transaction, IntegrityError
+from django.db.models import Q
 from django.forms import modelformset_factory
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
@@ -23,9 +24,10 @@ from user_account.models import UserProfile
 
 @login_required
 def rooms(request):
-    rooms = Room.objects.filter(membership__group_user=request.user)
+    rooms = Room.objects.filter(member_ship__group_user = request.user)
     owner_rooms = Room.objects.filter(user=request.user)
     category = RoomCategory.objects.all()
+    person_profile = UserProfile.objects.get(user=request.user)
     if 'createChannels' in request.POST:
         try:
             postData = request.POST
@@ -33,6 +35,7 @@ def rooms(request):
             image = request.FILES.get("image")
             banner = request.FILES.get("banner")
             name = postData.get('name')
+            description = postData.get('description')
             private = postData.get('is_private', '')
 
             get_cateogry = RoomCategory.objects.get(id=category)
@@ -41,7 +44,7 @@ def rooms(request):
                 private = False
             else:
                 private = True
-            data = Room.objects.create(name=name, user=request.user, category=get_cateogry, image=image, banner=banner,
+            data = Room.objects.create(name=name, user=request.user, description=description, category=get_cateogry, image=image, banner=banner,
                                        is_private=private)
             data.save()
             return redirect('room', data.slug)
@@ -50,7 +53,7 @@ def rooms(request):
                           'Kategori seçimi, kanal kapak resmi, kanal banner resmi, kanal adı ve kanal gizlilik durumunu seçmeniz gerekmektedir.')
             return render(request, 'pages/chat/rooms.html',
                           {'rooms': rooms, 'category': category, 'messages': messages, 'owner_rooms': owner_rooms})
-    return render(request, 'pages/chat/rooms.html', {'rooms': rooms, 'category': category, 'owner_rooms': owner_rooms})
+    return render(request, 'pages/chat/rooms.html', {'rooms': rooms, 'category': category, 'owner_rooms': owner_rooms,'person_profile':person_profile})
 
 
 @login_required
@@ -58,6 +61,7 @@ def room_find(request):
     rooms = Room.objects.all()
     category = RoomCategory.objects.all()
     user_room = Room.objects.filter(user=request.user)
+    person_profile = UserProfile.objects.get(user=request.user)
     if 'is_join' in request.POST:
         try:
             postData = request.POST
@@ -69,13 +73,37 @@ def room_find(request):
             return redirect('rooms')
         except:
             pass
-    return render(request, 'pages/chat/keşfet.html', {'rooms': rooms, 'messages': messages,'category':category,'user_room':user_room})
+    if 'createChannels' in request.POST:
+        try:
+            postData = request.POST
+            category = postData.get('category', '')
+            image = request.FILES.get("image")
+            banner = request.FILES.get("banner")
+            name = postData.get('name')
+            description = postData.get('description')
+            private = postData.get('is_private', '')
+
+            get_cateogry = RoomCategory.objects.get(id=category)
+
+            if private == "1":
+                private = False
+            else:
+                private = True
+            data = Room.objects.create(name=name, user=request.user, description=description, category=get_cateogry,
+                                       image=image, banner=banner,
+                                       is_private=private)
+            data.save()
+            return redirect('room', data.slug)
+        except:
+            pass
+    return render(request, 'pages/chat/keşfet.html', {'rooms': rooms,'person_profile':person_profile, 'messages': messages,'category':category,'user_room':user_room})
 
 @login_required
 def all_rooms(request):
     rooms = Room.objects.all()
     category = RoomCategory.objects.all()
     user_room = Room.objects.filter(user=request.user)
+    person_profile = UserProfile.objects.get(user=request.user)
     if 'is_join' in request.POST:
         try:
             postData = request.POST
@@ -84,10 +112,131 @@ def all_rooms(request):
             room = Room.objects.get(slug=room_slug)
             user = User.objects.get(username=get_user)
             MemberShip.objects.create(group_user=user, room=room)
-            return redirect('rooms')
+            return redirect('categories_room')
         except:
             pass
-    return render(request,'pages/chat/discover_partials/all.html',{'rooms':rooms,'category':category,'user_room':user_room})
+    if 'createChannels' in request.POST:
+        try:
+            postData = request.POST
+            category = postData.get('category', '')
+            image = request.FILES.get("image")
+            banner = request.FILES.get("banner")
+            name = postData.get('name')
+            description = postData.get('description')
+            private = postData.get('is_private', '')
+            get_cateogry = RoomCategory.objects.get(id=category)
+            if private == "1":
+                private = False
+            else:
+                private = True
+            data = Room.objects.create(name=name, user=request.user, description=description, category=get_cateogry,
+                                       image=image, banner=banner,
+                                       is_private=private)
+            data.save()
+            return redirect('room', data.slug)
+        except:
+            pass
+    return render(request,'pages/chat/discover_partials/all.html',{'rooms':rooms,'category':category,'user_room':user_room,'person_profile':person_profile})
+
+
+@login_required
+def categories_room(request, slug):
+    rooms = Room.objects.filter(category__slug=slug)
+    category = RoomCategory.objects.all()
+    user_room = Room.objects.filter(user=request.user)
+    person_profile = UserProfile.objects.get(user=request.user)
+    select_category = RoomCategory.objects.get(slug=slug)
+    count = Room.objects.filter(category__slug=slug).count()
+    if 'is_join' in request.POST:
+        try:
+            postData = request.POST
+            room_slug = postData.get('room_slug')
+            get_user = postData.get('request_user')
+            room = Room.objects.get(slug=room_slug)
+            user = User.objects.get(username=get_user)
+            MemberShip.objects.create(group_user=user, room=room)
+            return redirect('categories_room')
+        except:
+            pass
+    if 'createChannels' in request.POST:
+        try:
+            postData = request.POST
+            category = postData.get('category', '')
+            image = request.FILES.get("image")
+            banner = request.FILES.get("banner")
+            name = postData.get('name')
+            description = postData.get('description')
+            private = postData.get('is_private', '')
+
+            get_cateogry = RoomCategory.objects.get(id=category)
+
+            if private == "1":
+                private = False
+            else:
+                private = True
+            data = Room.objects.create(name=name, user=request.user, description=description, category=get_cateogry,
+                                       image=image, banner=banner,
+                                       is_private=private)
+            data.save()
+            return redirect('room', data.slug)
+        except:
+            pass
+    return render(request, 'pages/chat/discover_partials/categories.html',
+                  {'rooms': rooms, 'category': category, 'user_room': user_room,'person_profile':person_profile,'select_category':select_category,'count':count})
+    pass
+
+@login_required
+def json_all_search_channels(request):
+    q = request.GET['query']
+    room = Room.objects.filter(name__contains=q)
+    room_count = len(Room.objects.filter(name__contains=q).values('name'))
+    result = None
+    if len(room) > 0:
+        data = []
+        for r in room:
+            option_item = {
+                'name': r.name,
+                'description': r.description,
+                'is_private': r.is_private,
+                'image': r.get_channel_photos(),
+                'banner': r.get_banner_photos(),
+                'membercount': r.MemberCount(),
+                'memberuser': list(r.MemberUser()),
+                'joinedroom': r.JoinedRoom(request),
+                'is_admin':r.JoinedRoomAdmin(request),
+            }
+
+
+            data.append(option_item)
+        result = data
+    return JsonResponse({'data':result,'room_count':room_count}, safe=False, content_type="application/json")
+
+@login_required
+def json_all_search_categories_channels(request,id):
+    q = request.GET['query']
+    room = Room.objects.filter(name__contains=q, category_id=id)
+    room_count = len(Room.objects.filter(name__contains=q, category_id=id).values('name'))
+
+    result = None
+    if len(room) > 0:
+        data = []
+        for r in room:
+            option_item = {
+                'name': r.name,
+                'description': r.description,
+                'is_private': r.is_private,
+                'image': r.get_channel_photos(),
+                'banner': r.get_banner_photos(),
+                'membercount': r.MemberCount(),
+                'memberuser': list(r.MemberUser()),
+                'joinedroom': r.JoinedRoom(request),
+                'is_admin':r.JoinedRoomAdmin(request),
+            }
+
+
+            data.append(option_item)
+        result = data
+    return JsonResponse({'data':result,'room_count':room_count}, safe=False, content_type="application/json")
 
 @login_required
 def room(request, slug):

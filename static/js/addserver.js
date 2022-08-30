@@ -138,3 +138,35 @@ categoryValue.forEach(i => {
 })
 
 
+$(document).ready(function () {
+    $(".name-character-error-msg").hide()
+    $("#channelsName").keyup(function (event) {
+        $("#nameCount").text($(this).val().length);
+        var x = $(this).val().length;
+        if (x > 120) {
+            $(this).css("border-color", "red")
+            $(".name-character-error-msg").show()
+        } else {
+            $(this).css("border-color", "")
+            $(".name-character-error-msg").hide()
+        }
+    })
+});
+
+
+$(document).ready(function () {
+    $(".description-character-error-msg").hide()
+    $("#channelsDescription").keyup(function (event) {
+        $("#descriptionCount").text($(this).val().length);
+        var x = $(this).val().length;
+        if (x > 160) {
+            $(this).css("border-color", "red")
+            $(".description-character-error-msg").show()
+        } else {
+            $(this).css("border-color", "")
+            $(".description-character-error-msg").hide()
+        }
+    })
+});
+
+

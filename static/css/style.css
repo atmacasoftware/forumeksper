@@ -107,6 +107,10 @@ label:focus,
 
 /* 1.1) Navbar */
 
+.navbar{
+    z-index: 999999;
+}
+
 .navbar-nav .nav-item {
     padding-left: 10px;
     padding-right: 10px;
@@ -221,7 +225,7 @@ label:focus,
     transition: 0.3s;
 }
 
-.profile_dd li:hover{
+.profile_dd li:hover {
     background: #52D382;
 }
 
@@ -235,39 +239,39 @@ label:focus,
     color: black;
 }
 
-.profile__logout{
+.profile__logout {
     display: flex;
     justify-content: start;
     align-items: center;
 }
 
-.profile__logout a{
+.profile__logout a {
     color: black;
 }
 
-.profile_icon img{
+.profile_icon img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
 }
 
-.profile_ul .title{
+.profile_ul .title {
     margin-left: 20px;
 }
 
-.profile_dd li:hover p, .profile_dd li:hover a, .profile_dd li:hover i{
+.profile_dd li:hover p, .profile_dd li:hover a, .profile_dd li:hover i {
     color: #ffffff;
 }
 
-.profile_ul .title.profile-img{
+.profile_ul .title.profile-img {
     margin-top: 12px;
 }
 
-.profile_ul .title p{
+.profile_ul .title p {
     color: black;
 }
 
-.profile__link{
+.profile__link {
     display: flex;
     justify-content: start;
     align-items: center;
@@ -1390,6 +1394,27 @@ textarea[name=content] {
     right: 20px;
     opacity: 0;
     transition: 0.3s;
+}
+
+#channelsDescription {
+    text-align: center;
+    border-style: dashed;
+    width: 75%;
+}
+
+.character-limit {
+    display: flex;
+    width: 75%;
+    justify-content: space-between;
+}
+
+.character-error-msg {
+    color: red;
+    float: left;
+}
+
+.text-counter {
+    float: right;
 }
 
 

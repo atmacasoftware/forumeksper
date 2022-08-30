@@ -2,17 +2,52 @@
 {% load static %}
 
 {% block discover_all %}
-    <ul>
-        {% for room in rooms %}
-            <li>
-                <h4>{{ room.name }}</h4>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="room_slug" value="{{ room.slug }}">
-                    <input type="hidden" name="request_user" value="{{ request.user.username }}">
-                    <input type="submit" value="Katıl" name="is_join">
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="channels">
+        <div class="channels_header">
+            <h5>Hepsi Kategorisinde Popüler Kanallar</h5>
+        </div>
+        <div class="channels_content">
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="channelsCard">
+                {% for room in rooms %}
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                {% if room.get_banner_photos %}
+                                    <img src="{{ room.get_banner_photos }}" class="card-img" alt="Banner">
+                                {% else %}
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img"
+                                         alt="Empty Banner">
+                                {% endif %}
+                                <div class="card-img-overlay">
+                                    {% if room.get_channel_photos %}
+                                        <img src="{{ room.get_channel_photos }}" alt="Channel">
+                                    {% else %}
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ room.name }}</h5>
+                                <p class="card-text">
+                                    {{ room.description }}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;{{ room.MemberCount }} Üye</span>
+                            </div>
+
+                            {% if room.MemberUser %}
+                                <a href="" class="joinBtn">Kanala Git</a>
+                            {% else %}
+                                {% if room.is_private %}
+                                    <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                                {% else %}
+                                    <a href="" class="joinBtn">Kanala Katıl</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

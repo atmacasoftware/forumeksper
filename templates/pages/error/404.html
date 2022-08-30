@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/error.css' %}">
+{% endblock %}
+
+{% block error_404 %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="img-wrapper">
+                    <img src="{% static 'img/error/error_404.png' %}" alt="404">
+                </div>
+            </div>
+            <div class="col-lg-6 error-wrapper">
+                <div class="error-header">
+                    <div class="error-title">   
+                        <h3>Ooops, 404 Hatası</h3>
+                    </div>
+                    <div class="error-text">
+                        <p>Aradığınız sayfayı maalesef bulamadık.</p>
+                    </div>
+                    <div class="error-button">
+                        <a href="{% url 'mainpage' %}">Anasayfa'ya Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

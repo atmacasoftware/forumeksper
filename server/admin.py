@@ -28,6 +28,7 @@ class RoomManagerAdmin(admin.ModelAdmin):
     search_fields = ('room','user')
     list_per_page = 300
 
+
 admin.site.register(Room,RoomAdmin)
 admin.site.register(Message,MessageAdmin)
 admin.site.register(MemberShip,MemberAdmin)

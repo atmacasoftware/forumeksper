@@ -1,0 +1,12 @@
+<div class="card mb-4">
+    <h5 class="card-header">Editör Seçimleri</h5>
+    <div class="card-body popular-list">
+        <ul>
+            {% for f in editor_select %}
+                <li>
+                    <a href="">{{ f.forum.title|truncatechars:"30" }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

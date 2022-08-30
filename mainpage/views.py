@@ -16,3 +16,10 @@ def mainpage(request):
         notification = Notification.objects.filter(recipient_user=request.user).order_by('-created_at')
         notification_count = Notification.objects.filter(recipient_user=request.user).count()
     return render(request,'pages/mainpage.html',{'profile':profile,'person_profile':person_profile,'notification':notification,'notification_count':notification_count,'notification_unread':notification_unread})
+
+
+def error_404(request, exception):
+    return render(request, 'pages/error/404.html',status=404)
+
+def error_500(request):
+    return render(request, 'pages/error/500.html',status=500)

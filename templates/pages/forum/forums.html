@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+{% endblock %}
+{% block forums %}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-lg-8">
+                {% for c in categoris %}
+                    <table class="table table-sm align-middle table-hover mb-0 bg-white mb-5 table-bordered">
+                        <thead class="bg-light">
+                        <tr>
+                            <th colspan="2">
+                                <span>{{ c.name }}</span>
+                                <span>
+                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#create-subject{{ c.id }}">
+                                                Konu Oluştur
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="create-subject{{ c.id }}" tabindex="-1"
+                                         aria-labelledby="create-subject{{ c.id }}-label" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="create-subject{{ c.id }}-label">{{ c.name }} Kategorisinde Konu Oluştur</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <form action="." method="post">
+                                                  {% csrf_token %}
+                                                  <input type="hidden" name="category_id" value="{{ c.id }}">
+                                                  <div class="form-outline mb-4">
+                                                        <input type="text" name="title" id="{{ c.id }}-title"
+                                                               class="form-control"/>
+                                                        <label class="form-label" for="{{ c.id }}-title">Başlık</label>
+                                                  </div>
+
+                                                  <!-- Message input -->
+
+                                                  <div class="form-outline mb-4">
+                                                      <textarea class="form-control" name="content" id="{{ c.id }}-content"
+                                                                rows="4"></textarea>
+                                                      <label class="form-label"
+                                                             for="{{ c.id }}-content">İçeriğiniz</label>
+                                                  </div>
+
+                                                  <!-- Submit button -->
+                                                  <input type="submit"
+                                                          class="btn btn-primary btn-block mb-4" name="crete_subject" value="Oluştur">
+                                            </form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for f in forum %}
+                            {% if c.id == f.category.id %}
+                                <tr>
+                                    <td class="w-75">
+                                        <p class="fw-bold mb-1"><a href="{% url 'forum_details' f.slug %}"
+                                                                   class="text-dark">{{ f.title }}</a></p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="fw-normal mb-1">{{ f.comment_count }} cevap</p>
+                                        <p class="text-muted mb-0">{{ f.forumViews }} görüntüleme</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+            <div class="col-lg-4">
+                <!--Popular Forum Start -->
+                {% include 'pages/forum/popular.html' %}
+                <!--Popular Forum End -->
+
+                <!--Editör Select Start -->
+                {% include 'pages/forum/editor_select.html' %}
+                <!--Editör Select  End -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

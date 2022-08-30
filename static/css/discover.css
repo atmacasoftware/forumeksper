@@ -37,9 +37,9 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 990px){
-    .row{
-        flex-grow: inherit!important;
+@media screen and (max-width: 990px) {
+    .row {
+        flex-grow: inherit !important;
     }
 }
 
@@ -57,12 +57,12 @@
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
-.category-wrapper_header__title{
+.category-wrapper_header__title {
     margin-top: 20px;
     padding: 10px 30px;
 }
 
-.category-wrapper_header__title h4{
+.category-wrapper_header__title h4 {
     color: #ffffff;
 }
 
@@ -91,24 +91,24 @@
     padding: 10px 30px;
 }
 
-.sub_categories a img{
+.sub_categories a img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 30px;
 }
 
-.sub_categories a:hover{
+.sub_categories a:hover {
     background: rgba(238, 242, 244, 0.4);
 }
 
-.sub_categories a.active{
+.sub_categories a.active {
     background: #52D382;
     color: black;
     font-weight: bold;
 }
 
-.channel-wrapper{
+.channel-wrapper {
     background: black;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     padding: 10px 30px;
@@ -120,7 +120,7 @@
     height: 100%;
 }
 
-.joined-wrapper{
+.joined-wrapper {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -134,49 +134,129 @@
     height: 100%;
 }
 
-.joined-wrapper .joined-channels{
+.joined-wrapper .joined-channels {
     margin-bottom: 10px;
     position: relative;
+    text-align: center;
 }
 
-.joined-wrapper img{
+.joined-wrapper img {
     width: 75px;
     height: 75px;
     border-radius: 50%;
 }
 
-.tooltiptext {
-    visibility: hidden;
-    position: absolute;
-    width: auto;
-    max-width: 120px;
-    min-width: 170px;
-    background-color: #ffffff;
-    color: black;
-    text-align: center;
-    padding: 5px 10px;
-    border-radius: 6px;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.3s;
+.channel-wrapper_header {
+    width: 100%;
+    border-bottom: 2px solid #f4f4f4;
 }
 
-.tooltip-left {
-    top: 50%;
-    left: -140%;
-    transform: translate(-50%,-50%);
-    font-size: 14px;
+.channel-wrapper_header .discover-search {
+    margin-bottom: 10px;
+    width: 35%;
+    position: relative;
 }
 
-.tooltiptext::after {
-    content: "";
+.channel-wrapper_header .discover-search input {
+    width: 100%;
+    background: #1d1d1d;
+    border: none;
+    outline: none;
+    height: 40px;
+    border-radius: 15px;
+    padding: 5px 20px;
+    color: #ffffff;
+}
+
+.channel-wrapper_header .discover-search input::placeholder {
+    color: #52D382;
+}
+
+.channel-wrapper_header .discover-search label {
     position: absolute;
     top: 50%;
-    left: 104%;
-    margin-left: -5px;
-    border-width: 7px;
-    border-style: solid;
+    right: 5%;
     transform: translateY(-50%);
-    border-color: transparent transparent transparent #ffffff;
 }
 
+.channels {
+    margin-top: 20px;
+}
+
+.channels_header h5 {
+    color: #ffffff;
+}
+
+.card {
+    background: #212529;
+}
+
+.card-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.card-img-overlay {
+    text-align: center;
+}
+
+.card-img-overlay img {
+    width: 75px;
+    height: 75px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.card-text {
+    font-size: 0.8rem;
+    color: darkgray;
+}
+
+.card-title {
+    color: #ffffff;
+}
+
+.card-body span {
+    font-weight: bold;
+}
+
+.card-header {
+    position: relative;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.joinBtn {
+    background: darkturquoise;
+    width: 100%;
+    height: 40px;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.plus-wrapper{
+    width: 75px;
+    height: 75px;
+    background: black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.plus-wrapper a i{
+    font-size: 42px;
+    color: white;
+}
+
+#createChannel .card{
+    background: white;
+}

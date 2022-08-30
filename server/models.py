@@ -48,7 +48,7 @@ class RoomCategory(models.Model):
 
 
 class Room(models.Model):
-    name = models.CharField(max_length=255, null=True, verbose_name="Kanal Adı")
+    name = models.CharField(max_length=120, null=True, verbose_name="Kanal Adı")
     slug = models.SlugField(unique=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name="Kanal Sahibi")
     category = models.ForeignKey(RoomCategory, on_delete=models.CASCADE, null=True,verbose_name="Kategori Adı")
@@ -56,6 +56,7 @@ class Room(models.Model):
     modified_at = models.DateTimeField(null=True, verbose_name="Güncellendiği Tarih", blank=True)
     image = models.ImageField(upload_to='kanal/kapak', null=True, blank=True)
     banner = models.ImageField(upload_to='kanal/banner', null=True, blank=True)
+    description = models.CharField(max_length=160, null=True, verbose_name="Kanal Tanımı", help_text="En fazla 160 karakter")
     is_private = models.BooleanField(default=False, null=True, verbose_name="Gizli Mi?")
 
     class Meta:
@@ -90,8 +91,26 @@ class Room(models.Model):
     def RoomAdmin(self):
         return self.user.username
 
+    def JoinedRoomAdmin(self,request):
+        if self.user.username == request.user.username:
+            return True
+        else:
+            return False
+
     def RoomManeger(self):
         return self.room_manager.values_list('user__username', flat=True)
+
+    def MemberCount(self):
+        return self.member_ship.count()
+
+    def MemberUser(self):
+        return self.member_ship.values_list('group_user__username', flat=True)
+
+    def JoinedRoom(self, request):
+        if self.member_ship.filter(group_user__username=request.user.username):
+            return True
+        else:
+            return False
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -103,8 +122,8 @@ class Room(models.Model):
 
 
 class MemberShip(models.Model):
-    group_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Üye")
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
+    group_user = models.ForeignKey(User, related_name="member_ship", on_delete=models.CASCADE, verbose_name="Üye")
+    room = models.ForeignKey(Room,related_name="member_ship", on_delete=models.CASCADE, null=True)
     joined_date = models.DateTimeField(auto_now_add=True, editable=False, null=True)
 
     class Meta:

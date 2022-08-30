@@ -18,6 +18,7 @@ from django.urls import path, include,re_path
 from django.views.static import serve
 from django.conf import settings
 
+from mainpage.views import mainpage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,10 +26,13 @@ urlpatterns = [
     path('', include('mainpage.urls')),
     path('server/', include('server.urls')),
     path('survey/', include('survey.urls')),
+    path('forum/', include('forums.urls')),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
 
+handler404 = 'mainpage.views.error_404'
+handler500 = 'mainpage.views.error_500'
 
 admin.site.site_title = 'Forum Eksper Yönetimi'
 admin.site.site_header = 'Forum Eksper Yönetim Paneli'

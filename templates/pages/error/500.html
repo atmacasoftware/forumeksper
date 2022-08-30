@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block error_500 %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="img-wrapper">
+                    <img src="{% static 'img/error/error_500.png' %}" alt="404">
+                </div>
+            </div>
+            <div class="col-lg-6 error-wrapper">
+                <div class="error-header">
+                    <div class="error-title">
+                        <h3>Ooops, 500 Hatası</h3>
+                    </div>
+                    <div class="error-text">
+                        <p>Bağlantı ile ilgili bir problem yaşıyoruz. Lütfen anasayfaya dönüş yapın.</p>
+                    </div>
+                    <div class="error-button">
+                        <a href="{% url 'mainpage' %}">Anasayfa'ya Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

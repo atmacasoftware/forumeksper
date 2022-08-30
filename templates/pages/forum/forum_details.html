@@ -1,0 +1,372 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+{% endblock %}
+
+
+{% block forum_details %}
+    <div class="container mb-5">
+        <header class="mt-5">
+            <!-- Breadcrumb -->
+            <nav class="d-flex">
+                <h6 class="mb-0">
+                    <a href="" class="text-reset">Anasayfa</a>
+                    <span>/</span>
+                    <a href="{% url 'forum_page' %}" class="text-reset">Forumlar</a>
+                    <span>/</span>
+                    <a href="{% url 'forum_details' forum.slug %}" class="text-reset"><u>{{ forum.title }}</u></a>
+                </h6>
+            </nav>
+            <!-- Breadcrumb -->
+        </header>
+
+        <main>
+            <div class="row mt-3">
+                <div class="col-lg-8">
+                    <div class="card text-white bg-dark">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ forum.title }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3 mt-3 text-white bg-dark" id="forumOwner">
+                        <div class="row g-0">
+                            <div class="col-md-3 user-profile mt-4">
+                                {% if owner_profile.get_profile_photos %}
+                                    <img src="{{ owner_profile.get_profile_photos }}" alt="Forum User">
+                                {% else %}
+                                    <img src="{% static 'img/profile/empty_profile.png' %}" alt="Forum User">
+                                {% endif %}
+                                <p class="card-text mt-3">{{ owner_profile.user }}</p>
+
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <div class="card-body-header">
+                                        <h5 class="card-title">{{ forum.title }} </h5>
+                                        <button class="report-abuse-button"><i
+                                                class="fas fa-exclamation-triangle white"></i></button>
+                                    </div>
+                                    <p class="card-text">{{ forum.content }}</p>
+                                    <p class="card-text"><small class="text-muted">{{ forum.created_at }}</small></p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="footer-group">
+                                        <a href="#" id="ownerLike" class="like-dislike"><i class="fas fa-thumbs-up"
+                                                {% if forum.isLiked %} style="color: green;" {% else %}
+                                                                                           style="color: white;" {% endif %}></i>
+                                            <p><span class="like-count">{{ forum.isLikedCount }}</span> beğenme</p>
+                                        </a>
+                                    </div>
+                                    <div class="footer-group">
+                                        <a href="#" id="ownerDisLike" class="like-dislike"><i class="fas fa-thumbs-down"
+                                                {% if forum.disliked %} style="color: red;" {% else %}
+                                                                                              style="color: white;" {% endif %}></i>
+                                            <p><span class="dislike-count">{{ forum.dislikedCount }}</span> beğenmeme
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <div class="footer-group">
+
+                                        <a href="#mainCreateForm" class="show-comment"
+                                           id="showReply-{{ c.id }}">
+                                            <i class="fas fa-reply"></i>
+                                            {{ forum.comment_count }} Yanıt
+                                        </a>
+                                    </div>
+                                </div>
+                                <script>
+                                    $(document).ready(function () {
+                                        $("#ownerLike").click(function (e) {
+                                            e.preventDefault();
+                                            $.ajax({
+                                                url: '{% url "json_owner_like" forum.id %}',
+                                                dataType: 'json',
+                                                success: function (res) {
+                                                    if (res.data === 'liked') {
+                                                        $("#ownerLike i").css('color', 'green')
+                                                        $('#ownerLike .like-count').html(parseInt($('#ownerLike .like-count').text()) + 1)
+                                                    } else if (res.data === 'deleted') {
+                                                        $("#ownerLike i").css('color', 'white')
+                                                        $('#ownerLike .like-count').html(parseInt($('#ownerLike .like-count').text()) - 1)
+                                                    } else if (res.data === 'deleted_dislike_create_liked') {
+                                                        $("#ownerLike i").css('color', 'green')
+                                                        $("#ownerDisLike i").css('color', 'white')
+                                                        $('#ownerLike .like-count').html(parseInt($('#ownerLike .like-count').text()) + 1)
+                                                        $('#ownerDisLike .dislike-count').html(parseInt($('#ownerDisLike .dislike-count').text()) - 1)
+                                                    }
+                                                }
+                                            })
+                                        });
+
+                                        $("#ownerDisLike").click(function (e) {
+                                            e.preventDefault();
+                                            $.ajax({
+                                                url: '{% url "json_owner_dislike" forum.id %}',
+                                                dataType: 'json',
+                                                success: function (res) {
+                                                    if (res.data === 'disliked') {
+                                                        $("#ownerDisLike i").css('color', 'red')
+                                                        $('#ownerDisLike .dislike-count').html(parseInt($('#ownerDisLike .dislike-count').text()) + 1)
+                                                    } else if (res.data === 'deleted') {
+                                                        $("#ownerDisLike i").css('color', 'white')
+                                                        $('#ownerDisLike .dislike-count').html(parseInt($('#ownerDisLike .dislike-count').text()) + -1)
+                                                    } else if (res.data === 'deleted_liked_create_dislike') {
+                                                        $("#ownerLike i").css('color', 'white')
+                                                        $("#ownerDisLike i").css('color', 'red')
+                                                        $('#ownerLike .like-count').html(parseInt($('#ownerLike .like-count').text()) - 1)
+                                                        $('#ownerDisLike .dislike-count').html(parseInt($('#ownerDisLike .dislike-count').text()) + 1)
+                                                    }
+                                                }
+                                            })
+                                        })
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {% for c in comment_data %}
+                        <div class="card mb-3 mt-3 comment-user" id="comment-{{ c.id }}">
+                            <div class="row g-0">
+                                <div class="col-md-3 user-profile mt-4">
+                                    {% for u in all_profile %}
+                                        {% if u.user.username == c.user.username %}
+                                            {% if u.get_profile_photos %}
+                                                <img src="{{ u.get_profile_photos }}" alt="Forum User">
+                                            {% else %}
+                                                <img src="{% static 'img/profile/empty_profile.png' %}"
+                                                     alt="Forum User">
+                                            {% endif %}
+                                            <p class="card-text mt-3">{{ u.user.username }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card-body">
+                                        <div class="card-body-header">
+                                            <div class="dropdown">
+                                                <button type="button"
+                                                        id="dropdownMenu2" data-mdb-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                    <i class="bi bi-three-dots"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                    <li>
+                                                        <button class="dropdown-item" type="button">Kötüye Yorum
+                                                            Bildir
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <p class="card-text">{{ c.content }}</p>
+                                        <p class="card-text"><small class="text-muted">{{ c.created_at }}</small>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="footer-group">
+                                            <a href="" class="like-dislike" id="comment-like-{{ c.id }}"><i
+                                                    class="fas fa-thumbs-up" {% if c.isLiked %}
+                                                    style="color: green;" {% else %}
+                                                    style="color: black;" {% endif %}></i>
+                                                <p><span class="like-count">{{ c.isLikedCountComment }}</span> beğenme
+                                                </p>
+                                            </a>
+                                        </div>
+                                        <div class="footer-group">
+                                            <a href="" class="like-dislike" id="comment-dislike-{{ c.id }}"><i
+                                                    class="fas fa-thumbs-down" {% if c.isDisliked %}
+                                                    style="color: red;" {% else %}
+                                                    style="color: black;" {% endif %}></i>
+                                                <p><span class="dislike-count">{{ c.dislikedCountComment }}</span>
+                                                    beğenme</p>
+                                            </a>
+                                        </div>
+                                        <div class="footer-group">
+
+                                            <button class="show-comment"
+                                                    id="showReply-{{ c.id }}">
+                                                <i class="fas fa-reply"></i>
+                                                {{ c.ReplyCommentCount }} Yanıt
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $("#comment-like-{{ c.id }}").click(function (e) {
+                                                e.preventDefault();
+                                                $.ajax({
+                                                    url: '{% url "json_comment_like" c.id %}',
+                                                    dataType: 'json',
+                                                    success: function (res) {
+                                                        if (res.data === 'liked') {
+                                                            $("#comment-like-{{ c.id }} i").css('color', 'green')
+                                                            $('#comment-like-{{ c.id }} .like-count').html(parseInt($('#comment-like-{{ c.id }} .like-count').text()) + 1)
+                                                        } else if (res.data === 'deleted') {
+                                                            $("#comment-like-{{ c.id }} i").css('color', 'black')
+                                                            $('#comment-like-{{ c.id }} .like-count').html(parseInt($('#comment-like-{{ c.id }} .like-count').text()) - 1)
+                                                        } else if (res.data === 'deleted_dislike_create_liked') {
+                                                            $("#comment-like-{{ c.id }} i").css('color', 'green')
+                                                            $("#comment-dislike-{{ c.id }} i").css('color', 'black')
+                                                            $('#comment-like-{{ c.id }} .like-count').html(parseInt($('#comment-like-{{ c.id }} .like-count').text()) + 1)
+                                                            $('#comment-dislike-{{ c.id }} .dislike-count').html(parseInt($('#comment-dislike-{{ c.id }} .dislike-count').text()) - 1)
+                                                        }
+                                                    }
+                                                })
+                                            });
+
+                                            $("#comment-dislike-{{ c.id }}").click(function (e) {
+                                                e.preventDefault();
+                                                $.ajax({
+                                                    url: '{% url "json_comment_dislike" c.id %}',
+                                                    dataType: 'json',
+                                                    success: function (res) {
+                                                        if (res.data === 'disliked') {
+                                                            $("#comment-dislike-{{ c.id }} i").css('color', 'red')
+                                                            $('#comment-dislike-{{ c.id }} .dislike-count').html(parseInt($('#comment-dislike-{{ c.id }} .dislike-count').text()) + 1)
+                                                        } else if (res.data === 'deleted') {
+                                                            $("#comment-dislike-{{ c.id }} i").css('color', 'black')
+                                                            $('#comment-dislike-{{ c.id }} .dislike-count').html(parseInt($('#comment-dislike-{{ c.id }} .dislike-count').text()) + -1)
+                                                        } else if (res.data === 'deleted_liked_create_dislike') {
+                                                            $("#comment-like-{{ c.id }} i").css('color', 'black')
+                                                            $("#comment-dislike-{{ c.id }} i").css('color', 'red')
+                                                            $('#comment-like-{{ c.id }} .like-count').html(parseInt($('#comment-like-{{ c.id }} .like-count').text()) + -1)
+                                                            $('#comment-dislike-{{ c.id }} .dislike-count').html(parseInt($('#comment-dislike-{{ c.id }} .dislike-count').text()) + 1)
+                                                        }
+                                                    }
+                                                })
+                                            })
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        {% for rc in reply_comment %}
+                            {% if c.id == rc.comment.id %}
+                                <div class="parent-comment mb-3" id="parent-comment-{{ c.id }}-{{ rc.id }}">
+                                    <div class="icon">
+                                        <i class="bi bi-arrow-return-right"></i>
+                                    </div>
+                                    <div class="card w-100">
+                                        <div class="row">
+                                            <div class="col-md-3 user-profile mt-4">
+                                                {% for u in all_profile %}
+                                                    {% if u.user.username == rc.user.username %}
+                                                        {% if u.get_profile_photos %}
+                                                            <img src="{{ u.get_profile_photos }}" alt="Forum User">
+                                                        {% else %}
+                                                            <img src="{% static 'img/profile/empty_profile.png' %}"
+                                                                 alt="Forum User">
+                                                        {% endif %}
+                                                        <p class="card-text mt-3">{{ u.user.username }}</p>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="card-body">
+                                                    <div class="card-body-header">
+                                                        <div class="dropdown">
+                                                            <button type="button"
+                                                                    id="dropdownMenu2" data-mdb-toggle="dropdown"
+                                                                    aria-expanded="false">
+                                                                <i class="bi bi-three-dots"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                                <li>
+                                                                    <button class="dropdown-item" type="button">Kötüye
+                                                                        Yorum
+                                                                        Bildir
+                                                                    </button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <p class="card-text">{{ rc.content }}</p>
+                                                    <p class="card-text"><small
+                                                            class="text-muted">{{ rc.created_at }}</small>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <script>
+                                document.getElementById("showReply-{{ c.id }}").addEventListener('click', function () {
+                                    document.getElementById("parent-comment-{{ c.id }}-{{ rc.id }}").classList.toggle('show')
+                                });
+                            </script>
+                        {% endfor %}
+                        <div class="parent-comment mb-3" id="reply-comment-{{ c.id }}">
+                            <div class="icon">
+                                <i class="bi bi-arrow-return-right"></i>
+                            </div>
+                            <div class="card w-100">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form action="{% url 'forum_details' forum.slug %}" method="post" class="p-3">
+                                            {% csrf_token %}
+                                            <!-- Message input -->
+                                            <input type="hidden" value="{{ c.id }}" name="comment_id">
+                                            <div class="form-outline mb-4 ">
+                                                <textarea class="form-control" name="reply_comment"
+                                                          id="replyComment{{ c.id }}" rows="2"></textarea>
+                                                <label class="form-label" for="replyComment{{ c.id }}">{{ c.user }} için
+                                                    yanıt ver...</label>
+                                            </div>
+                                            <!-- Submit button -->
+                                            <input type="submit" name="reply_create_comment"
+                                                   class="btn-primary btn-block mb-3 w-25 mt-3" value="Yanıtla"/>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            document.getElementById("showReply-{{ c.id }}").addEventListener('click', function () {
+                                document.getElementById("reply-comment-{{ c.id }}").classList.toggle('show')
+                            });
+                        </script>
+                    {% endfor %}
+                    <div class="create-comment">
+                        <form action="{% url 'forum_details' forum.slug %}" method="post" id="mainCreateForm">
+                            {% csrf_token %}
+                            <div class="form-outline">
+                                <textarea class="form-control" name="comment" id="commentText" rows="4"
+                                          required></textarea>
+                                <label class="form-label" for="commentText">Yorumunuz...</label>
+                            </div>
+                            <input type="submit" name="create_comment" value="Yorum Yap"
+                                   class="btn btn-primary btn-block mb-3 w-25 mt-3">
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="">
+                        <!--Popular Forum Start -->
+                        {% include 'pages/forum/popular.html' %}
+                        <!--Popular Forum End -->
+                        <!--Editör Select Start -->
+                        {% include 'pages/forum/editor_select.html' %}
+                        <!--Editör Select  End -->
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ request.user.username|json_script:"json-username" }}
+    {{ forum.id|json_script:"json-forumid" }}
+    <script src="{% static 'js/forums.js' %}"></script>
+{% endblock %}

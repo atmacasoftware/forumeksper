@@ -1,0 +1,403 @@
+{% extends 'pages/chat/keşfet.html' %}
+{% load static %}
+
+{% block discover_categories %}
+    <div class="channels">
+        <div class="channels_header">
+            <h5>{% if request.path == "/server/kesfet/genel" %} Genel{% elif request.path == '/server/kesfet/egitim' %}
+                Eğitim{% elif request.path == '/server/kesfet/yardimlasma' %}
+                Yardımlaşma{% elif request.path == '/server/kesfet/tanisma' %}
+                Tanışma{% elif request.path == '/server/kesfet/is' %}
+                İş{% elif request.path == '/server/kesfet/sohbet' %} Sohbet{% endif %} Kategorisinde Popüler
+                Kanallar</h5>
+        </div>
+        <div class="channels_content">
+            <div class="row row-cols-1 row-cols-md-3 g-4" {% if count < 1 %}
+                 style="display: flex;justify-content: center;align-content: center;flex-direction: column;width: 100%;margin-top: 80px;" {% endif %}
+                 id="channelsCard">
+                {% for room in rooms %}
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                {% if room.get_banner_photos %}
+                                    <img src="{{ room.get_banner_photos }}" class="card-img" alt="Banner">
+                                {% else %}
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img"
+                                         alt="Empty Banner">
+                                {% endif %}
+                                <div class="card-img-overlay">
+                                    {% if room.get_channel_photos %}
+                                        <img src="{{ room.get_channel_photos }}" alt="Channel">
+                                    {% else %}
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ room.name }}</h5>
+                                <p class="card-text">
+                                    {{ room.description }}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;{{ room.MemberCount }} Üye</span>
+                            </div>
+
+                            {% if room.MemberUser %}
+                                <a href="" class="joinBtn">Kanala Git</a>
+                            {% else %}
+                                {% if room.is_private %}
+                                    <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                                {% else %}
+                                    <a href="" class="joinBtn">Kanala Katıl</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <h4 style="width:100%; text-align: center; color: #52D382; margin-top: 100px;">Maalesef ilgili
+                        kategoride kanal bulamadım.</h4>
+                    <h5 style="width:100%;text-align: center; color: #6f7073">Lütfen yeniden arama yapınız veya bu
+                        kategoride siz kanal açabilirsiniz.</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $("#ChannelSearch").keyup(function (e) {
+            $.ajax({
+                url: "{% url 'json_all_search_categories_channel' select_category.id %}",
+                data: {
+                    'query': $(this).val(),
+                    'id':{{ select_category.id }}
+                },
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById("channelsCard").innerHTML = ''
+                    const data = response.data
+                    if (response.room_count > 0) {
+                        $("#channelsCard").css({
+                            "display": "flex",
+                            "align-items": "center",
+                            "justify-content": "start",
+                            "flex-direction": "row"
+                        })
+                        data.map(c => {
+                            if (c.banner == null && c.image != null) {
+                                if (c.joinedroom || c.is_admin) {
+                                    let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                    document.getElementById("channelsCard").innerHTML += html
+                                } else {
+                                    if (c.is_private) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    }
+                                }
+
+                            } else if (c.image == null && c.banner != null) {
+                                if (c.joinedroom || c.is_admin) {
+                                    let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                    document.getElementById("channelsCard").innerHTML += html
+                                } else {
+                                    if (c.is_private) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    }
+                                }
+                            } else if (c.banner == null && c.image == null) {
+                                if (c.joinedroom || c.is_admin) {
+                                    let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                    document.getElementById("channelsCard").innerHTML += html
+                                } else {
+                                    if (c.is_private) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    }
+                                }
+                            } else {
+                                if (c.joinedroom || c.is_admin) {
+                                    let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+<a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                    document.getElementById("channelsCard").innerHTML += html
+                                } else {
+                                    if (c.is_private) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+                                <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+<a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    }
+                                }
+
+                            }
+                        })
+                    } else {
+                        let html = `
+                                <h4 style="width:100%; text-align: center; color: #52D382; margin-top: 100px;">Maalesef ilgili kategoride kanal bulamadım.</h4>
+                                <h5 style="width:100%;text-align: center; color: #6f7073">Lütfen yeniden arama yapınız veya bu kategoride siz kanal açabilirsiniz.</h5>
+                            `
+                        $("#channelsCard").css({
+                            "display": "flex",
+                            "align-items": "center",
+                            "justify-content": "center",
+                            "flex-direction": "column"
+                        })
+                        document.getElementById("channelsCard").innerHTML = html
+                    }
+                }
+            })
+        })
+    </script>
+    <script src="{% static 'js/addserver.js' %}"></script>
+{% endblock %}
+

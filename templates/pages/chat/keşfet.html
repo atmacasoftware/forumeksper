@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/discover.css' %}">
+
 {% endblock %}
 
 {% block channel_find %}
@@ -17,14 +18,15 @@
                         </div>
                         <div class="category-wrapper__categories">
                             <div class="sub_categories">
-                                <a href="" class="{% if request.path == '/server/kesfet/hepsi/' %} active {% endif %}">
+                                <a href="{% url 'all_rooms' %}"
+                                   class="{% if request.path == '/server/kesfet/hepsi/' %} active {% endif %}">
                                     <img src="{% static 'img/server/all_channels.png' %}" alt="All">
                                     Hepsi
                                 </a>
                             </div>
                             {% for c in category %}
                                 <div class="sub_categories">
-                                    <a href="">
+                                    <a href="{% url 'categories_room' c.slug %}">
                                         <img src="{{ c.get_category_photos }}" alt="">
                                         {{ c.name }}
                                     </a>
@@ -34,173 +36,526 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-sm-12 channel-wrapper">
+                    <div class="channel-wrapper_header">
+                        <div class="discover-search">
+                            <input type="text"
+                                   placeholder="{% if request.path == '/server/kesfet/hepsi/' %} Hepsi {% elif request.path == '/server/kesfet/genel' %} Genel {% elif request.path == '/server/kesfet/egitim' %} Eğitim {% elif request.path == '/server/kesfet/yardimlasma' %} Yardımlaşma{% elif request.path == '/server/kesfet/tanisma' %} Tanışma{% elif request.path == '/server/kesfet/is' %} İş{% elif request.path == '/server/kesfet/sohbet' %} Sohbet{% endif %} kategorisinde ara... "
+                                   id="ChannelSearch">
+                            <label for="ChannelSearch"><i class="fas fa-search"></i></label>
+                        </div>
+                    </div>
                     {% block discover_all %}
+                    {% endblock %}
+                    {% block discover_categories %}
                     {% endblock %}
                 </div>
                 <div class="col-lg-1 col-sm-12 joined-wrapper">
-                <div class="scrool">
-
-
-                    {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
+                    <div class="scrool">
+                        <div class="joined-channels" id="create-channel">
+                            <div class="plus-wrapper" data-mdb-toggle="tooltip"
+                                 data-mdb-placement="left" title="Kanal Oluştur">
+                                <a href="#" class="channels_top_circle" data-bs-toggle="modal"
+                                   data-bs-target="#createChannel">
+                                    <i class="bi bi-plus"></i>
+                                </a>
+                            </div>
                         </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                {% for my in user_room %}
-                        <div class="joined-channels" id="room-channel-{{ my.id }}">
-                            <a href="">
-                                <img src="{{ my.get_channel_photos }}" alt="Photo">
-                                <span class="tooltiptext tooltip-left" id="room-{{ my.id }}">{{ my.name }}</span>
-                            </a>
-                            <script>
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseover', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "visible";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "1";
-                                })
-
-                                document.getElementById('room-channel-{{ my.id }}').addEventListener('mouseout', function () {
-                                    document.getElementById('room-{{ my.id }}').style.visibility = "hidden";
-                                    document.getElementById('room-{{ my.id }}').style.opacity = "0";
-                                })
-                            </script>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% for my in user_room %}
+                            <div class="joined-channels" id="room-channel-{{ my.id }}">
+                                <a href="" data-mdb-toggle="tooltip"
+                                   data-mdb-placement="left" title="{{ my.name }}">
+                                    <img src="{{ my.get_channel_photos }}" alt="Photo">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="createChannel" tabindex="-1" aria-labelledby="createChannelLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createChannelLabel">Bir Kanal Oluştur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card px-0 pb-0 mb-3">
+                            <form id="createChannelForm" method="POST" enctype="multipart/form-data" action=".">
+                                {% csrf_token %}
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                         role="progressbar"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <br> <!-- fieldsets -->
+                                <fieldset>
+                                    <div class="form-card">
+                                        <p>Kanalınızın kategorisini belirleyiniz.</p>
+                                        <div class="row">
+                                            {% for c in category %}
+                                                <div class="col-lg-12">
+                                                    <div class="category">
+                                                        <input type="radio" class="categoryInput" name="category"
+                                                               id="category-{{ c.slug }}"
+                                                               value="{{ c.id }}" required>
+                                                        <label for="category-{{ c.slug }}">
+                                                            <div class="category-image">
+                                                                <img src="{{ c.get_category_photos }}"
+                                                                     alt="Category Photo">
+                                                            </div>
+                                                            <div class="category_name">
+                                                                <p>{{ c.name }}</p>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <h3 id="disp" style="color:green"></h3>
+                                        <h4 id="error" style="color:red"></h4>
+                                    </div>
+                                    <input type="button" name="next" id="next1" class="next action-button"
+                                           value="İlerle"/>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-card mb-4">
+                                        <div class="upload_profile_picture">
+                                            <p>Kanalınız için fotoğraf seçiniz.</p>
+                                            <img src="{% static 'img/server/upload_picture.png' %}" id="picture"
+                                                 alt="Upload Picture">
+                                            <input type="file" class="file" id="image" name="image" accept="image/*"
+                                                   required>
+                                            <label for="image" id="uploadPictureBtn"><i
+                                                    class="bi bi-camera-fill"></i></label>
+                                        </div>
+                                        <div class="upload_banner mt-5">
+                                            <p>Kanalınız için kapak fotoğrafı seçiniz.</p>
+                                            <img src="{% static 'img/server/upload_banner.png' %}" id="banner_picture"
+                                                 alt="Upload Banner">
+                                            <input type="file" class="file" id="banner" name="banner" accept="image/*"
+                                                   required>
+                                            <label for="banner" id="uploadBannerBtn"><i
+                                                    class="bi bi-camera-fill"></i></label>
+                                        </div>
+                                        <div class="crete_channel_name mt-5">
+                                            <p>Kanal adınızı belirleyiniz.</p>
+                                            <input type="text" maxlength="120" name="name" id="channelsName">
+                                            <div class="character-limit">
+                                                <p class="name-character-error-msg">Karakter sınırı aşıldı.</p>
+                                                <p class="text-counter"><span id="nameCount">0</span>/120</p>
+                                            </div>
+                                        </div>
+                                        <div class="crete_channel_name mt-5">
+                                            <p>Kanalınızın hakkında yazınız.</p>
+                                            <input type="text" maxlength="160" name="description"
+                                                   id="channelsDescription">
+                                            <div class="character-limit">
+                                                <p class="description-character-error-msg">Karakter sınırı aşıldı.</p>
+                                                <p class="text-counter"><span id="descriptionCount">0</span>/160</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="button" name="next" class="next action-button" value="İlerle"/> <input
+                                        type="button" name="previous" class="previous action-button-previous"
+                                        value="Geri"/>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-card">
+                                        <p>Kanalınızın gizlilik durumunu belirleyiniz.</p>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="is_public">
+                                                    <input type="radio" name="is_private" id="is_public" value="1"
+                                                           required>
+                                                    <label for="is_public">
+                                                        <div class="is_private_image">
+                                                            <img src="{% static 'img/server/public.png' %}"
+                                                                 alt="Private İmage">
+                                                        </div>
+                                                        <div class="is_private_name">
+                                                            <h4>Herkese Açık</h4>
+                                                            <span>Herkese açık olması durumunda kanalına herkes katılabilir.</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="is_public">
+                                                    <input type="radio" name="is_private" id="is_private" value="2"
+                                                           required>
+                                                    <label for="is_private">
+                                                        <div class="is_private_image">
+                                                            <img src="{% static 'img/server/private.png' %}"
+                                                                 alt="Private İmage">
+                                                        </div>
+                                                        <div class="is_private_name">
+                                                            <h4>Gizli</h4>
+                                                            <span>Gizli olması durumunda kanalınıza katılmak isteyenler size davet gönderecekler.</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <input type="submit" name="createChannels" class="action-button" value="Oluştur"/>
+                                    <input
+                                            type="button" name="previous" class="previous action-button-previous"
+                                            value="Geri"/>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
 {% endblock %}
 
 {% block scripts %}
+    {{ request.user.username|json_script:"json-username" }}
+    <script>
+        const userName = JSON.parse(document.getElementById('json-username').textContent);
+        {% if request.path == "/server/kesfet/hepsi/" %}
+            $("#ChannelSearch").keyup(function (e) {
+                $.ajax({
+                    url: "{% url 'json_all_search_channels' %}",
+                    data: {
+                        'query': $(this).val()
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        document.getElementById("channelsCard").innerHTML = ''
+                        const data = response.data
+                        if (response.room_count > 0) {
+                            $("#channelsCard").css({
+                                "display": "flex",
+                                "align-items": "center",
+                                "justify-content": "start",
+                                "flex-direction": "row"
+                            })
+                            data.map(c => {
+                                if (c.banner == null && c.image != null) {
+                                    if (c.joinedroom || c.is_admin) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
 
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        if (c.is_private) {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        } else {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.image}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        }
+                                    }
+
+                                } else if (c.image == null && c.banner != null) {
+                                    if (c.joinedroom || c.is_admin) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        if (c.is_private) {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        } else {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.banner}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        }
+                                    }
+                                } else if (c.banner == null && c.image == null) {
+                                    if (c.joinedroom || c.is_admin) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        if (c.is_private) {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        } else {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="{% static 'img/server/empty_banner.png' %}" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="{% static 'img/server/empty_channels.png' %}" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+
+                            <a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        }
+                                    }
+                                } else {
+                                    if (c.joinedroom || c.is_admin) {
+                                        let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+<a href="" class="joinBtn">Kanala Git</a>
+                        </div>
+                    </div>
+                                `
+                                        document.getElementById("channelsCard").innerHTML += html
+                                    } else {
+                                        if (c.is_private) {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+                                <a href="" class="joinBtn">Katılma İsteği Gönder</a>
+                        </div>
+                    </div>
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        } else {
+                                            let html = `
+                                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                    <img src="${c.image}/" class="card-img" alt="Banner">
+                                <div class="card-img-overlay">
+                                        <img src="${c.banner}/" alt="Channel">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${c.name}</h5>
+                                <p class="card-text">
+                                    ${c.description}
+                                </p>
+                                <span><i class="fas fa-users"></i> &nbsp;${c.membercount} Üye</span>
+                            </div>
+<a href="" class="joinBtn">Kanala Katıl</a>
+                        </div>
+                    </div>
+                                `
+                                            document.getElementById("channelsCard").innerHTML += html
+                                        }
+                                    }
+
+                                }
+                            })
+                        } else {
+                            let html = `
+                                <h4 style="width:100%; text-align: center; color: #52D382; margin-top: 100px;">Maalesef ilgili kategoride kanal bulamadım.</h4>
+                                <h5 style="width:100%;text-align: center; color: #6f7073">Lütfen yeniden arama yapınız veya bu kategoride siz kanal açabilirsiniz.</h5>
+                            `
+                            $("#channelsCard").css({
+                                "display": "flex",
+                                "align-items": "center",
+                                "justify-content": "center",
+                                "flex-direction": "column"
+                            })
+                            document.getElementById("channelsCard").innerHTML = html
+                        }
+                    }
+                })
+            })
+        {% endif %}
+    </script>
+    <script src="{% static 'js/addserver.js' %}"></script>
 {% endblock %}

@@ -86,8 +86,6 @@
     </div>
 
 
-
-
     <!-- Modal -->
     <div class="modal fade" id="createChannel" tabindex="-1" aria-labelledby="createChannelLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -155,7 +153,19 @@
                                     </div>
                                     <div class="crete_channel_name mt-5">
                                         <p>Kanal adınızı belirleyiniz.</p>
-                                        <input type="text" name="name" id="channelsName">
+                                        <input type="text" maxlength="120" name="name" id="channelsName">
+                                        <div class="character-limit">
+                                            <p class="name-character-error-msg">Karakter sınırı aşıldı.</p>
+                                            <p class="text-counter"><span id="nameCount">0</span>/120</p>
+                                        </div>
+                                    </div>
+                                    <div class="crete_channel_name mt-5">
+                                        <p>Kanalınızın hakkında yazınız.</p>
+                                        <input type="text" maxlength="160" name="description" id="channelsDescription">
+                                        <div class="character-limit">
+                                            <p class="description-character-error-msg">Karakter sınırı aşıldı.</p>
+                                            <p class="text-counter"><span id="descriptionCount">0</span>/160</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <input type="button" name="next" class="next action-button" value="İlerle"/> <input
