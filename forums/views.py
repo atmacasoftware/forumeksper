@@ -30,7 +30,6 @@ def forum_page(request):
     except:
         editor_select = EditorSelectForum.objects.all().order_by('-created_at')
 
-
     if 'crete_subject' in request.POST:
         postData = request.POST
         category_id = postData.get('category_id')
@@ -43,16 +42,17 @@ def forum_page(request):
         point = UserForumPoint.objects.filter(user=request.user).exists()
         if point == True:
             user = UserForumPoint.objects.get(user=request.user)
-            update_user = UserForumPoint.objects.filter(user=request.user).update(point = int(user.point) + 100)
+            update_user = UserForumPoint.objects.filter(user=request.user).update(point=int(user.point) + 100)
             update_user.save()
         else:
             user = UserForumPoint.objects.create(user=request.user, point=100)
             user.save()
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
     context = {
         'categoris': categoris,
         'forum': forum,
         'all_forums': all_forums,
-        'editor_select':editor_select,
+        'editor_select': editor_select,
     }
 
     return render(request, 'pages/forum/forums.html', context)
@@ -92,7 +92,7 @@ def forum_details(request, slug):
             'isDisliked': cd.dislikedComment(request),
             'dislikedCountComment': cd.dislikedCountComment(),
             'ReplyCommentCount': cd.ReplyCommentCount(),
-            'editor_select':editor_select,
+            'editor_select': editor_select,
         }
 
         comment_data.append(item)
@@ -263,6 +263,7 @@ def popular(request):
     }
 
     return render(request, 'pages/forum/popular.html', context)
+
 
 def editor_select(request):
     editor_select = None
