@@ -1,0 +1,249 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}">
+{% endblock %}
+
+
+{% block news %}
+
+    {% include 'pages/haberler/news_navbar.html' %}
+
+    <!-- Top News Slider Start -->
+    <div class="container-fluid py-3 news">
+        <div class="container">
+            <div class="owl-carousel owl-carousel-2 carousel-item-3 position-relative top-slider">
+                {% for tns in news_result %}
+                    <div class="d-flex">
+                        <img src="{{ tns.image }}" style="width: 80px; height: 80px; object-fit: cover;" alt="...">
+                        <div class="d-flex align-items-center bg-light px-3" style="height: 80px;">
+                            <a class="text-secondary font-weight-semi-bold"
+                               href="">{{ tns.name|truncatechars:'75' }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Top News Slider End -->
+
+    <!-- Main News Slider Start -->
+    <div class="container-fluid py-3 news">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="owl-carousel owl-carousel-2 carousel-item-1 position-relative mb-3 mb-lg-0">
+                        {% for mns in slider %}
+                            <div class="position-relative overflow-hidden" style="height: 435px;">
+                                <img class="img-fluid h-100" src="{{ mns.image }}" style="object-fit: cover;" alt="...">
+                                <div class="overlay">
+                                    <div class="mb-1">
+                                        <a class="text-white" href="">{{ mns.source }}</a>
+                                    </div>
+                                    <a class="h2 m-0 text-white font-weight-bold" href="">{{ mns.name }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center justify-content-between bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Kategoriler</h3>
+                        <a class="text-secondary font-weight-medium text-decoration-none" href="">Tümünü Gör</a>
+                    </div>
+                    {% for c in links_four %}
+                        <div class="position-relative overflow-hidden mb-3" style="height: 80px;">
+
+                            <a href=""
+                               class="overlay align-items-center justify-content-center h4 m-0 text-white text-decoration-none">
+                                {{ c.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main News Slider End -->
+
+
+    <!-- Featured News Slider Start -->
+    <div class="container-fluid py-3 news">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between bg-light py-2 px-4 mb-3">
+                <h3 class="m-0">Öne Çıkan</h3>
+
+            </div>
+            <div class="owl-carousel owl-carousel-2 carousel-item-4 position-relative">
+                {% for fns in news_result %}
+                    <div class="position-relative overflow-hidden" style="height: 300px;">
+                        <img class="img-fluid w-100 h-100" src="{{ fns.image }}" style="object-fit: cover;">
+                        <div class="overlay">
+                            <div class="mb-1" style="font-size: 13px;">
+                                <a class="text-white" href="">{{ fns.source }}</a>
+                            </div>
+                            <a class="h4 m-0 text-white" href="">{{ fns.name|truncatechars:'30' }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured News Slider End -->
+
+
+    <!-- Category News Slider Start -->
+    <div class="container-fluid news">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Ekonomi</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for ecn in economy_news %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ ecn.image }}" style="object-fit: cover;"
+                                     alt="economy">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ ecn.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ ecn.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Teknoloji</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for tch in technology %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ tch.image }}" style="object-fit: cover;"
+                                     alt="technology">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ tch.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ tch.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Category News Slider End -->
+
+
+    <!-- Category News Slider Start -->
+    <div class="container-fluid news">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Spor</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for spt in sport_news %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ spt.image }}" style="object-fit: cover;"
+                                     alt="sport">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ spt.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ spt.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Sağlık</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for hlt in health_news %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ hlt.image }}" style="object-fit: cover;"
+                                     alt="health">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ hlt.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ hlt.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Category News Slider End -->
+
+    <!-- Category News Slider Start -->
+    <div class="container-fluid news">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Dünya</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for wrd in world_news %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ wrd.image }}" style="object-fit: cover;"
+                                     alt="world">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ wrd.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ wrd.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-6 py-3">
+                    <div class="bg-light py-2 px-4 mb-3">
+                        <h3 class="m-0">Eğlence & Sanat</h3>
+                    </div>
+                    <div class="owl-carousel owl-carousel-3 carousel-item-2 position-relative">
+                        {% for ent in entertainment_news %}
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="{{ ent.image }}" style="object-fit: cover;"
+                                     alt="health">
+                                <div class="overlay position-relative bg-light">
+                                    <div class="mb-2" style="font-size: 13px;">
+                                        <a href="">{{ ent.source }}</a>
+                                    </div>
+                                    <a class="h4 m-0" href="">{{ ent.name|truncatechars:'50' }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Category News Slider End -->
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/news.js' %}"></script>
+
+{% endblock %}

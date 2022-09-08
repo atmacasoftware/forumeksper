@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/weather.css' %}">
+{% endblock %}
+{% block weather %}
+    <body onload="GetInfo();">
+    <section class="weather-wrapper">
+        <div class="container">
+            <div class="row mt-5 mb-3">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4 weather-side" style="background: gainsboro;">
+                                <a href="" class="change-city"><i class="fas fa-map-marker-alt"></i>&nbsp;Şehir Değiştir</a>
+                                <h4 class="weather-city">{{ weather.city }}</h4>
+                                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Weather">
+                                <p class="description">
+                                    {% if weather.description == 'scattered clouds' %}
+                                        Parçalı Bulutlu
+                                    {% endif %}
+                                </p>
+                                <p class="temparature">{{ weather.temparature }}<sup>o</sup><span>C</span></p>
+                                <p>Hissedilen {{ weather.feels_like }}<sup>o</sup><span>C</span></p>
+                            </div>
+                            <div class="col-md-8 forecast-side">
+                                <div class="card-body">
+
+                                    <div class="current-state">
+                                        <div class="state">
+                                            <h5>Rüzgar Hızı</h5>
+                                            <p>{{ weather.windspeed }} km/h</p>
+                                            {% if weather.winddegree < 22.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/kuzey.png' %}" alt="">
+                                                    <span>Kuzey</span>
+                                                </div>
+                                            {% elif weather.winddegree > 22.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/kuzeydoğu.png' %}" alt="">
+                                                    <span>Kuzeydoğu</span>
+                                                </div>
+                                            {% elif weather.winddegree > 67.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/doğu.png' %}" alt="">
+                                                    <span>Doğu</span>
+                                                </div>
+                                            {% elif weather.winddegree > 122.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/güneydoğu.png' %}" alt="">
+                                                    <span>Günedoğu</span>
+                                                </div>
+                                            {% elif weather.winddegree > 157.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/güneydoğu.png' %}" alt="">
+                                                    <span>Güney</span>
+                                                </div>
+                                            {% elif weather.winddegree > 202.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/güneydoğu.png' %}" alt="">
+                                                    <span>Güneybatı</span>
+                                                </div>
+                                            {% elif weather.winddegree > 247.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/güneydoğu.png' %}" alt="">
+                                                    <span>Batı</span>
+                                                </div>
+                                            {% elif weather.winddegree > 337.5 %}
+                                                <div class="wind">
+                                                    <img src="{% static 'img/weather/kuzey.png' %}" alt="">
+                                                    <span>Kuzey</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="state">
+                                            <h5>Nem</h5>
+                                            <p>{{ weather.humidity }}</p>
+                                            <i class="bi bi-droplet-half"></i>
+                                        </div>
+                                        <div class="state">
+                                            <h5>Basınç</h5>
+                                            <p>{{ weather.pressure }} hPa</p>
+                                            <img src="{% static 'img/weather/pressure.png' %}" alt="Pressure">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </body>
+{% endblock %}

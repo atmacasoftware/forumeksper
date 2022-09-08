@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.cache import cache
 import datetime
+
+from django.utils import timezone
+
 from forumeksper import settings
 from mainpage.models import Citys, WorkType
 
@@ -49,3 +52,21 @@ class UserProfile(models.Model):
                 return True
         else:
             return False
+
+
+class UserPoint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Puan Alan Kullanıcı")
+    point = models.PositiveBigIntegerField(verbose_name="Kullanıcı Puanı")
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, verbose_name="Oluşturulma Tarihi")
+    updated_at = models.DateTimeField(auto_now=True, editable=False, verbose_name="Güncellenme Tarihi")
+
+    class Meta:
+        verbose_name_plural = "2. Kullanıcı Puanı"
+
+    def __str__(self):
+        return self.user.username + " - " + str(self.point)
+
+    def save(self, *args, **kwargs):
+        if not self.updated_at:
+            self.updated_at = timezone.now()
+        super(UserPoint, self).save(*args, **kwargs)

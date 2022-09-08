@@ -15,11 +15,7 @@
     background-color: #555;
 }
 
-table thead tr th{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 
 #forumOwner img {
     width: 100px;

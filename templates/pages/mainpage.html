@@ -42,17 +42,15 @@
                     <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
                         <div class="row">
                             <div class="col-md-4 position-relative box">
-                                <h5 class="box-title">Forumlar</h5>
+                                <h5 class="box-title">Popüler Forumlar</h5>
                                 <ul>
-                                    <li><a href=""><i class="bi bi-caret-right-fill"></i> Birinci forum</a></li>
-                                    <li><a href=""><i class="bi bi-caret-right-fill"></i> Birinci forum</a></li>
-                                    <li><a href=""><i class="bi bi-caret-right-fill"></i> Birinci forum</a></li>
-                                    <li><a href=""><i class="bi bi-caret-right-fill"></i> Birinci forum</a></li>
-                                    <li><a href=""><i class="bi bi-caret-right-fill"></i> Birinci forum</a></li>
+                                    {% for pf in popular_forums %}
+                                        <li><a href="">{{ pf.title }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div class="col-md-4 position-relative box">
-                                <h5 class="box-title">Kanallar</h5>
+                                <h5 class="box-title">Popüler Kanallar</h5>
                             </div>
                             <div class="col-md-4 position-relative box">
                                 <h5 class="box-title">Duyurular</h5>
@@ -64,14 +62,142 @@
         </section>
         <!--Box End -->
 
+        <section class="mt-5 mb-5">
+            <div class="container">
+                <div class="mainpage-box">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- Carousel Start -->
+                            <div class="card p-3">
+                                <div id="announcementCarouselIndicator" class="carousel slide" data-mdb-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        <button
+                                                type="button"
+                                                data-mdb-target="#announcementCarouselIndicator"
+                                                data-mdb-slide-to="0"
+                                                class="active"
+                                                aria-current="true"
+                                                aria-label="Slide 1"
+                                        ></button>
+                                        <button
+                                                type="button"
+                                                data-mdb-target="#announcementCarouselIndicator"
+                                                data-mdb-slide-to="1"
+                                                aria-label="Slide 2"
+                                        ></button>
+                                        <button
+                                                type="button"
+                                                data-mdb-target="#announcementCarouselIndicator"
+                                                data-mdb-slide-to="2"
+                                                aria-label="Slide 3"
+                                        ></button>
+                                    </div>
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
+                                                 class="d-block w-100"
+                                                 alt="Wild Landscape"/>
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="https://mdbcdn.b-cdn.net/img/new/slides/042.webp"
+                                                 class="d-block w-100"
+                                                 alt="Camera"/>
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="https://mdbcdn.b-cdn.net/img/new/slides/043.webp"
+                                                 class="d-block w-100"
+                                                 alt="Exotic Fruits"/>
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                            data-mdb-target="#announcementCarouselIndicator" data-mdb-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                            data-mdb-target="#announcementCarouselIndicator" data-mdb-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Carousel End -->
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <h5 class="card-header">
+                                    <span>Güncel Faiz Oranları</span>
+                                    <a href="">Tümünü Gör</a>
+                                </h5>
+                                <div class="card-body card-height-1">
+                                    <table class="table align-middle mb-0 bg-white">
+                                        <thead class="bg-light">
+                                        <tr>
+                                            <th>Banka Adı</th>
+                                            <th>Konut Kredi Faizi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for bl in bank_rate_list %}
+                                            <tr>
+                                                <td>
+                                                    <p class="fw-bold mb-1">{{ bl.bank.name }}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="fw-normal mb-1">{{ bl.rate }}</p>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="mainpage-box news">
+                    <div class="row">
+                        <h5>
+                            <span>Son Haberler</span>
+                            <a href="{% url 'category_news' 'genel' %}">Tüm Haberleri Gör</a>
+                        </h5>
+                        <hr>
+                        {% for n in mainpage_news %}
+                            <div class="col-lg-3 mb-4 recent-news">
+                                <div class="card">
+                                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                                        <img src="{{ n.image }}"
+                                             class="img-fluid"/>
+                                        <a href="{{ n.url }}">
+                                            <div class="mask"
+                                                 style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="{{ n.url }}">{{ n.name|truncatechars:'60' }}</a>
+                                        </h5>
+                                        <span>{{ n.source }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
 
-    <script>
+    <!--<script>
         const ws = new WebSocket('wss://127.0.0.1:8000/ws/server/')
         ws.onopen = () => {
             console.log('opened')
         }
-    </script>
+    </script> -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/clock.js' %}"></script>
 {% endblock %}

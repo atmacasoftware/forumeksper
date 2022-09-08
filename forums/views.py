@@ -3,17 +3,26 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from forums.models import ForumCategory, Forum, ForumView, ForumComment, ReplyComment, LikeForum, DisLikeForum, \
-    LikeComment, DisLikeComment, EditorSelectForum, UserForumPoint
-from user_account.models import UserProfile
+    LikeComment, DisLikeComment, EditorSelectForum
+from user_account.models import UserProfile,UserPoint
 
 
 # Create your views here.
+
+add_forum=100
+add_comment=20
 
 def forum_page(request):
     categoris = ForumCategory.objects.all()
     forum = None
     all_forums = None
     editor_select = None
+    user_point = None
+
+    try:
+        user_point = UserPoint.objects.all().order_by('point')[:50]
+    except:
+        user_point = UserPoint.objects.all().order_by('point')[:50]
 
     try:
         all_forums = Forum.objects.all().annotate(popular_forum=Count('forum_views')).distinct().order_by(
@@ -39,13 +48,14 @@ def forum_page(request):
 
         data = Forum.objects.create(user=request.user, category=category, title=title, content=content, status=True)
         data.save()
-        point = UserForumPoint.objects.filter(user=request.user).exists()
+        point = UserPoint.objects.filter(user=request.user).exists()
         if point == True:
-            user = UserForumPoint.objects.get(user=request.user)
-            update_user = UserForumPoint.objects.filter(user=request.user).update(point=int(user.point) + 100)
+            user = UserPoint.objects.get(user=request.user)
+            update_user = UserPoint.objects.get(user=request.user)
+            update_user.point = user.point + add_forum
             update_user.save()
         else:
-            user = UserForumPoint.objects.create(user=request.user, point=100)
+            user = UserPoint.objects.create(user=request.user, point=add_forum)
             user.save()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     context = {
@@ -53,6 +63,7 @@ def forum_page(request):
         'forum': forum,
         'all_forums': all_forums,
         'editor_select': editor_select,
+        'user_point':user_point,
     }
 
     return render(request, 'pages/forum/forums.html', context)
@@ -68,6 +79,12 @@ def forum_details(request, slug):
     all_forums = None
     editor_select = None
     comment_data = []
+    user_list = None
+
+    try:
+        user_list = UserPoint.objects.all().order_by('point')[:50]
+    except:
+        user_list = UserPoint.objects.all().order_by('point')[:50]
 
     try:
         editor_select = EditorSelectForum.objects.all().order_by('-created_at')[:10]
@@ -93,6 +110,7 @@ def forum_details(request, slug):
             'dislikedCountComment': cd.dislikedCountComment(),
             'ReplyCommentCount': cd.ReplyCommentCount(),
             'editor_select': editor_select,
+            'user_list':user_list
         }
 
         comment_data.append(item)
@@ -109,6 +127,16 @@ def forum_details(request, slug):
         data = ForumComment.objects.create(user=request.user, forum=forum, content=comment, ip=ip)
         data.save()
 
+        point = UserPoint.objects.filter(user=request.user).exists()
+        if point == True:
+            user = UserPoint.objects.get(user=request.user)
+            update_user = UserPoint.objects.get(user=request.user)
+            update_user.point = user.point + add_comment
+            update_user.save()
+        else:
+            user = UserPoint.objects.create(user=request.user, point=add_comment)
+            user.save()
+
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     if 'reply_create_comment' in request.POST:
@@ -120,6 +148,16 @@ def forum_details(request, slug):
         data = ReplyComment.objects.create(user=request.user, forums=forum, comment=related_comment, content=content,
                                            ip=ip)
         data.save()
+
+        point = UserPoint.objects.filter(user=request.user).exists()
+        if point == True:
+            user = UserPoint.objects.get(user=request.user)
+            update_user = UserPoint.objects.get(user=request.user)
+            update_user.point = user.point + add_comment
+            update_user.save()
+        else:
+            user = UserPoint.objects.create(user=request.user, point=add_comment)
+            user.save()
 
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -154,6 +192,7 @@ def json_owner_like(request, forum_id):
             like = LikeForum.objects.create(forum=forum, user=request.user, ip=ip, is_liked=True)
             like.save()
             data = 'liked'
+
 
         elif dislike == True:
             dislike = DisLikeForum.objects.filter(forum=forum, user=request.user)

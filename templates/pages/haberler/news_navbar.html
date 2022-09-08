@@ -1,0 +1,11 @@
+<div class="category-wrapper sticky-top bg-light">
+    <div class="container">
+        <ul>
+            {% for c in news_links %}
+                <li class="link">
+                    <a href="{% url 'category_news' c.slug %}">{{ c.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

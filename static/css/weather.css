@@ -1,0 +1,110 @@
+.weather-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 0;
+}
+
+.weather-side .change-city {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #1d1d1d;
+}
+
+.weather-side h4 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+
+.weather-side img {
+    width: 30%;
+    height: auto;
+}
+
+.weather-side .description {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.weather-side .temparature {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.five-day {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.day {
+    width: 250px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background: gainsboro;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.min-max-temperature {
+    display: flex;
+    flex-direction: row;
+}
+
+.current-state {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.current-state .state{
+    width: 33%;
+    height: 300px;
+    background: gainsboro;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 30px 10px;
+}
+
+.state p{
+    font-size: 42px;
+}
+
+.wind{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.wind img{
+    border: 1px solid black;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.state i{
+    font-size: 30px;
+}

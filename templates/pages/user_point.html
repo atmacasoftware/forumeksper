@@ -1,0 +1,19 @@
+<h5 class="card-header">Kullanıcı Puan Sıralaması</h5>
+<div class="card-body popular-list">
+    <table class="table">
+        <thead class="bg-light">
+        <tr>
+            <th scope="col">Kullanıcı Adı</th>
+            <th scope="col">Puanı</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in user_point %}
+            <tr>
+                <th scope="row">{{ u.user.username }}</th>
+                <td>{{ u.point }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

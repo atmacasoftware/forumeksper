@@ -46,7 +46,7 @@
                                 <div class="card-body">
                                     <div class="card-body-header">
                                         <h5 class="card-title">{{ forum.title }} </h5>
-                                        <button class="report-abuse-button"><i
+                                        <button class="report-abuse-button" data-mdb-toggle="tooltip" data-mdb-placement="left" title="Kötüye Kullanım Bildir"><i
                                                 class="fas fa-exclamation-triangle white"></i></button>
                                     </div>
                                     <p class="card-text">{{ forum.content }}</p>
@@ -149,20 +149,8 @@
                                 <div class="col-md-9">
                                     <div class="card-body">
                                         <div class="card-body-header">
-                                            <div class="dropdown">
-                                                <button type="button"
-                                                        id="dropdownMenu2" data-mdb-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                    <li>
-                                                        <button class="dropdown-item" type="button">Kötüye Yorum
-                                                            Bildir
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <button class="report-abuse-button" data-mdb-toggle="tooltip" data-mdb-placement="left" title="Kötüye Kullanım Bildir"><i
+                                                class="fas fa-exclamation-triangle"></i></button>
                                         </div>
                                         <p class="card-text">{{ c.content }}</p>
                                         <p class="card-text"><small class="text-muted">{{ c.created_at }}</small>

@@ -4,7 +4,7 @@
         <ul>
             {% for f in all_forums %}
                 <li>
-                    <a href="">{{ f.title|truncatechars:"30" }}</a>
+                    <a href="{% url 'forum_details' f.slug %}">{{ f.title|truncatechars:"30" }}</a>
                 </li>
             {% endfor %}
         </ul>

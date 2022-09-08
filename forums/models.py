@@ -227,13 +227,3 @@ class EditorSelectForum(models.Model):
         return self.forum.title
 
 
-class UserForumPoint(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Puan Alan Kullanıcı")
-    point = models.PositiveBigIntegerField(verbose_name="Kullanıcı Puanı")
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
-
-    class Meta:
-        verbose_name_plural = "8. Kullanıcı Puanı"
-
-    def __str__(self):
-        return self.user.username + " - " + self.point

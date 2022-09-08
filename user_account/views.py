@@ -11,7 +11,7 @@ from forumeksper.settings import EMAIL_HOST_USER
 from user_account.forms import SignUpForm
 from django.contrib.auth import login, authenticate
 # Create your views here.
-from user_account.models import UserProfile
+from user_account.models import UserProfile, UserPoint
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.hashers import check_password
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -160,3 +160,17 @@ class Login(View):
             return render(request, 'pages/login.html', {'error1': 'Kullanıcı adı veya şifre yanlış olabilir.',
                                                         'error2': 'Hesabınız aktif edilmemiş olabilir. Lütfen email adresini kontrol ediniz. Aktivasyon maili spamlarına düşmüş olabilir.'})
 
+
+
+def user_point(request):
+    user_point = None
+    try:
+        user_point = UserPoint.objects.all().order_by('point')[:50]
+    except:
+        user_point = UserPoint.objects.all().order_by('point')[:50]
+
+    context = {
+        'user_point': user_point,
+    }
+
+    return render(request, 'pages/user_point.html', context)

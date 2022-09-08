@@ -38,6 +38,9 @@
 {% include 'partials/_navbar.html' %}
 <!--Navbar End-->
 
+<div id="preloader">
+    <div id="loader"></div>
+</div>
 
 <!--Pages Start-->
 {% block mainpage %}
@@ -62,8 +65,13 @@
 {% endblock %}
 {% block forum_details %}
 {% endblock %}
+{% block weather %}
+{% endblock %}
+{% block news %}
+{% endblock %}
+{% block category_news %}
+{% endblock %}
 <!--Pages End-->
-
 
 <!--Footer Start-->
 {% include 'partials/_footer.html' %}
@@ -82,6 +90,9 @@
         type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
 ></script>
+<script src="{% static 'js/loader.js' %}"></script>
+<!--<script src="{% static 'js/weather.js' %}"></script>-->
+
 {% block scripts %}
 
 {% endblock %}

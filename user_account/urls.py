@@ -9,4 +9,5 @@ urlpatterns = [
     path('cikis-yap', LogoutView.as_view(next_page='mainpage'), name='logout'),
     path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('validate-username', csrf_exempt(UsernameValidationView.as_view()),name="validate-username"),
+    path('kullanici-siralamasi/', user_point, name="user_point")
 ]
