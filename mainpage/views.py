@@ -1,18 +1,19 @@
 import json
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import requests
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from mainpage.forms import WeatherForm
 from forums.models import Forum
-from mainpage.models import LoanInterestRate, Weather, NewsCategory
+from mainpage.models import LoanInterestRate, Weather, NewsCategory, Note, Advertisement
 # Create your views here.
 from notifications.models import Notification
 from user_account.models import UserProfile
 import datetime
 import math
 import http.client
+
 
 def mainpage(request):
     profile = UserProfile.objects.all()
@@ -40,7 +41,6 @@ def mainpage(request):
     cities = Weather.objects.filter(ip=ip).last()
 
     url = "https://api.openweathermap.org/data/2.5/weather?q={}&appid=37a3b97ba41dfc38e67661578a88798d"
-
 
     if request.method == 'POST':
         form = WeatherForm(request.POST)
@@ -75,10 +75,11 @@ def mainpage(request):
     res = conn.getresponse()
     data = res.read()
     news = data.decode("utf-8")
-    response = requests.request("GET", "https://api.collectapi.com/news/getNews?country=tr&tag=general", headers=headers)
+    response = requests.request("GET", "https://api.collectapi.com/news/getNews?country=tr&tag=general",
+                                headers=headers)
     new = response.json()
 
-    #print(new["result"])
+    # print(new["result"])
 
     mainpage_news = new["result"]
 
@@ -88,15 +89,15 @@ def mainpage(request):
         'notification': notification,
         'notification_count': notification_count,
         'notification_unread': notification_unread,
-        'popular_forums':popular_forums,
-        'bank_rate_list':bank_rate_list,
+        'popular_forums': popular_forums,
+        'bank_rate_list': bank_rate_list,
         'weather': weather,
         'form': form,
-        'news':news,
-        'mainpage_news':mainpage_news
+        'news': news,
+        'mainpage_news': mainpage_news
     }
 
-    return render(request,'pages/mainpage.html',context)
+    return render(request, 'pages/mainpage.html', context)
 
 
 def weather_page(request, weather_id):
@@ -107,23 +108,22 @@ def weather_page(request, weather_id):
     city_weather = requests.get(api.format(city)).json()
     weather = {
         'city': city,
-        'temparature': round((city_weather['main']['temp'] - 273.15),1),
+        'temparature': round((city_weather['main']['temp'] - 273.15), 1),
         'description': city_weather['weather'][0]['description'],
         'icon': city_weather['weather'][0]['icon'],
         'humidity': city_weather['main']['humidity'],
         'pressure': city_weather['main']['pressure'],
         'windspeed': city_weather['wind']['speed'],
-        'feels_like': round((city_weather['main']['feels_like'] - 273.15),1),
+        'feels_like': round((city_weather['main']['feels_like'] - 273.15), 1),
         'winddegree': city_weather['wind']['deg'],
     }
 
-
     context = {
         'weather': weather,
-        'city':city
+        'city': city
     }
 
-    return render(request,'pages/weather.html', context)
+    return render(request, 'pages/weather.html', context)
 
 
 def news(request):
@@ -133,7 +133,7 @@ def news(request):
     }
 
     response = requests.request("GET", f"https://api.collectapi.com/news/getNews?country=tr&tag=general",
-                                        headers=headers)
+                                headers=headers)
     news = response.json()
     news_result = news["result"]
 
@@ -172,8 +172,8 @@ def news(request):
     entertainment_news = news_entertainment["result"]
 
     context = {
-        'news_result':news_result,
-        'slider':slider,
+        'news_result': news_result,
+        'slider': slider,
         'economy_news': economy_news,
         'technology': technology_news,
         'sport_news': sport_news,
@@ -182,10 +182,10 @@ def news(request):
         'entertainment_news': entertainment_news
     }
 
-    return render(request,'pages/haberler/main.html',context)
+    return render(request, 'pages/haberler/main.html', context)
+
 
 def category_news(request, slug):
-
     category = NewsCategory.objects.get(slug=slug)
 
     select_category = category.name
@@ -226,27 +226,67 @@ def category_news(request, slug):
     category_news_four = category_news[:4]
 
     context = {
-        'category_news':category_news,
-        'category':category,
-        'slider':slider,
-        'select_category':select_category,
-        'category_news_four':category_news_four,
+        'category_news': category_news,
+        'category': category,
+        'slider': slider,
+        'select_category': select_category,
+        'category_news_four': category_news_four,
     }
 
     return render(request, 'pages/haberler/category.html', context)
 
 
 def advertisement(request):
-    return render(request,'pages/ads/create_ads.html')
+    notes = None
 
+    try:
+        notes = Note.objects.filter(pages="2")
+    except:
+        notes = None
 
+    if request.method == 'POST':
+        try:
+            postData = request.POST
+            first_name = postData.get('first_name', '')
+            last_name = postData.get('last_name', '')
+            email = postData.get('email', '')
+            phone = postData.get('phone', '')
+            company_name = postData.get('company_name', '')
+            ads_type = postData.get('ads_type', '')
+            ads_category = postData.get('ads_category', '')
+            title = postData.get('title', '')
+            message = postData.get('message', '')
+            private = postData.get('is_private', '')
+            image = request.FILES.get("image")
+            print(private)
 
+            if private == 'on':
+                private = True
+            else:
+                private = False
+            data = Advertisement.objects.create(first_name=first_name, last_name=last_name, email=email, phone=phone,
+                                                company=company_name, type=ads_type, ads=ads_category, title=title,
+                                                message=message, image=image, is_private=private)
+            data.save()
+            messages.success(request, 'İlanınız başarıyla gönderildi. Ekipimiz tarafından yapılan incelemlere göre yaklaşık 24 saat içerisinde sizlere ulaşacağız.')
+            return redirect('advertisement')
+        except:
+            messages.info(request, 'İşaretli alanların doldurulması gerekmektedir.')
 
+            return redirect('advertisement')
+    pass
+
+    context = {
+        'notes': notes
+    }
+
+    return render(request, 'pages/ads/create_ads.html', context)
 
 
 ############# Error Pages ##############
 def error_404(request, exception):
-    return render(request, 'pages/error/404.html',status=404)
+    return render(request, 'pages/error/404.html', status=404)
+
 
 def error_500(request):
-    return render(request, 'pages/error/500.html',status=500)
+    return render(request, 'pages/error/500.html', status=500)

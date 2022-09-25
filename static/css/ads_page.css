@@ -1,3 +1,7 @@
+.container{
+    align-items: center;
+}
+
 input:hover, textarea:hover{
     border: 1px solid black;
 }
@@ -16,4 +20,21 @@ input:focus, textarea:focus{
 #adsSelect p {
     margin-left: 20px;
     margin-top: 20px;
+}
+
+#companyName:valid{
+    border-color: black!important;
+}
+
+.annotation{
+    padding: 5px 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.alert{
+    top: 170px!important;
 }

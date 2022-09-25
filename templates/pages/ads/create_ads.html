@@ -6,8 +6,22 @@
 {% endblock %}
 
 {% block create_ads %}
-    <div class="container mt-5 mb-5 d-flex justify-content-center align-item-center">
-        <form action="" class="row g-1 w-75 was-validated">
+
+    {% include 'message.html' %}
+    <div class="container mt-5 mb-5 d-flex justify-content-center flex-column">
+
+        <!-- Note Start -->
+        {% for n in notes %}
+            <div class="w-75 annotation bg-dark text-white">
+                <p>{{ n.content }}</p>
+            </div>
+        {% endfor %}
+
+        <!-- Note End -->
+
+        <form action="{% url 'advertisement' %}" class="row g-1 w-75 was-validated" method="POST"
+              enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="col-md-6">
                 <label for="firstName" class="form-label">İsim *</label>
                 <input type="text" name="first_name" class="form-control is-valid" id="firstName" required>
@@ -30,8 +44,8 @@
             </div>
             <div class="col-8">
                 <label for="adsType" class="form-label">İlan Tipi *</label>
-                <select class="form-select" required aria-label="ads_type" id="adsType">
-                    <option selected disabled value="">Seçimiz yapınız...</option>
+                <select class="form-select" name="ads_type" required aria-label="ads_type" id="adsType">
+                    <option selected disabled value="0">Seçimiz yapınız...</option>
                     <option value="1">Reklam</option>
                     <option value="2">Haber</option>
                     <option value="3">Çalışan Alımı</option>
@@ -43,7 +57,7 @@
             <div id="adsSelect">
                 <div class="col-6 mt-4">
                     <label for="selectCategory" class="form-label">Reklam Kategorisi *</label>
-                    <select class="form-select" aria-label="select_category" id="selectCategory">
+                    <select class="form-select" name="ads_category" aria-label="select_category" id="selectCategory">
                         <option selected disabled value="">Seçimiz yapınız...</option>
                         <option value="1">1. Kategori</option>
                         <option value="2">2. Kategori</option>
@@ -60,18 +74,30 @@
             <div id="adsNews">
                 <div class="col-12 mt-4">
                     <label for="title" class="form-label">Haber Başlığı *</label>
-                    <input type="text" name="email" class="form-control is-valid" id="title">
+                    <input type="text" name="title" class="form-control is-valid" id="title">
                 </div>
             </div>
-            <div class="col-12 mt-5">
-                <label for="messageArea" id="messageAreaLabel" class="form-label">Mesaj</label>
-                <textarea class="form-control" id="messageArea"
+            <div class="col-12 mt-4">
+                <label for="messageArea" id="messageAreaLabel" class="form-label">Mesaj *</label>
+                <textarea name="message" class="form-control" id="messageArea"
                           required></textarea>
                 <div class="invalid-feedback">
                     Lütfen mesaj içeriğini giriniz.
                 </div>
             </div>
-            <div class="col-12 mt-5">
+
+            <div class="mt-4">
+                <label for="imageFile" class="form-label">Bir fotoğraf seçiniz...</label>
+                <input class="form-control" name="image" type="file" id="imageFile" accept="image/*">
+            </div>
+
+            <div class="form-check mt-3" id="isPrivateCheck">
+                <input type="checkbox" name="is_private" class="form-check-input" id="isPrivateCheckInput">
+                <label class="form-check-label" for="isPrivateCheckInput">Bilgilerimin gizli kalmasını istiyorum.
+                    (Bilgileriniz asla kimseyle paylaşılmaz. Gizli kimlik ile yayınlanacaktır.)</label>
+            </div>
+
+            <div class="col-12 mt-3">
                 <button type="submit" class="btn btn-primary">Gönder</button>
             </div>
         </form>
@@ -79,5 +105,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script type='text/javascript'
+            src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script src="{% static 'js/ads_page.js' %}"></script>
 {% endblock %}

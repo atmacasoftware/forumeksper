@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from mainpage.models import Citys, WorkType, BankList, LoanInterestRate, Weather, NewsCategory, Advertisement
+from mainpage.models import Citys, WorkType, BankList, LoanInterestRate, Weather, NewsCategory, Advertisement, Note
 from mainpage.resources import CityResource,WeatherResource
 
 
@@ -18,10 +18,14 @@ class WeatherAdmin(ImportExportModelAdmin):
 
 
 class AdvertisementAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'company','email','phone','type','ads')
+    list_display = ('first_name', 'last_name', 'company','email','phone','type','ads','created_at')
     search_fields = ('email','phone')
     list_per_page = 300
 
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('pages', 'created_at')
+    search_fields = ('pages','created_at')
+    list_per_page = 300
 
 admin.site.register(Citys, CityAdmin)
 admin.site.register(WorkType)
@@ -30,3 +34,4 @@ admin.site.register(LoanInterestRate)
 admin.site.register(Weather,WeatherAdmin)
 admin.site.register(NewsCategory)
 admin.site.register(Advertisement, AdvertisementAdmin)
+admin.site.register(Note, NoteAdmin)

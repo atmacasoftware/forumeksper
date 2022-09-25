@@ -146,10 +146,31 @@ class Advertisement(models.Model):
     ads = models.CharField(choices=ADS_CATEGORY, max_length=50, null=True, blank=True, verbose_name="Reklam Kategorisi")
     title = models.CharField(max_length=120, verbose_name="Haber Başlığı", null=True, blank=True)
     message = models.TextField(verbose_name="Mesaj", null=True)
+    is_private = models.BooleanField(default=False, null=True)
+    image = models.ImageField(upload_to='ilan/', null=True, blank=True, verbose_name="İlan Resimleri")
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True)
 
     class Meta:
         verbose_name_plural = "7. İlanlar"
 
     def __str__(self):
         return self.first_name + " " + self.last_name + " " + self.email
+
+
+class Note(models.Model):
+    PAGES = (
+        ('1','Anasayfa'),
+        ('2','İlan'),
+    )
+
+    pages = models.CharField(choices=PAGES, max_length=100, null=True, verbose_name="Sayfa Seçimi")
+    content = models.TextField(verbose_name="İçerik", null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name_plural = "8. Notlar"
+
+
+
+
 

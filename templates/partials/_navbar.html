@@ -94,6 +94,9 @@
                 <li class="nav-item">
                     <a href="{% url 'news' %}" class="nav-link"><i class="bi bi-newspaper"></i> &nbsp;Haberler</a>
                 </li>
+            <li class="nav-item">
+                    <a href="{% url 'news' %}" class="nav-link"><i class="bi bi-controller"></i> &nbsp;Eğlence</a>
+                </li>
                 <li class="nav-item">
                     <a href="{% url 'forum_page' %}" class="nav-link"><i class="fa-solid fa-align-left"></i> &nbsp;Forumlar</a>
                 </li>
@@ -104,6 +107,7 @@
                         <a href="{% url 'login' %}" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> &nbsp;Kanallar</a>
                     {% endif %}
                 </li>
+
                 {% if request.user.is_authenticated %}
                     <li class="nav-item notification-item">
                         {% include 'pages/navbar_partials/notification.html' %}
