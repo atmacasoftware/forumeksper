@@ -16,5 +16,6 @@ class UserPointAdmin(admin.ModelAdmin):
     list_per_page = 300
 
 
+
 admin.site.register(UserProfile, ProfileAdmin)
 admin.site.register(UserPoint, UserPointAdmin)

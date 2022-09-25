@@ -1,0 +1,19 @@
+input:hover, textarea:hover{
+    border: 1px solid black;
+}
+
+input:focus, textarea:focus{
+    border: 1px solid black;
+}
+
+#adsSelect{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+#adsSelect p {
+    margin-left: 20px;
+    margin-top: 20px;
+}

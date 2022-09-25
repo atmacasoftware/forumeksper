@@ -117,3 +117,39 @@ class NewsCategory(models.Model):
         self.modified = timezone.now()
         self.slug = self.get_slug()
         return super(NewsCategory, self).save(*args, **kwargs)
+
+
+class Advertisement(models.Model):
+
+    TYPE = (
+        ('1','Reklam'),
+        ('2','Haber'),
+        ('3','Çalışan Alımı'),
+        ('4','İstek-Öneri'),
+        ('5','Şikayet'),
+    )
+
+    ADS_CATEGORY = (
+        ('1','1. Kategori'),
+        ('2','2. Kategori'),
+        ('3','3. Kategori'),
+        ('4','4. Kategori'),
+        ('5','5. Kategori'),
+    )
+
+    first_name = models.CharField(max_length=100, verbose_name="İsim", null=True)
+    last_name = models.CharField(max_length=100, verbose_name="Soyisim", null=True)
+    company = models.CharField(max_length=100, verbose_name="Şirket Adı", null=True, blank=True)
+    email = models.EmailField(max_length=255, null=True, verbose_name="Email")
+    phone = models.CharField(max_length=11, verbose_name="Telefon", null=True)
+    type = models.CharField(choices=TYPE, max_length=50, null=True, verbose_name="İlan Tipi")
+    ads = models.CharField(choices=ADS_CATEGORY, max_length=50, null=True, blank=True, verbose_name="Reklam Kategorisi")
+    title = models.CharField(max_length=120, verbose_name="Haber Başlığı", null=True, blank=True)
+    message = models.TextField(verbose_name="Mesaj", null=True)
+
+    class Meta:
+        verbose_name_plural = "7. İlanlar"
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name + " " + self.email
+

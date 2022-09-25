@@ -1,5 +1,7 @@
 {% load static %}
 
+{% include 'pages/ads/first_category.html' %}
+
 {% if request.path == '/' %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light mini-navbar">
         <!-- Container wrapper -->
@@ -60,7 +62,7 @@
                         <span id="minutes">00</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-send-fill"></i>&nbsp; İlan Gönder</a>
+                        <a class="nav-link" href="{% url 'advertisement' %}"><i class="bi bi-send-fill"></i>&nbsp; İlan Gönder</a>
                     </li>
                     <!-- Navbar dropdown -->
                 </ul>

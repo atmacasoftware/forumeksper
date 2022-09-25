@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/ads_page.css' %}">
+{% endblock %}
+
+{% block create_ads %}
+    <div class="container mt-5 mb-5 d-flex justify-content-center align-item-center">
+        <form action="" class="row g-1 w-75 was-validated">
+            <div class="col-md-6">
+                <label for="firstName" class="form-label">İsim *</label>
+                <input type="text" name="first_name" class="form-control is-valid" id="firstName" required>
+            </div>
+            <div class="col-md-6">
+                <label for="lastName" class="form-label">Soyisim *</label>
+                <input type="text" name="last_name" class="form-control is-valid" id="lastName" required>
+            </div>
+            <div class="col-12">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" name="email" class="form-control is-valid" id="email" required>
+            </div>
+            <div class="col-12">
+                <label for="phone" class="form-label">Telefon *</label>
+                <input type="text" name="phone" class="form-control is-valid" id="phone" required>
+            </div>
+            <div class="col-md-12">
+                <label for="companyName" class="form-label">Şirket Adı</label>
+                <input type="text" name="company_name" class="form-control" id="companyName">
+            </div>
+            <div class="col-8">
+                <label for="adsType" class="form-label">İlan Tipi *</label>
+                <select class="form-select" required aria-label="ads_type" id="adsType">
+                    <option selected disabled value="">Seçimiz yapınız...</option>
+                    <option value="1">Reklam</option>
+                    <option value="2">Haber</option>
+                    <option value="3">Çalışan Alımı</option>
+                    <option value="4">İstek-Öneri</option>
+                    <option value="5">Şikayet</option>
+                </select>
+                <div class="invalid-feedback">Lütfen seçim yapınız!</div>
+            </div>
+            <div id="adsSelect">
+                <div class="col-6 mt-4">
+                    <label for="selectCategory" class="form-label">Reklam Kategorisi *</label>
+                    <select class="form-select" aria-label="select_category" id="selectCategory">
+                        <option selected disabled value="">Seçimiz yapınız...</option>
+                        <option value="1">1. Kategori</option>
+                        <option value="2">2. Kategori</option>
+                        <option value="3">3. Kategori</option>
+                        <option value="4">4. Kategori</option>
+                        <option value="5">5. Kategori</option>
+                    </select>
+                    <div class="invalid-feedback">Lütfen seçim yapınız!</div>
+                </div>
+                <div class="col-6 mt-5">
+                    <p>Reklamlarla ilgili daha detaylı bilgi için <a href="">tıklayınız</a>.</p>
+                </div>
+            </div>
+            <div id="adsNews">
+                <div class="col-12 mt-4">
+                    <label for="title" class="form-label">Haber Başlığı *</label>
+                    <input type="text" name="email" class="form-control is-valid" id="title">
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <label for="messageArea" id="messageAreaLabel" class="form-label">Mesaj</label>
+                <textarea class="form-control" id="messageArea"
+                          required></textarea>
+                <div class="invalid-feedback">
+                    Lütfen mesaj içeriğini giriniz.
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <button type="submit" class="btn btn-primary">Gönder</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/ads_page.js' %}"></script>
+{% endblock %}

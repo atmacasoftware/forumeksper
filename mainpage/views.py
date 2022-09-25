@@ -235,6 +235,16 @@ def category_news(request, slug):
 
     return render(request, 'pages/haberler/category.html', context)
 
+
+def advertisement(request):
+    return render(request,'pages/ads/create_ads.html')
+
+
+
+
+
+
+############# Error Pages ##############
 def error_404(request, exception):
     return render(request, 'pages/error/404.html',status=404)
 
