@@ -14,7 +14,7 @@
 7. Kayıt Ol
 
 ## Sayfa Dışı
-1. Hava Durumu
+1. Hava Durumudu
 2. İlanlar
 3. Reklam Kategorileri
 
