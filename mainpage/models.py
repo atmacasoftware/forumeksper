@@ -119,31 +119,74 @@ class NewsCategory(models.Model):
         return super(NewsCategory, self).save(*args, **kwargs)
 
 
+class AdsCategory(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Kategori Adı")
+    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.0,verbose_name="Fiyat")
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+    update_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True, null=True, editable=False)
+
+    class Meta:
+        verbose_name_plural = "7.1. Reklam Kategorileri"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def get_slug(self):
+        slug = slugify(self.name.replace("ı", "i"))
+        unique = slug
+        number = 1
+
+        while AdsCategory.objects.filter(slug=unique).exists():
+            unique = '{}-{}'.format(slug, number)
+            number += 1
+
+        return unique
+
+    def save(self, *args, **kwargs):
+        self.slug = self.get_slug()
+        return super(AdsCategory, self).save(*args, **kwargs)
+
+
+class AdvertisementType(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Kategori Adı")
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+    update_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True, null=True, editable=False)
+
+    class Meta:
+        verbose_name_plural = "7.2. İlan Kategorileri"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def get_slug(self):
+        slug = slugify(self.name.replace("ı", "i"))
+        unique = slug
+        number = 1
+
+        while AdvertisementType.objects.filter(slug=unique).exists():
+            unique = '{}-{}'.format(slug, number)
+            number += 1
+
+        return unique
+
+    def save(self, *args, **kwargs):
+        self.slug = self.get_slug()
+        return super(AdvertisementType, self).save(*args, **kwargs)
+
+
 class Advertisement(models.Model):
-
-    TYPE = (
-        ('1','Reklam'),
-        ('2','Haber'),
-        ('3','Çalışan Alımı'),
-        ('4','İstek-Öneri'),
-        ('5','Şikayet'),
-    )
-
-    ADS_CATEGORY = (
-        ('1','1. Kategori'),
-        ('2','2. Kategori'),
-        ('3','3. Kategori'),
-        ('4','4. Kategori'),
-        ('5','5. Kategori'),
-    )
 
     first_name = models.CharField(max_length=100, verbose_name="İsim", null=True)
     last_name = models.CharField(max_length=100, verbose_name="Soyisim", null=True)
     company = models.CharField(max_length=100, verbose_name="Şirket Adı", null=True, blank=True)
     email = models.EmailField(max_length=255, null=True, verbose_name="Email")
     phone = models.CharField(max_length=11, verbose_name="Telefon", null=True)
-    type = models.CharField(choices=TYPE, max_length=50, null=True, verbose_name="İlan Tipi")
-    ads = models.CharField(choices=ADS_CATEGORY, max_length=50, null=True, blank=True, verbose_name="Reklam Kategorisi")
+    type = models.ForeignKey(AdvertisementType, on_delete=models.CASCADE, null=True, verbose_name="İlan Tipi")
+    ads = models.ForeignKey(AdsCategory, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Reklam Kategorisi")
     title = models.CharField(max_length=120, verbose_name="Haber Başlığı", null=True, blank=True)
     message = models.TextField(verbose_name="Mesaj", null=True)
     is_private = models.BooleanField(default=False, null=True)

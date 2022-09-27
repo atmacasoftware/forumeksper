@@ -6,7 +6,7 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from mainpage.forms import WeatherForm
 from forums.models import Forum
-from mainpage.models import LoanInterestRate, Weather, NewsCategory, Note, Advertisement
+from mainpage.models import LoanInterestRate, Weather, NewsCategory, Note, Advertisement, AdsCategory, AdvertisementType
 # Create your views here.
 from notifications.models import Notification
 from user_account.models import UserProfile
@@ -238,6 +238,8 @@ def category_news(request, slug):
 
 def advertisement(request):
     notes = None
+    categories = AdsCategory.objects.all()
+    advertisement_types = AdvertisementType.objects.all()
 
     try:
         notes = Note.objects.filter(pages="2")
@@ -258,14 +260,26 @@ def advertisement(request):
             message = postData.get('message', '')
             private = postData.get('is_private', '')
             image = request.FILES.get("image")
-            print(private)
+
+            category = None
+            type = None
+
+            try:
+                category = get_object_or_404(AdsCategory, slug=ads_category)
+            except:
+                category = None
+
+            try:
+                type = get_object_or_404(AdvertisementType, slug=ads_type)
+            except:
+                type = None
 
             if private == 'on':
                 private = True
             else:
                 private = False
             data = Advertisement.objects.create(first_name=first_name, last_name=last_name, email=email, phone=phone,
-                                                company=company_name, type=ads_type, ads=ads_category, title=title,
+                                                company=company_name, type=type, ads=category, title=title,
                                                 message=message, image=image, is_private=private)
             data.save()
             messages.success(request, 'İlanınız başarıyla gönderildi. Ekipimiz tarafından yapılan incelemlere göre yaklaşık 24 saat içerisinde sizlere ulaşacağız.')
@@ -277,7 +291,9 @@ def advertisement(request):
     pass
 
     context = {
-        'notes': notes
+        'notes': notes,
+        'categories':categories,
+        'advertisement_types':advertisement_types
     }
 
     return render(request, 'pages/ads/create_ads.html', context)

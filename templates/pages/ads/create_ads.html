@@ -46,11 +46,9 @@
                 <label for="adsType" class="form-label">İlan Tipi *</label>
                 <select class="form-select" name="ads_type" required aria-label="ads_type" id="adsType">
                     <option selected disabled value="0">Seçimiz yapınız...</option>
-                    <option value="1">Reklam</option>
-                    <option value="2">Haber</option>
-                    <option value="3">Çalışan Alımı</option>
-                    <option value="4">İstek-Öneri</option>
-                    <option value="5">Şikayet</option>
+                    {% for t in advertisement_types %}
+                        <option value="{{ t.slug }}">{{ t.name }}</option>
+                    {% endfor %}
                 </select>
                 <div class="invalid-feedback">Lütfen seçim yapınız!</div>
             </div>
@@ -59,11 +57,9 @@
                     <label for="selectCategory" class="form-label">Reklam Kategorisi *</label>
                     <select class="form-select" name="ads_category" aria-label="select_category" id="selectCategory">
                         <option selected disabled value="">Seçimiz yapınız...</option>
-                        <option value="1">1. Kategori</option>
-                        <option value="2">2. Kategori</option>
-                        <option value="3">3. Kategori</option>
-                        <option value="4">4. Kategori</option>
-                        <option value="5">5. Kategori</option>
+                        {% for c in categories %}
+                            <option value="{{ c.slug }}">{{ c.name }}</option>
+                        {% endfor %}
                     </select>
                     <div class="invalid-feedback">Lütfen seçim yapınız!</div>
                 </div>
@@ -106,6 +102,6 @@
 
 {% block scripts %}
     <script type='text/javascript'
-            src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+            src="{% static 'js/inputmask.bundle.js' %}"></script>
     <script src="{% static 'js/ads_page.js' %}"></script>
 {% endblock %}
