@@ -299,6 +299,9 @@ def advertisement(request):
     return render(request, 'pages/ads/create_ads.html', context)
 
 
+def ads_info(request):
+    return render(request,'pages/ads/info.html')
+
 ############# Error Pages ##############
 def error_404(request, exception):
     return render(request, 'pages/error/404.html', status=404)
