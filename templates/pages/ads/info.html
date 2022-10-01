@@ -12,13 +12,90 @@
 <body>
 <div class="container">
     <div class="site-wrapper">
-
-        <div class="first-category category">
-            <p>1. Reklam Kategorisi</p>
-            <span class="info">i</span>
+        <div class="row">
+            <div class="first-category category">
+                <p>1. Reklam Kategorisi</p>
+                <span class="info">i</span>
+            </div>
         </div>
-
+        <div class="row">
+            <div class="search">
+                <input type="text" disabled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="second-category ">
+                <div class="box category">
+                    <p>2. Reklam Kategorisi</p>
+                    <span class="info">i</span>
+                </div>
+                <div class="box category">
+                    <p>2. Reklam Kategorisi</p>
+                    <span class="info">i</span>
+                </div>
+                <div class="box category">
+                    <p>2. Reklam Kategorisi</p>
+                    <span class="info">i</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <div class="column-1 category">
+                    <p>3. Reklam Kategorisi</p>
+                    <span class="info">i</span>
+                </div>
+                <div class="column-2">
+                    <div class="s-box"></div>
+                    <div class="s-box"></div>
+                    <div class="s-box"></div>
+                    <div class="s-box"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="five-category category">
+                <p>5. Reklam Kategorisi</p>
+                <span class="info">i</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="boxes">
+                <div class="box"></div>
+                <div class="box"></div>
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="boxes">
+                <div class="box"></div>
+                <div class="box"></div>
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="four-category category">
+                <p>4. Reklam Kategorisi</p>
+                <span class="info">i</span>
+            </div>
+        </div>
     </div>
 </div>
+<!--Modal Start-->
+<div class="modal-container firstCategoryModal">
+    <div class="modal-body">
+        <button class="modal-close">x</button>
+        <div class="modal-content">
+        {{ ads_type1 }}
+            {% for t1 in ads_type1 %}
+                <p>{{ t1.name }}</p>
+                <p>Başlangıç fiyatı günlük {{ t1.price }} olarak belirlendi.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!--Modal End-->
 </body>
 </html>

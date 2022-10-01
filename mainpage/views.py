@@ -300,7 +300,21 @@ def advertisement(request):
 
 
 def ads_info(request):
-    return render(request,'pages/ads/info.html')
+    ads_type1 = AdsCategory.objects.filter(name="1. Kategori")
+    ads_type2 = AdsCategory.objects.filter(name="2. Kategori")
+    ads_type3 = AdsCategory.objects.filter(name="3. Kategori")
+    ads_type4 = AdsCategory.objects.filter(name="4. Kategori")
+    ads_type5 = AdsCategory.objects.filter(name="5. Kategori")
+
+    context = {
+        ads_type1: 'ads_type1',
+        ads_type2: 'ads_type2',
+        ads_type3: 'ads_type3',
+        ads_type4: 'ads_type4',
+        ads_type5: 'ads_type5'
+    }
+
+    return render(request,'pages/ads/info.html',context)
 
 ############# Error Pages ##############
 def error_404(request, exception):
