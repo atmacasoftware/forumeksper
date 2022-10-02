@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mainpage',
     'forums',
     'ckeditor',
+    'gaming',
 ]
 
 MIDDLEWARE = [

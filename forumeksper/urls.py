@@ -27,6 +27,7 @@ urlpatterns = [
     path('server/', include('server.urls')),
     path('survey/', include('survey.urls')),
     path('forum/', include('forums.urls')),
+    path('eglence/', include('gaming.urls')),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
