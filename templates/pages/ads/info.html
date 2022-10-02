@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="first-category category">
                 <p>1. Reklam Kategorisi</p>
-                <span class="info">i</span>
+                <span class="info" id="firstCategoryBtn">i</span>
             </div>
         </div>
         <div class="row">
@@ -84,18 +84,21 @@
     </div>
 </div>
 <!--Modal Start-->
-<div class="modal-container firstCategoryModal">
+<div class="modal-container firstCategoryModal" id="firstCategoryModal">
     <div class="modal-body">
         <button class="modal-close">x</button>
         <div class="modal-content">
-        {{ ads_type1 }}
-            {% for t1 in ads_type1 %}
-                <p>{{ t1.name }}</p>
-                <p>Başlangıç fiyatı günlük {{ t1.price }} olarak belirlendi.</p>
-            {% endfor %}
+            <h3>1. Kategori Özellikleri</h3>
+            <p>Tüm sayfalarda sayfa başında gösterilecektir.</p>
+            <p>Fiyatı günlük 1000 TL'dir.</p>
+            <p></p>
+            <p></p>
         </div>
     </div>
 </div>
 <!--Modal End-->
+
+
+<script src="{% static 'js/ads_info.js' %}"></script>
 </body>
 </html>

@@ -282,7 +282,8 @@ def advertisement(request):
                                                 company=company_name, type=type, ads=category, title=title,
                                                 message=message, image=image, is_private=private)
             data.save()
-            messages.success(request, 'İlanınız başarıyla gönderildi. Ekipimiz tarafından yapılan incelemlere göre yaklaşık 24 saat içerisinde sizlere ulaşacağız.')
+            messages.success(request,
+                             'İlanınız başarıyla gönderildi. Ekipimiz tarafından yapılan incelemlere göre yaklaşık 24 saat içerisinde sizlere ulaşacağız.')
             return redirect('advertisement')
         except:
             messages.info(request, 'İşaretli alanların doldurulması gerekmektedir.')
@@ -292,8 +293,8 @@ def advertisement(request):
 
     context = {
         'notes': notes,
-        'categories':categories,
-        'advertisement_types':advertisement_types
+        'categories': categories,
+        'advertisement_types': advertisement_types
     }
 
     return render(request, 'pages/ads/create_ads.html', context)
@@ -311,10 +312,11 @@ def ads_info(request):
         ads_type2: 'ads_type2',
         ads_type3: 'ads_type3',
         ads_type4: 'ads_type4',
-        ads_type5: 'ads_type5'
+        ads_type5: 'ads_type5',
     }
 
-    return render(request,'pages/ads/info.html',context)
+    return render(request, 'pages/ads/info.html', context=context)
+
 
 ############# Error Pages ##############
 def error_404(request, exception):
