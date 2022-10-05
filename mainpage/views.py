@@ -319,51 +319,7 @@ def ads_info(request):
     return render(request, 'pages/ads/info.html', context=context)
 
 
-def second_category_ads(request):
-    ads1 = None
-    ads2 = None
-    ads3 = None
 
-    ads = CreateAds.objects.filter(category__name="2. Kategori").count()
-
-    if ads > 11 and ads <21:
-
-        try:
-            ads1 = CreateAds.objects.filter(category__name="2. Kategori")[:10]
-        except:
-            ads1 = CreateAds.objects.filter(category__name="2. Kategori")
-
-        try:
-            ads2 = CreateAds.objects.filter(category__name="2. Kategori")[11:20]
-        except:
-            ads2 = CreateAds.objects.filter(category__name="2. Kategori")
-
-    elif ads > 20:
-        try:
-            ads1 = CreateAds.objects.filter(category__name="2. Kategori")[:10]
-        except:
-            ads1 = CreateAds.objects.filter(category__name="2. Kategori")
-
-        try:
-            ads2 = CreateAds.objects.filter(category__name="2. Kategori")[11:20]
-        except:
-            ads2 = CreateAds.objects.filter(category__name="2. Kategori")
-
-        try:
-            ads3 = CreateAds.objects.filter(category__name="2. Kategori")[21:30]
-        except:
-            ads3 = CreateAds.objects.filter(category__name="2. Kategori")
-
-    else:
-        ads1 = CreateAds.objects.filter(category__name="2. Kategori")
-
-    context = {
-        ads1: 'ads1',
-        ads2: 'ads2',
-        ads3: 'ads3',
-    }
-
-    return render(request, 'pages/ads/second_category.html', context)
 
 
 ############# Error Pages ##############

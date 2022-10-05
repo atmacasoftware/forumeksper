@@ -100,6 +100,7 @@ TEMPLATES = [
                 'user_account.context_processors.user_profile',
                 'mainpage.context_processors.news_category',
                 'mainpage.context_processors.first_category_ads',
+                'mainpage.context_processors.second_category_ads',
             ],
         },
     },
