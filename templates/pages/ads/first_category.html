@@ -1,30 +1,13 @@
 <nav class="navbar navbar-expand-lg bg-light" style="height: 100px!important;">
     <div class="container">
-        <div class="owl-carousel owl-carousel-2 carousel-item-1 position-relative mb-3 mb-lg-0">
-            <div class="position-relative overflow-hidden" style="height: 435px;">
-                <img class="img-fluid h-100" src="..." style="object-fit: cover;" alt="...">
-                <div class="overlay">
-                    <div class="mb-1">
-                        <a class="text-white" href="">1. Kategori</a>
+        <div id="firstCategoryCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for ads in firstcategoryads %}
+                    <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}" data-bs-interval="10000">
+                        <a href="{{ ads.link }}" target="_blank"><img src="{{ ads.get_photos }}" class="d-block w-100" alt="ads"></a>
                     </div>
-                    <a class="h2 m-0 text-white font-weight-bold" href="">{{ mns.name }}</a>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </nav>
-
-<script>
-    $(".tranding-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 2000,
-        items: 1,
-        dots: false,
-        loop: true,
-        nav: true,
-        navText: [
-            '<i class="fa fa-angle-left"></i>',
-            '<i class="fa fa-angle-right"></i>'
-        ]
-    });
-</script>

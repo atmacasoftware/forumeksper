@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from mainpage.forms import WeatherForm
-from mainpage.models import Citys, Weather, NewsCategory
+from mainpage.models import Citys, Weather, NewsCategory, CreateAds
 import requests
 import math
 
@@ -54,3 +54,7 @@ def news_category(request):
     links = NewsCategory.objects.all().order_by('id')
     links_four = NewsCategory.objects.all().order_by('id')[:4]
     return dict(news_links=links, links_four=links_four)
+
+def first_category_ads(request):
+    ads = CreateAds.objects.filter(category__name="1. Kategori")
+    return dict(firstcategoryads=ads)

@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <div id="secondCategoryCarouselOne" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for ads in firstcategoryads %}
+                        <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}"
+                             data-bs-interval="10000">
+                            <a href="{{ ads.link }}" target="_blank"><img src="{{ ads.get_photos }}"
+                                                                          class="d-block w-100" alt="ads"></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+    </div>
+</div>

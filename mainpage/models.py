@@ -200,6 +200,30 @@ class Advertisement(models.Model):
         return self.first_name + " " + self.last_name + " " + self.email
 
 
+class CreateAds(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Müşteri İsim ve Soyismi")
+    email = models.EmailField(verbose_name="Müşteri Email")
+    phone = models.CharField(max_length=255, verbose_name="Müşteri Telefon")
+    price = models.CharField(max_length=255, verbose_name="Reklam Ücreti")
+    category = models.ForeignKey(AdsCategory, on_delete=models.CASCADE, null=True, verbose_name="Reklam Kategorisi")
+    image = models.ImageField(upload_to='ilan/reklamlar/', null=True, blank=True, verbose_name="Reklam Resmi", help_text="1296 px x 100 px boyutlarında olmalıdır.")
+    link = models.CharField(max_length=1000, null=True, verbose_name="Reklam Linki")
+    title = models.CharField(max_length=255, null=True, verbose_name="Reklam Başlığı")
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True)
+    is_time = models.BooleanField(default=False, null=True)
+
+    class Meta:
+        verbose_name_plural = "7.3 Oluşturulan Reklamlar"
+
+    def __str__(self):
+        return self.name + " " + self.email
+
+    def get_photos(self):
+        if self.image:
+            return self.image.url
+        else:
+            return None
+
 class Note(models.Model):
     PAGES = (
         ('1','Anasayfa'),
@@ -212,6 +236,9 @@ class Note(models.Model):
 
     class Meta:
         verbose_name_plural = "8. Notlar"
+
+
+
 
 
 
